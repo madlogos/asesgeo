@@ -1,0 +1,31 @@
+Package: asesgeo
+Type: Package
+Title: ASES Analytic Toolkit on Geographics
+Version: 0.1.0
+Author: Yiying Wang <wangy@aetna.com>
+Maintainer: Yiying Wang <wangy@aetna.com>
+Contributor: Shanshan Zou <zous@aetna.com>
+Description: This package contains frequently used functions on geographic
+    for ASES, regarding coordinate coversion, IP/address parsing, etc.
+License: GPL
+Encoding: UTF-8
+LazyData: true
+Imports:
+	aseskit,
+    curl,
+    dplyr,
+    ggplot2,
+    glue,
+    magrittr,
+    maps,
+    maptools,
+    raster,
+    rmapshaper,
+    scales,
+    sf,
+    sp,
+    tidyr
+RoxygenNote: 6.1.1
+Suggests: 
+    testthat,
+    vdiffr

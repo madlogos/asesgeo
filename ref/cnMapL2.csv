@@ -1,0 +1,354 @@
+"","ISO","ID_1","NAME_1","ID_2","NAME","TYPE","ENGTYPE","NAME_CHS","NAME_LAB","VARNAME","AREA","PTX","PTY"
+"1","CHN",1,"Anhui",1,"Anqing","Dějíshě","Prefecture City","安庆市","安庆","Anqěng",1.449442361,116.5944798,30.61075399
+"2","CHN",1,"Anhui",2,"Bengbu","Dějíshě","Prefecture City","蚌埠市","蚌埠","B?ngb?",0.570317058,117.3274272,33.11179775
+"3","CHN",1,"Anhui",3,"Bozhou","Dějíshě","Prefecture City","亳州市","亳州","Bózhou",0.833037247,116.1805244,33.43340263
+"4","CHN",1,"Anhui",4,"Chaohu","Dějíshě","Prefecture City","巢湖市","巢湖","Cháohú",0.895554061,117.781854,31.46379141
+"5","CHN",1,"Anhui",5,"Chizhou","Dějíshě","Prefecture City","池州市","池州","Chízhou",0.793536845,117.3671314,30.28375655
+"6","CHN",1,"Anhui",6,"Chuzhou","Dějíshě","Prefecture City","滁州市","滁州","Chúzhou",1.302514743,118.097843,32.54487701
+"7","CHN",1,"Anhui",7,"Fuyang","Dějíshě","Prefecture City","阜阳市","阜阳","F?yáng",0.973189358,115.7004676,32.91640489
+"8","CHN",1,"Anhui",8,"Hefei","Dějíshě","Prefecture City","合肥市","合肥","Héféi",0.714430631,117.2444177,31.99357629
+"9","CHN",1,"Anhui",9,"Huaibei","Dějíshě","Prefecture City","淮北市","淮北","Huáibei",0.261888164,116.7371333,33.72136058
+"10","CHN",1,"Anhui",10,"Huainan","Dějíshě","Prefecture City","淮南市","淮南","Huáinán",0.204395065,116.7326152,32.75688931
+"11","CHN",1,"Anhui",11,"Huangshan","Dějíshě","Prefecture City","黄山市","黄山","Huángshan",0.909386193,118.0764213,29.90611289
+"12","CHN",1,"Anhui",12,"Lu'an","Dějíshě","Prefecture City","六安市","六安","L?'an",1.750922403,116.3123625,31.75714304
+"13","CHN",1,"Anhui",13,"Ma'anshan","Dějíshě","Prefecture City","马鞍山市","马鞍","Ma'anshan",0.169813243,118.613618,31.53246699
+"14","CHN",1,"Anhui",14,"Suzhou AH","Dějíshě","Prefecture City","宿州市","宿州","S?zhou",0.974237675,117.2081497,33.86090045
+"15","CHN",1,"Anhui",15,"Tongling","Dějíshě","Prefecture City","铜陵市","铜陵","Tónglíng",0.097780964,117.8943485,30.94488655
+"16","CHN",1,"Anhui",16,"Wuhu","Dějíshě","Prefecture City","芜湖市","芜湖","Wúhú",0.311280697,118.3267445,31.06687221
+"17","CHN",1,"Anhui",17,"Xuancheng","Dějíshě","Prefecture City","宣城市","宣城","Xuanchéng",1.157012889,118.8565635,30.69105912
+"18","CHN",2,"Beijing",18,"Beijing","Zhíxiáshě","Municipality","北京","北京","Beijing",1.734891144,116.4106715,40.1849142
+"19","CHN",3,"Chongqing",19,"Chongqing","Zhíxiáshě","Municipality","重庆","重庆","Chóngqěng",7.713129154,107.8748401,30.05864874
+"20","CHN",4,"Fujian",20,"Fuzhou","Dějíshě","Prefecture City","福州市","福州","Fúzhou",1.049527705,119.1564744,26.06444018
+"21","CHN",4,"Fujian",21,"Longyan","Dějíshě","Prefecture City","龙岩市","龙岩","Lóngyán",1.71327683,116.7383107,25.29232553
+"22","CHN",4,"Fujian",22,"Nanping","Dějíshě","Prefecture City","南平市","南平","Nánpíng",2.401012726,118.1426306,27.3402755
+"23","CHN",4,"Fujian",23,"Ningde","Dějíshě","Prefecture City","宁德市","宁德","Níngdé",1.201745497,119.4701027,26.97549144
+"24","CHN",4,"Fujian",24,"Putian","Dějíshě","Prefecture City","莆田市","莆田","Pútián",0.349988083,118.8793257,25.45721664
+"25","CHN",4,"Fujian",25,"Quanzhou","Dějíshě","Prefecture City","泉州市","泉州","Quánzhou",0.978473765,118.2547522,25.21181723
+"26","CHN",4,"Fujian",26,"Sanming","Dějíshě","Prefecture City","三明市","三明","Sanmíng",2.074376382,117.3951961,26.29994742
+"27","CHN",4,"Fujian",27,"Xiamen","Dějíshě","Prefecture City","厦门市","厦门","Xi?mén",0.136604015,118.1106587,24.68310417
+"28","CHN",4,"Fujian",28,"Zhangzhou","Dějíshě","Prefecture City","漳州市","漳州","Zhangzhou",1.114207187,117.4412465,24.38372375
+"29","CHN",5,"Gansu",29,"Baiyin","Dějíshě","Prefecture City","白银市","白银","Báiyín",2.024832534,104.6221059,36.61248331
+"30","CHN",5,"Gansu",30,"Dingxi","Dějíshě","Prefecture City","定西市","定西","Děngxi",1.946761352,104.451532,35.1205534
+"31","CHN",5,"Gansu",31,"Gannan Tibetan","Zězhězhou","Autonomous Prefecture","甘南藏族自治州","甘南","Gannán Z?ngzú",3.576382808,102.7448766,34.33469962
+"32","CHN",5,"Gansu",32,"Jiayuguan","Dějíshě","Prefecture City","嘉峪关市","嘉峪关","Jiay?guan",0.136763736,98.19598992,39.8165279
+"33","CHN",5,"Gansu",33,"Jinchang","Dějíshě","Prefecture City","金昌市","金昌","Jinchang",0.759144355,102.0507236,38.42731729
+"34","CHN",5,"Gansu",34,"Jiuquan","Dějíshě","Prefecture City","酒泉市","酒泉","Jiuquán",15.46596251,96.24378957,40.45979211
+"35","CHN",5,"Gansu",35,"Lanzhou","Dějíshě","Prefecture City","兰州市","兰州","Lánzhou",1.332358496,103.6364678,36.34893148
+"36","CHN",5,"Gansu",36,"Linxia Hui","Zězhězhou","Autonomous Prefecture","临夏回族自治州","临夏","Línxi? Huiz?",0.804023424,103.2771832,35.6299443
+"37","CHN",5,"Gansu",37,"Longnan","Dějíshě","Prefecture City","陇南市","陇南","Longnán",2.764369391,105.2102105,33.59511443
+"38","CHN",5,"Gansu",38,"Pingliang","Dějíshě","Prefecture City","平凉市","平凉","Píngliáng",1.09713523,106.6510984,35.30654585
+"39","CHN",5,"Gansu",39,"Qingyang","Dějíshě","Prefecture City","庆阳市","庆阳","Qěngyáng",2.721228676,107.5914498,36.16604784
+"40","CHN",5,"Gansu",40,"Tianshui","Dějíshě","Prefecture City","天水市","天水","Tianshui",1.399272495,105.7399518,34.65014895
+"41","CHN",5,"Gansu",41,"Wuwei","Dějíshě","Prefecture City","武威市","武威","Wuwei",3.362586511,103.05382,38.17535817
+"42","CHN",5,"Gansu",42,"Zhangye","Dějíshě","Prefecture City","张掖市","张掖","Zhangy?",4.113083537,99.89444781,38.91973388
+"43","CHN",6,"Guangdong",43,"Chaozhou","Dějíshě","Prefecture City","潮州市","潮州","Cháozhou",0.283951629,116.7684354,23.79860483
+"44","CHN",6,"Guangdong",44,"Dongguan","Dějíshě","Prefecture City","东莞市","东莞","Dongguan",0.21293431,113.8763176,22.93540427
+"45","CHN",6,"Guangdong",45,"Foshan","Dějíshě","Prefecture City","佛山市","佛山","Fóshan",0.342003561,112.9450635,23.01295412
+"46","CHN",6,"Guangdong",46,"Guangzhou","Dějíshě","Prefecture City","广州市","广州","Guangzhou",0.630132944,113.5355406,23.35757095
+"47","CHN",6,"Guangdong",47,"Heyuan","Dějíshě","Prefecture City","河源市","河源","Héyuán",1.386822809,114.9573295,24.04267719
+"48","CHN",6,"Guangdong",48,"Huizhou","Dějíshě","Prefecture City","惠州市","惠州","Huězhou",0.997726262,114.4965555,23.24551705
+"49","CHN",6,"Guangdong",49,"Jiangmen","Dějíshě","Prefecture City","江门市","江门","Jiangmén",0.821990562,112.6679026,22.29819408
+"50","CHN",6,"Guangdong",50,"Jieyang","Dějíshě","Prefecture City","揭阳市","揭阳","Jieyáng",0.460988917,116.1165273,23.33776025
+"51","CHN",6,"Guangdong",51,"Maoming","Dějíshě","Prefecture City","茂名市","茂名","M?omíng",0.995157265,110.9528539,22.01561884
+"52","CHN",6,"Guangdong",52,"Meizhou","Dějíshě","Prefecture City","梅州市","梅州","Méizhou",1.405706099,116.0787235,24.20202043
+"53","CHN",6,"Guangdong",53,"Qingyuan","Dějíshě","Prefecture City","清远市","清远","Qingyuan",1.682436813,112.8737094,24.31231958
+"54","CHN",6,"Guangdong",54,"Shantou","Dějíshě","Prefecture City","汕头市","汕头","Sh?ntóu",0.182113441,116.5556078,23.33062802
+"55","CHN",6,"Guangdong",55,"Shanwei","Dějíshě","Prefecture City","汕尾市","汕尾","Sh?nwei",0.428015691,115.5318601,23.01543973
+"56","CHN",6,"Guangdong",56,"Shaoguan","Dějíshě","Prefecture City","韶关市","韶关","Sháoguan",1.641742834,113.7717706,24.81816146
+"57","CHN",6,"Guangdong",57,"Shenzhen","Dějíshě","Prefecture City","深圳市","深圳","Shenzh?n",0.168399338,114.1330528,22.65631716
+"58","CHN",6,"Guangdong",58,"Yangjiang","Dějíshě","Prefecture City","阳江市","阳江","Yángjiang",0.683735893,111.774161,22.03855903
+"59","CHN",6,"Guangdong",59,"Yunfu","Dějíshě","Prefecture City","云浮市","云浮","Yúnfú",0.68487639,111.7959632,22.81579258
+"60","CHN",6,"Guangdong",60,"Zhanjiang","Dějíshě","Prefecture City","湛江市","湛江","Zh?njiang",1.091519772,110.1584215,21.0951683
+"61","CHN",6,"Guangdong",61,"Zhaoqing","Dějíshě","Prefecture City","肇庆市","肇庆","Zh?oqěng",1.314537655,112.202118,23.54029666
+"62","CHN",6,"Guangdong",62,"Zhongshan","Dějíshě","Prefecture City","中山市","中山","Zhongshan",0.154011483,113.3894405,22.52221732
+"63","CHN",6,"Guangdong",63,"Zhuhai","Dějíshě","Prefecture City","珠海市","珠海","Zhuhai",0.135227557,113.2514288,22.1620676
+"64","CHN",7,"Guangxi",64,"Baise","Dějíshě","Prefecture City","百色市","百色","Bais?",3.211435655,106.2891298,23.98656499
+"65","CHN",7,"Guangxi",65,"Beihai","Dějíshě","Prefecture City","北海市","北海","Beihai",0.303393794,109.3355895,21.67935542
+"66","CHN",7,"Guangxi",66,"Chongzuo","Dějíshě","Prefecture City","崇左市","崇左","Chóngzuo",1.523006774,107.2755004,22.50315553
+"67","CHN",7,"Guangxi",67,"Fangchenggang","Dějíshě","Prefecture City","防城港市","防城港","Fángchénggang",0.524480097,108.0024167,21.88232513
+"68","CHN",7,"Guangxi",68,"Guigang","Dějíshě","Prefecture City","贵港市","贵港","Guěgang",0.938059025,109.9987765,23.31009537
+"69","CHN",7,"Guangxi",69,"Guilin","Dějíshě","Prefecture City","桂林市","桂林","Guělín",2.471221632,110.5120744,25.35341843
+"70","CHN",7,"Guangxi",70,"Hechi","Dějíshě","Prefecture City","河池市","河池","Héchí",2.979205707,107.8400634,24.64474761
+"71","CHN",7,"Guangxi",71,"Hezhou","Dějíshě","Prefecture City","贺州市","贺州","H?zhou",1.038335651,111.3601274,24.35912887
+"72","CHN",7,"Guangxi",72,"Laibin","Dějíshě","Prefecture City","来宾市","来宾","Láibin",1.166283345,109.40168,23.84755714
+"73","CHN",7,"Guangxi",73,"Liuzhou","Dějíshě","Prefecture City","柳州市","柳州","Liuzhou",1.681655838,109.3791164,24.93896395
+"74","CHN",7,"Guangxi",74,"Nanning","Dějíshě","Prefecture City","南宁市","南宁","Nánníng",1.948696435,108.4633816,23.05874298
+"75","CHN",7,"Guangxi",75,"Qinzhou","Dějíshě","Prefecture City","钦州市","钦州","Qinzhou",0.938536011,109.0249708,22.18313555
+"76","CHN",7,"Guangxi",76,"Wuzhou","Dějíshě","Prefecture City","梧州市","梧州","Wúzhou",1.108426152,110.9917958,23.48119685
+"77","CHN",7,"Guangxi",77,"Yulin GX","Dějíshě","Prefecture City","玉林市","玉林","Y?lín",1.127970378,110.183163,22.44330359
+"78","CHN",8,"Guizhou",78,"Anshun","Dějíshě","Prefecture City","安顺市","安顺","Ansh?n",0.840211345,105.9514265,25.99615459
+"79","CHN",8,"Guizhou",79,"Bijie","Děqu","Prefecture","毕节地区","毕节","Bějié",2.447013346,105.2123072,27.06717489
+"80","CHN",8,"Guizhou",80,"Guiyang","Dějíshě","Prefecture City","贵阳市","贵阳","Guěyáng",0.729568592,106.7078248,26.84339443
+"81","CHN",8,"Guizhou",81,"Liupanshui","Dějíshě","Prefecture City","六盘水市","六盘水","Li?pánshui",0.900147214,104.8922815,26.13064686
+"82","CHN",8,"Guizhou",82,"Qiandongnan Miao and Dong","Zězhězhou","Autonomous Prefecture","黔东南苗族侗族自治州","黔东南","Qiándongnán Miáozú|Dňngzú",2.742631079,108.5564966,26.50353589
+"83","CHN",8,"Guizhou",83,"Qiannan Buyei and Miao","Zězhězhou","Autonomous Prefecture","黔南布依族苗族自治州","黔南","Qiánnán B?yizú|Miáozú",2.348894335,107.251474,26.01580875
+"84","CHN",8,"Guizhou",84,"Qianxinan Buyei and Miao","Zězhězhou","Autonomous Prefecture","黔西南布依族苗族自治州","黔西南","Qiánxinán B?yizú|Miáozú",1.505802665,105.4643494,25.26619231
+"85","CHN",8,"Guizhou",85,"Tongren","Děqu","Prefecture","铜仁地区","铜仁","Tóngrén",1.6453736,108.5439891,27.96945676
+"86","CHN",8,"Guizhou",86,"Zunyi","Dějíshě","Prefecture City","遵义市","遵义","Zunyě",2.827645273,107.0869932,28.16831915
+"87","CHN",9,"Hainan",87,"Haikou","Dějíshě","Prefecture City","海口市","海口","Haikou",0.193925436,110.4257392,19.83115946
+"88","CHN",9,"Hainan",88,"Hainan","Děqu","Prefecture","海南","海南","Hainán",2.570786872,109.7147896,19.19810037
+"89","CHN",9,"Hainan",89,"Sanya","Dějíshě","Prefecture City","三亚市","三亚","Sany?",0.161223216,109.4179033,18.39202091
+"90","CHN",10,"Hebei",90,"Baoding","Dějíshě","Prefecture City","保定市","保定","Baoděng",2.319569572,115.1684269,39.02259895
+"91","CHN",10,"Hebei",91,"Cangzhou","Dějíshě","Prefecture City","沧州市","沧州","Cangzhou",1.461744706,116.7510722,38.26576179
+"92","CHN",10,"Hebei",92,"Chengde","Dějíshě","Prefecture City","承德市","承德","Chéngdé",4.248814543,117.5455887,41.3437081
+"93","CHN",10,"Hebei",93,"Handan","Dějíshě","Prefecture City","邯郸市","邯郸","Hándan",1.213617417,114.5441311,36.55050314
+"94","CHN",10,"Hebei",94,"Hengshui","Dějíshě","Prefecture City","衡水市","衡水","Héngshui",0.903154405,115.823532,37.76085346
+"95","CHN",10,"Hebei",95,"Langfang","Dějíshě","Prefecture City","廊坊市","廊坊","Lángfáng",0.667687441,116.5358369,39.11278433
+"96","CHN",10,"Hebei",96,"Qinhuangdao","Dějíshě","Prefecture City","秦皇岛市","秦皇岛","Qínhuángdao",0.820913055,119.1836784,40.08941729
+"97","CHN",10,"Hebei",97,"Shijiazhuang","Dějíshě","Prefecture City","石家庄市","石家庄","Shíjiazhuang",1.444423174,114.4408915,38.12945859
+"98","CHN",10,"Hebei",98,"Tangshan","Dějíshě","Prefecture City","唐山市","唐山","Tángshan",1.396392356,118.3389641,39.73726071
+"99","CHN",10,"Hebei",99,"Xingtai","Dějíshě","Prefecture City","邢台市","邢台","Xíngtái",1.26630135,114.8182545,37.21122519
+"100","CHN",10,"Hebei",100,"Zhangjiakou","Dějíshě","Prefecture City","张家口市","张家口","Zhangjiakou",3.920881626,115.0300687,40.86497799
+"101","CHN",11,"Heilongjiang",101,"Daqing","Dějíshě","Prefecture City","大庆市","大庆","D?qěng",2.419656592,124.6898552,46.33658105
+"102","CHN",11,"Heilongjiang",102,"Daxing'anling","Děqu","Prefecture","大兴安岭地区","大兴安岭","D?xing'anling",8.536155359,124.2039965,52.32476144
+"103","CHN",11,"Heilongjiang",103,"Harbin","Dějíshě","Prefecture City","哈尔滨市","哈尔滨","Ha'erbin",6.153486298,127.9622494,45.63840109
+"104","CHN",11,"Heilongjiang",104,"Hegang","Dějíshě","Prefecture City","鹤岗市","鹤岗","H?gang",1.717757896,130.8050895,47.64202776
+"105","CHN",11,"Heilongjiang",105,"Heihe","Dějíshě","Prefecture City","黑河市","黑河","Heihé",8.259045846,126.9811932,49.2629919
+"106","CHN",11,"Heilongjiang",106,"Jiamusi","Dějíshě","Prefecture City","佳木斯市","佳木斯","Jiam?si",3.787433211,132.2121842,47.24463706
+"107","CHN",11,"Heilongjiang",107,"Jixi","Dějíshě","Prefecture City","鸡西市","鸡西","Jixi",2.912483115,132.3049536,45.54158193
+"108","CHN",11,"Heilongjiang",108,"Mudanjiang","Dějíshě","Prefecture City","牡丹江市","牡丹江","Mudanjiang",4.384245794,129.8849693,44.59753771
+"109","CHN",11,"Heilongjiang",109,"Qiqihar","Dějíshě","Prefecture City","齐齐哈尔市","齐齐哈尔","Qíqíha'er",5.058853563,124.5411231,47.69612133
+"110","CHN",11,"Heilongjiang",110,"Qitaihe","Dějíshě","Prefecture City","七台河市","七台河","Qitáihé",0.619716142,130.8624881,45.89689115
+"111","CHN",11,"Heilongjiang",111,"Shuangyashan","Dějíshě","Prefecture City","双鸭山市","双鸭山","Shuangyashan",2.715554873,132.5160707,46.64905532
+"112","CHN",11,"Heilongjiang",112,"Suihua","Dějíshě","Prefecture City","绥化市","绥化","Suíhu?",4.174355007,126.6235154,46.88986127
+"113","CHN",11,"Heilongjiang",113,"Yichun","Dějíshě","Prefecture City","伊春市","伊春","Yichun",3.959873436,129.2088703,47.80757763
+"114","CHN",12,"Henan",114,"Anyang","Dějíshě","Prefecture City","安阳市","安阳","Anyáng",0.726443655,114.3495363,35.87903647
+"115","CHN",12,"Henan",115,"Hebi","Dějíshě","Prefecture City","鹤壁市","鹤壁","H?bě",0.214507915,114.305423,35.72556812
+"116","CHN",12,"Henan",116,"Jiaozuo","Dějíshě","Prefecture City","焦作市","焦作","Jiaozuň",0.415695278,113.1177239,35.10610618
+"117","CHN",12,"Henan",117,"Jiyuan shi","Dějíshě","Prefecture City","济源市","济源","Jiyuán",0.187111709,112.3921,35.09941294
+"118","CHN",12,"Henan",118,"Kaifeng","Dějíshě","Prefecture City","开封市","开封","Kaifeng",0.61487371,114.5349322,34.60865089
+"119","CHN",12,"Henan",119,"Luohe","Dějíshě","Prefecture City","漯河市","漯河","Luňhé",0.257162785,113.9026848,33.65687693
+"120","CHN",12,"Henan",120,"Luoyang","Dějíshě","Prefecture City","洛阳市","洛阳","Luňyáng",1.473525889,112.0251774,34.28680887
+"121","CHN",12,"Henan",121,"Nanyang","Dějíshě","Prefecture City","南阳市","南阳","Nányáng",2.563301841,112.2834049,33.04632801
+"122","CHN",12,"Henan",122,"Pingdingshan","Dějíshě","Prefecture City","平顶山市","平顶山","Píngdingshan",0.767135979,113.012935,33.79741101
+"123","CHN",12,"Henan",123,"Puyang","Dějíshě","Prefecture City","濮阳市","濮阳","Púyáng",0.418261927,115.2790697,35.81162181
+"124","CHN",12,"Henan",124,"Sanmenxia","Dějíshě","Prefecture City","三门峡市","三门峡","Sanménxiá",0.972916788,111.1066822,34.36292165
+"125","CHN",12,"Henan",125,"Shangqiu","Děqu","Prefecture","商丘市","商丘","Shangqiu Xi?n",1.049163932,115.6970648,34.29107628
+"126","CHN",12,"Henan",126,"Xinxiang","Dějíshě","Prefecture City","新乡市","新乡","Xinxiang",0.816256538,114.0909874,35.26713331
+"127","CHN",12,"Henan",127,"Xinyang","Dějíshě","Prefecture City","信阳市","信阳","Xěnyáng",1.805797218,114.8820996,32.08121522
+"128","CHN",12,"Henan",128,"Xuchang","Dějíshě","Prefecture City","许昌市","许昌","Xuchang",0.488056586,113.7087062,34.07270418
+"129","CHN",12,"Henan",129,"Zhengzhou","Dějíshě","Prefecture City","郑州市","郑州","Zh?ngzhou",0.739248699,113.4719231,34.62610007
+"130","CHN",12,"Henan",130,"Zhoukou","Dějíshě","Prefecture City","周口市","周口","Zhoukou",1.16952475,114.8774481,33.72495772
+"131","CHN",12,"Henan",131,"Zhumadian","Dějíshě","Prefecture City","驻马店市","驻马店","Zh?madi?n",1.455750099,114.1477228,32.92430993
+"132","CHN",13,"Hubei",132,"Enshi Tujia and Miao","Zězhězhou","Autonomous Prefecture","恩施土家族苗族自治州","恩施","Enshi Tujiazú|Miáozú",2.265541125,109.5487905,30.19164453
+"133","CHN",13,"Hubei",133,"Ezhou","Dějíshě","Prefecture City","鄂州市","鄂州","?zhou",0.189933112,114.7799927,30.36801136
+"134","CHN",13,"Hubei",134,"Huanggang","Dějíshě","Prefecture City","黄冈市","黄冈","Huánggang",1.612668549,115.3459455,30.72062929
+"135","CHN",13,"Hubei",135,"Huangshi","Dějíshě","Prefecture City","黄石市","黄石","Huángshí",0.428212916,115.022172,29.92833811
+"136","CHN",13,"Hubei",136,"Jingmen","Dějíshě","Prefecture City","荆门市","荆门","Jingmén",1.166862816,112.6091747,31.07117341
+"137","CHN",13,"Hubei",137,"Jingzhou","Dějíshě","Prefecture City","荆州市","荆州","Jingzhou",1.317722721,112.5716022,29.99554847
+"138","CHN",13,"Hubei",138,"Qianjiang","Dějíshě","Prefecture City","潜江市","潜江","Qiánjiang",0.189837486,112.7579102,30.33818578
+"139","CHN",13,"Hubei",139,"Shennongjia","Děqu","Prefecture","神农架林区","神农架","Shénnóngji? Línqu",0.30685063,110.4757875,31.59440798
+"140","CHN",13,"Hubei",140,"Shiyan","Dějíshě","Prefecture City","十堰市","十堰","Shíy?n",2.266423357,110.4410867,32.45908926
+"141","CHN",13,"Hubei",141,"Suizhou Shi","Dějíshě","Prefecture City","随州市","随州","Suízhou",0.914789197,113.4242468,31.83008927
+"142","CHN",13,"Hubei",142,"Tianmen","Dějíshě","Prefecture City","天门市","天门","Tianmén",0.248417249,113.1152354,30.64594382
+"143","CHN",13,"Hubei",143,"Wuhan","Dějíshě","Prefecture City","武汉市","武汉","Wuh?n",0.788197258,114.3384631,30.62624332
+"144","CHN",13,"Hubei",144,"Xiangfan","Dějíshě","Prefecture City","襄樊市","襄樊","Xiangfán",1.881398619,111.9378017,31.93415407
+"145","CHN",13,"Hubei",145,"Xianning","Dějíshě","Prefecture City","咸宁市","咸宁","Xiánníng",0.908181517,114.1747014,29.62607798
+"146","CHN",13,"Hubei",146,"Xiantao","Dějíshě","Prefecture City","仙桃市","仙桃","Xiantáo",0.23686584,113.3788244,30.29041437
+"147","CHN",13,"Hubei",147,"Xiaogan","Dějíshě","Prefecture City","孝感市","孝感","Xi?ogan",0.839649915,113.8802534,31.11983099
+"148","CHN",13,"Hubei",148,"Yichang","Dějíshě","Prefecture City","宜昌市","宜昌","Yíchang",2.004212107,111.1360461,30.74898685
+"149","CHN",14,"Hunan",149,"Changde","Dějíshě","Prefecture City","常德市","常德","Chángdé",1.695173761,111.5225899,29.29867163
+"150","CHN",14,"Hunan",150,"Changsha","Dějíshě","Prefecture City","长沙市","长沙","Chángsha",1.082223162,113.1524714,28.22839128
+"151","CHN",14,"Hunan",151,"Chenzhou","Dějíshě","Prefecture City","郴州市","郴州","Chenzhou",1.747081866,113.135092,25.81200657
+"152","CHN",14,"Hunan",152,"Hengyang","Dějíshě","Prefecture City","衡阳市","衡阳","Héngyáng",1.394702402,112.5730186,26.79300246
+"153","CHN",14,"Hunan",153,"Huaihua","Dějíshě","Prefecture City","怀化市","怀化","Huáihu?",2.519832449,110.0736752,27.54629433
+"154","CHN",14,"Hunan",154,"Loudi","Dějíshě","Prefecture City","娄底市","娄底","Lóudi",0.743222072,111.6116097,27.74025313
+"155","CHN",14,"Hunan",155,"Shaoyang","Dějíshě","Prefecture City","邵阳市","邵阳","Sh?oyáng",2.092816408,110.9168906,26.87279113
+"156","CHN",14,"Hunan",156,"Xiangtan","Dějíshě","Prefecture City","湘潭市","湘潭","Xiangtán",0.462941927,112.6023176,27.7337074
+"157","CHN",14,"Hunan",157,"Xiangxi Tujia and Miao","Zězhězhou","Autonomous Prefecture","湘西土家族苗族自治州","湘西","Xiangxi Tujiazú|Miáozú",1.430854996,109.727324,28.69485272
+"158","CHN",14,"Hunan",158,"Yiyang","Dějíshě","Prefecture City","益阳市","益阳","Yěyáng",1.123343465,111.95057,28.57413814
+"159","CHN",14,"Hunan",159,"Yongzhou","Dějíshě","Prefecture City","永州市","永州","Yongzhou",1.812228921,111.7697842,25.69290263
+"160","CHN",14,"Hunan",160,"Yueyang","Dějíshě","Prefecture City","岳阳市","岳阳","Yu?yáng",1.373858892,113.2541385,29.06521026
+"161","CHN",14,"Hunan",161,"Zhangjiajie","Dějíshě","Prefecture City","张家界市","张家界","Zhangjiaji?",0.88817916,110.5294338,29.39193599
+"162","CHN",14,"Hunan",162,"Zhuzhou","Dějíshě","Prefecture City","株洲市","株洲","Zhuzhou",1.027714261,113.5180286,27.11867314
+"163","CHN",15,"Jiangsu",163,"Changzhou","Dějíshě","Prefecture City","常州市","常州","Chángzhou",0.417194046,119.6376194,31.62718006
+"164","CHN",15,"Jiangsu",164,"Huai'an","Dějíshě","Prefecture City","淮安市","淮安","Huái'an",0.96744837,118.9631885,33.356709
+"165","CHN",15,"Jiangsu",165,"Lianyungang","Dějíshě","Prefecture City","连云港市","连云港","Liányúngang",0.727366149,119.1307253,34.53340686
+"166","CHN",15,"Jiangsu",166,"Nanjing","Dějíshě","Prefecture City","南京市","南京","Nánjing",0.628212012,118.8420021,31.93019901
+"167","CHN",15,"Jiangsu",167,"Nantong","Dějíshě","Prefecture City","南通市","南通","Nántong",0.851394229,120.9941249,32.1899449
+"168","CHN",15,"Jiangsu",168,"Suqian","Dějíshě","Prefecture City","宿迁市","宿迁","S?qian",0.835117775,118.5189447,33.78518478
+"169","CHN",15,"Jiangsu",169,"Suzhou","Dějíshě","Prefecture City","宿州市","苏州","Suzhou",0.801723992,120.6421243,31.37632739
+"170","CHN",15,"Jiangsu",170,"Taizhou","Dějíshě","Prefecture City","泰州市","泰州","T?izhou",0.555350727,120.0551138,32.57130714
+"171","CHN",15,"Jiangsu",171,"Wuxi","Dějíshě","Prefecture City","无锡市","无锡","Wúxi",0.437078643,120.0759738,31.52670199
+"172","CHN",15,"Jiangsu",172,"Xuzhou","Dějíshě","Prefecture City","徐州市","徐州","Xúzhou",1.100099433,117.5120257,34.35953624
+"173","CHN",15,"Jiangsu",173,"Yancheng","Dějíshě","Prefecture City","盐城市","盐城","Yánchéng",1.48831228,120.1725874,33.51827022
+"174","CHN",15,"Jiangsu",174,"Yangzhou","Dějíshě","Prefecture City","扬州市","扬州","Yángzhou",0.636659417,119.4714686,32.73864824
+"175","CHN",15,"Jiangsu",175,"Zhenjiang","Dějíshě","Prefecture City","镇江市","镇江","Zh?njiang",0.365249434,119.4545887,32.01751033
+"176","CHN",16,"Jiangxi",176,"Fuzhou JX","Dějíshě","Prefecture City","抚州市","抚州","Fuzhou",1.719282087,116.4332789,27.51017442
+"177","CHN",16,"Jiangxi",177,"Ganzhou","Dějíshě","Prefecture City","赣州市","赣州","G?nzhou",3.544998455,115.2714884,25.70754406
+"178","CHN",16,"Jiangxi",178,"Ji'an","Dějíshě","Prefecture City","吉安市","吉安","Jí'an",2.299429942,114.8234557,26.97332222
+"179","CHN",16,"Jiangxi",179,"Jingdezhen","Dějíshě","Prefecture City","景德镇市","景德镇","Jingdézh?n",0.488472985,117.2694635,29.30797791
+"180","CHN",16,"Jiangxi",180,"Jiujiang","Dějíshě","Prefecture City","九江市","九江","Jiujiang",1.747159593,115.4384429,29.325854
+"181","CHN",16,"Jiangxi",181,"Nanchang","Dějíshě","Prefecture City","南昌市","南昌","Nánchang",0.683081982,116.0239905,28.66367451
+"182","CHN",16,"Jiangxi",182,"Pingxiang","Dějíshě","Prefecture City","萍乡市","萍乡","Píngxiang",0.34661064,113.9002109,27.51593262
+"183","CHN",16,"Jiangxi",183,"Shangrao","Dějíshě","Prefecture City","上饶市","上饶","Sh?ngráo",2.106079592,117.4692393,28.77455717
+"184","CHN",16,"Jiangxi",184,"Xinyu","Dějíshě","Prefecture City","新余市","新余","Xinyú",0.292965603,114.8511133,27.84722822
+"185","CHN",16,"Jiangxi",185,"Yichun JX","Dějíshě","Prefecture City","宜春市","宜春","Yíchun",1.718932563,114.9731399,28.30768951
+"186","CHN",16,"Jiangxi",186,"Yingtan","Dějíshě","Prefecture City","鹰潭市","鹰潭","Yingtán",0.324687424,117.1066219,28.22567666
+"187","CHN",17,"Jilin",187,"Baicheng","Dějíshě","Prefecture City","白城市","白城","Báichéng",2.949070393,123.0120124,45.34483024
+"188","CHN",17,"Jilin",188,"Baishan","Dějíshě","Prefecture City","白山市","白山","Báishan",1.897279191,127.2831939,42.06901401
+"189","CHN",17,"Jilin",189,"Changchun","Dějíshě","Prefecture City","长春市","长春","Chángchun",2.313263252,125.7689624,44.37787279
+"190","CHN",17,"Jilin",190,"Jilin","Dějíshě","Prefecture City","吉林","吉林","Jílín",3.072060388,126.8414001,43.58057781
+"191","CHN",17,"Jilin",191,"Liaoyuan","Dějíshě","Prefecture City","辽源市","辽源","Liáoyuán",0.567895718,125.3043205,42.81043746
+"192","CHN",17,"Jilin",192,"Siping","Dějíshě","Prefecture City","四平市","四平","Sěpíng",1.596086362,124.4691669,43.56960064
+"193","CHN",17,"Jilin",193,"Songyuan","Dějíshě","Prefecture City","松原市","松原","Songyuán",2.41100664,124.4781546,44.79940377
+"194","CHN",17,"Jilin",194,"Tonghua","Dějíshě","Prefecture City","通化市","通化","Tonghu?",1.695583691,125.9488953,41.95477279
+"195","CHN",17,"Jilin",195,"Yanbian Korean","Zězhězhou","Autonomous Prefecture","延边朝鲜族自治州","延边","Yánbian Cháoxianzú",4.816811606,129.1259375,43.14059772
+"196","CHN",18,"Liaoning",196,"Anshan","Dějíshě","Prefecture City","鞍山市","鞍山","Anshan",0.985400168,123.0098977,40.71514166
+"197","CHN",18,"Liaoning",197,"Benxi","Dějíshě","Prefecture City","本溪市","本溪","Benxi",0.907317282,124.565151,41.22869632
+"198","CHN",18,"Liaoning",198,"Chaoyang","Dějíshě","Prefecture City","朝阳市","朝阳","Cháoyáng",2.122493339,120.011743,41.51089455
+"199","CHN",18,"Liaoning",199,"Dalian","Dějíshě","Prefecture City","大连市","大连","D?lián",1.311241969,122.2212594,39.61175727
+"200","CHN",18,"Liaoning",200,"Dandong","Dějíshě","Prefecture City","丹东市","丹东","Dandong",1.571180516,124.4083675,40.54828184
+"201","CHN",18,"Liaoning",201,"Fushun","Dějíshě","Prefecture City","抚顺市","抚顺","Fush?n",1.21790238,124.6535873,41.83291591
+"202","CHN",18,"Liaoning",202,"Fuxin","Dějíshě","Prefecture City","阜新市","阜新","F?xin",1.125342509,121.9605527,42.28519817
+"203","CHN",18,"Liaoning",203,"Huludao","Dějíshě","Prefecture City","葫芦岛市","葫芦岛","Húludao",1.096505826,120.1935136,40.62623983
+"204","CHN",18,"Liaoning",204,"Jinzhou","Dějíshě","Prefecture City","锦州市","锦州","Jinzhou",1.075089501,121.6153477,41.47150839
+"205","CHN",18,"Liaoning",205,"Liaoyang","Dějíshě","Prefecture City","辽阳市","辽阳","Liáoyáng",0.501068703,123.2435739,41.18072372
+"206","CHN",18,"Liaoning",206,"Panjin","Dějíshě","Prefecture City","盘锦市","盘锦","Pánjin",0.389297887,121.9975651,41.08278997
+"207","CHN",18,"Liaoning",207,"Shenyang","Dějíshě","Prefecture City","沈阳市","沈阳","Shenyáng",1.403049511,123.1375203,42.09591696
+"208","CHN",18,"Liaoning",208,"Tieling","Dějíshě","Prefecture City","铁岭市","铁岭","Tieling",1.971643547,124.1712211,42.6422476
+"209","CHN",19,"Nei Mongol",209,"Alxa","Méng","League","阿拉善盟","阿拉善盟","Alash?n",25.57625942,102.4451197,40.49316619
+"210","CHN",19,"Nei Mongol",210,"Baotou","Dějíshě","Prefecture City","包头市","包头","Baotóu",2.737925181,110.2179323,41.64562
+"211","CHN",19,"Nei Mongol",211,"Baynnur","Dějíshě","Prefecture City","巴彦淖尔市","巴彦淖尔","Bay?nn?o'er",6.934215417,107.5821179,41.45114456
+"212","CHN",19,"Nei Mongol",212,"Chifeng","Dějíshě","Prefecture City","赤峰市","赤峰","Chěfeng",9.40028216,118.9041997,43.20099606
+"213","CHN",19,"Nei Mongol",213,"Hohhot","Dějíshě","Prefecture City","呼和浩特市","呼和浩特","Huhéh?ot?",2.073853348,111.3972002,40.58283912
+"214","CHN",19,"Nei Mongol",214,"Hulunbuir","Dějíshě","Prefecture City","呼伦贝尔市","呼伦贝尔","Hulúnb?i'er",31.46866419,121.2011017,49.66187652
+"215","CHN",19,"Nei Mongol",215,"Ordos","Dějíshě","Prefecture City","鄂尔多斯市","鄂尔多斯","?'erduosi",9.084260069,108.6252318,39.41176194
+"216","CHN",19,"Nei Mongol",216,"Tongliao","Dějíshě","Prefecture City","通辽市","通辽","Tongliáo",6.631926723,121.5595455,43.82871658
+"217","CHN",19,"Nei Mongol",217,"Ulaan Chab","Dějíshě","Prefecture City","乌兰察布市","乌兰察布","Wuláncháb?",5.912673862,112.4456286,41.68590712
+"218","CHN",19,"Nei Mongol",218,"Wuhai","Dějíshě","Prefecture City","乌海市","乌海","Wuhai",0.161533409,106.8829412,39.56718363
+"219","CHN",19,"Nei Mongol",219,"Xilin Gol","Méng","League","锡林郭勒盟","锡林郭勒盟","Xilínguol?",22.88765959,115.528456,44.20653905
+"220","CHN",19,"Nei Mongol",220,"Xing'an","Méng","League","兴安盟","兴安盟","Xing'an",6.244499872,121.380021,46.22290126
+"221","CHN",20,"Ningxia Hui",221,"Guyuan","Dějíshě","Prefecture City","固原市","固原","G?yuán",1.127493727,106.1829409,35.94980098
+"222","CHN",20,"Ningxia Hui",222,"Shizuishan","Dějíshě","Prefecture City","石嘴山市","石嘴山","Shízuishan",0.457240885,106.517862,38.97587044
+"223","CHN",20,"Ningxia Hui",223,"Wuzhong","Dějíshě","Prefecture City","吴忠市","吴忠","Wúzhong",1.682950322,106.4964133,37.4371258
+"224","CHN",20,"Ningxia Hui",224,"Yinchuan","Dějíshě","Prefecture City","银川市","银川","Yínchuan",0.742443641,106.3398729,38.22061409
+"225","CHN",20,"Ningxia Hui",225,"Zhongwei","Dějíshě","Prefecture City","中卫市","中卫","Zhongw?i",1.259017804,105.4740787,37.05268839
+"226","CHN",21,"Qinghai",226,"Golog Tibetan","Zězhězhou","Autonomous Prefecture","果洛藏族自治州","果洛","Guoluň Z?ngzú",7.493932728,99.39227533,34.11141532
+"227","CHN",21,"Qinghai",227,"Gyegu Tibetan","Zězhězhou","Autonomous Prefecture","玉树藏族自治州","玉树","Y?sh? Z?ngzú",23.88559818,93.69662601,34.11132299
+"228","CHN",21,"Qinghai",228,"Haibei Tibetan","Zězhězhou","Autonomous Prefecture","海北藏族自治州","海北","Haibei Z?ngzú",3.178283188,100.2683097,37.8008979
+"229","CHN",21,"Qinghai",229,"Haidong","Děqu","Prefecture","海东地区","海东","Haidong",1.307656237,102.3388221,36.33409424
+"230","CHN",21,"Qinghai",230,"Hainan Tibetan","Zězhězhou","Autonomous Prefecture","海南藏族自治州","海南","Hainán Z?ngzú",4.530395671,100.2560374,35.95238266
+"231","CHN",21,"Qinghai",231,"Haixi Mongol and Tibetan","Zězhězhou","Autonomous Prefecture","海西蒙古族藏族自治州","海西","Haixi Mengguzú Z?ngzú",28.47306544,95.11761572,37.28349115
+"232","CHN",21,"Qinghai",232,"Huangnan Tibetan","Zězhězhou","Autonomous Prefecture","黄南藏族自治州","黄南","Huángnán Z?ngzú",1.757379267,101.6289333,35.02976598
+"233","CHN",21,"Qinghai",233,"Xining","Dějíshě","Prefecture City","西宁市","西宁","Xiníng",0.725583897,101.4509439,36.81519565
+"234","CHN",22,"Shaanxi",234,"Ankang","Dějíshě","Prefecture City","安康市","安康","Ankang",2.251540458,108.9273895,32.75897279
+"235","CHN",22,"Shaanxi",235,"Baoji","Dějíshě","Prefecture City","宝鸡市","宝鸡","Baoji",1.777098224,107.2019965,34.37909691
+"236","CHN",22,"Shaanxi",236,"Hanzhong","Dějíshě","Prefecture City","汉中市","汉中","H?nzhong",2.622339112,107.1032077,33.08855511
+"237","CHN",22,"Shaanxi",237,"Shangluo","Dějíshě","Prefecture City","商洛市","商洛","Shangluň",1.906874174,109.8989341,33.64868437
+"238","CHN",22,"Shaanxi",238,"Tongchuan","Dějíshě","Prefecture City","铜川市","铜川","Tóngchuan",0.22923736,109.1753962,35.29830644
+"239","CHN",22,"Shaanxi",239,"Weinan","Dějíshě","Prefecture City","渭南市","渭南","W?inán",1.297197534,109.8580303,34.95289016
+"240","CHN",22,"Shaanxi",240,"Xi'an","Dějíshě","Prefecture City","西安市","西安","Xi'an",0.995958153,108.790893,34.11021018
+"241","CHN",22,"Shaanxi",241,"Xianyang","Dějíshě","Prefecture City","咸阳市","咸阳","Xiányáng",1.169754043,108.4493106,34.82794779
+"242","CHN",22,"Shaanxi",242,"Yan'an","Dějíshě","Prefecture City","延安市","延安","Yán'an",3.714099037,109.3180344,36.43933316
+"243","CHN",22,"Shaanxi",243,"Yulin","Dějíshě","Prefecture City","榆林市","榆林","Yúlín",4.426165256,109.5643042,38.03927053
+"244","CHN",23,"Shandong",244,"Binzhou","Děqu","Prefecture","滨州市","滨州","Binzhou",0.882386502,117.8645053,37.5768412
+"245","CHN",23,"Shandong",245,"Dezhou","Dějíshě","Prefecture City","德州市","德州","Dézhou",1.044885367,116.6468521,37.24498584
+"246","CHN",23,"Shandong",246,"Dongying","Dějíshě","Prefecture City","东营市","东营","Dongyíng",0.758950298,118.6160893,37.63119083
+"247","CHN",23,"Shandong",247,"Heze","Dějíshě","Prefecture City","菏泽市","菏泽","Hézé",1.200614428,115.6890017,35.15419937
+"248","CHN",23,"Shandong",248,"Jinan","Dějíshě","Prefecture City","济南市","济南","Jinán",0.820554896,117.0845411,36.73338142
+"249","CHN",23,"Shandong",249,"Jining","Dějíshě","Prefecture City","济宁市","济宁","Jiníng",0.945478831,116.6742631,35.37949645
+"250","CHN",23,"Shandong",250,"Laiwu","Dějíshě","Prefecture City","莱芜市","莱芜","Láiwú",0.210569837,117.6516571,36.28682817
+"251","CHN",23,"Shandong",251,"Liaocheng","Dějíshě","Prefecture City","聊城市","聊城","Liáochéng",0.866071554,115.8824384,36.45847135
+"252","CHN",23,"Shandong",252,"Linyi","Dějíshě","Prefecture City","临沂市","临沂","Línyí",1.700278971,118.2795664,35.31061211
+"253","CHN",23,"Shandong",253,"Qingdao","Dějíshě","Prefecture City","青岛市","青岛","Qingdao",1.100528328,120.1444101,36.45732544
+"254","CHN",23,"Shandong",254,"Rizhao","Dějíshě","Prefecture City","日照市","日照","Rězh?o",0.52444541,119.1335319,35.58456329
+"255","CHN",23,"Shandong",255,"Tai'an","Dějíshě","Prefecture City","泰安市","泰安","T?i'an",0.765346953,117.0346099,36.00045359
+"256","CHN",23,"Shandong",256,"Weifang","Dějíshě","Prefecture City","潍坊市","潍坊","Wéifang",1.583064638,119.0740738,36.53768984
+"257","CHN",23,"Shandong",257,"Weihai","Dějíshě","Prefecture City","威海市","威海","Weihai",0.566355624,121.9821932,37.11877303
+"258","CHN",23,"Shandong",258,"Yantai","Dějíshě","Prefecture City","烟台市","烟台","Yantái",1.382686873,120.804084,37.2365951
+"259","CHN",23,"Shandong",259,"Zaozhuang","Dějíshě","Prefecture City","枣庄市","枣庄","Zaozhuang",0.610663185,117.3089713,35.0333943
+"260","CHN",23,"Shandong",260,"Zibo","Dějíshě","Prefecture City","淄博市","淄博","Zibó",0.651632711,118.0093675,36.59299392
+"261","CHN",24,"Shanghai",261,"Shanghai","Zhíxiáshě","Municipality","上海","上海","Sh?nghai",0.651444874,121.4036651,31.08461642
+"262","CHN",25,"Shanxi",262,"Changzhi","Dějíshě","Prefecture City","长治市","长治","Chángzhě",1.405837545,112.9140988,36.47675136
+"263","CHN",25,"Shanxi",263,"Datong","Dějíshě","Prefecture City","大同市","大同","D?tóng",1.472823506,113.7173103,39.90287724
+"264","CHN",25,"Shanxi",264,"Jincheng","Dějíshě","Prefecture City","晋城市","晋城","Jěnchéng",0.93655335,112.7050601,35.61040417
+"265","CHN",25,"Shanxi",265,"Jinzhong","Dějíshě","Prefecture City","晋中市","晋中","Jěnzhong",1.664107725,112.963001,37.32741665
+"266","CHN",25,"Shanxi",266,"Linfen","Dějíshě","Prefecture City","临汾市","临汾","Línfén",2.009069764,111.3728501,36.23554851
+"267","CHN",25,"Shanxi",267,"Luliang","Dějíshě","Prefecture City","吕梁市","吕梁","Lulíang",2.147647072,111.2620637,37.67932537
+"268","CHN",25,"Shanxi",268,"Shuozhou","Dějíshě","Prefecture City","朔州市","朔州","Shuňzhou",1.122328076,112.6437421,39.61759757
+"269","CHN",25,"Shanxi",269,"Taiyuan","Dějíshě","Prefecture City","太原市","太原","T?iyuán",0.714819198,112.3141442,37.95945223
+"270","CHN",25,"Shanxi",270,"Xinzhou","Dějíshě","Prefecture City","忻州市","忻州","Xinzhou",2.610157044,112.40832,38.88249361
+"271","CHN",25,"Shanxi",271,"Yangquan","Dějíshě","Prefecture City","阳泉市","阳泉","Yángquán",0.469497304,113.5009656,38.06241732
+"272","CHN",25,"Shanxi",272,"Yuncheng","Dějíshě","Prefecture City","运城县","运城","Y?nchéng",1.411826761,111.0872197,35.19495834
+"273","CHN",26,"Sichuan",273,"Bazhong","Dějíshě","Prefecture City","巴中市","巴中","Bazhong",1.174097908,107.0383779,32.01638158
+"274","CHN",26,"Sichuan",274,"Chengdu","Dějíshě","Prefecture City","成都市","成都","Chéngdu",1.022612358,103.8454299,30.66543905
+"275","CHN",26,"Sichuan",275,"Dazhou","Dějíshě","Prefecture City","达州市","达州","Dázhou",1.568864438,107.6456098,31.36552868
+"276","CHN",26,"Sichuan",276,"Deyang","Dějíshě","Prefecture City","德阳市","德阳","Déyáng",0.563923456,104.4293611,31.1340846
+"277","CHN",26,"Sichuan",277,"Garze Tibetan","Zězhězhou","Autonomous Prefecture","甘孜藏族自治州","甘孜","Ganzi Z?ngzú",13.94209201,100.0178937,30.91235061
+"278","CHN",26,"Sichuan",278,"Guang'an","Dějíshě","Prefecture City","广安市","广安","Guang'an",0.596300047,106.6632729,30.42488024
+"279","CHN",26,"Sichuan",279,"Guangyuan","Dějíshě","Prefecture City","广元市","广元","Guangyuán",1.551498186,105.7797711,32.260871
+"280","CHN",26,"Sichuan",280,"Leshan","Dějíshě","Prefecture City","乐山市","乐山","L?shan",1.113960762,103.5329327,29.17899146
+"281","CHN",26,"Sichuan",281,"Liangshan Yi","Zězhězhou","Autonomous Prefecture","凉山彝族自治州","凉山","Liángshan Yízú",5.499595764,102.0759596,27.88707213
+"282","CHN",26,"Sichuan",282,"Luzhou","Dějíshě","Prefecture City","泸州市","泸州","Lúzhou",1.126435203,105.6674101,28.44012386
+"283","CHN",26,"Sichuan",283,"Meishan","Dějíshě","Prefecture City","眉山市","眉山","Méishan",0.755315021,103.7800334,29.89776564
+"284","CHN",26,"Sichuan",284,"Mianyang","Dějíshě","Prefecture City","绵阳市","绵阳","Míanyáng",1.925560794,104.7025664,31.84850173
+"285","CHN",26,"Sichuan",285,"Nanchong","Dějíshě","Prefecture City","南充市","南充","Nánchong",1.190396271,106.2044781,31.19644251
+"286","CHN",26,"Sichuan",286,"Neijiang]]","Dějíshě","Prefecture City","内江市","内江","N?ijiang",0.235672485,104.7950406,29.81024536
+"287","CHN",26,"Sichuan",287,"Neijiang","Dějíshě","Prefecture City","内江市","内江","N?ijiang",0.266278103,104.8855012,29.61365273
+"288","CHN",26,"Sichuan",288,"Ngawa Tibetan and Qiang","Zězhězhou","Autonomous Prefecture","阿坝藏族羌族自治州","阿坝","Ab? Z?ngzú|Qiangzú",8.05227302,102.6234959,32.3785596
+"289","CHN",26,"Sichuan",289,"Panzhihua","Dějíshě","Prefecture City","攀枝花市","攀枝花","Panzhihua",0.673928636,101.731356,26.80655423
+"290","CHN",26,"Sichuan",290,"Suining","Dějíshě","Prefecture City","遂宁市","遂宁","S?iníng",0.500989361,105.4703882,30.63146501
+"291","CHN",26,"Sichuan",291,"Ya'an","Dějíshě","Prefecture City","雅安市","雅安","Ya'an",1.403285154,102.6629848,29.91617779
+"292","CHN",26,"Sichuan",292,"Yibin","Dějíshě","Prefecture City","宜宾市","宜宾","Yíbin",1.224665463,104.6353227,28.57172965
+"293","CHN",26,"Sichuan",293,"Zigong","Dějíshě","Prefecture City","自贡市","自贡","Zěgňng",0.406040283,104.682859,29.28660888
+"294","CHN",26,"Sichuan",294,"Ziyang","Dějíshě","Prefecture City","资阳市","资阳","Ziyáng",0.743368677,104.9526104,30.18004066
+"295","CHN",27,"Tianjin",295,"Tianjin","Zhíxiáshě","Municipality","天津","天津","Tianjin",1.221815503,117.3330017,39.31040122
+"296","CHN",28,"Xinjiang Uygur",296,"Aksu","Děqu","Prefecture","阿克苏地区","阿克苏","Ak?su",13.99100318,81.55506171,40.95762775
+"297","CHN",28,"Xinjiang Uygur",297,"Altay","Děqu","Prefecture","阿勒泰地区","阿勒泰","Al?t?i",13.86312855,88.40306941,46.90752163
+"298","CHN",28,"Xinjiang Uygur",298,"Urumqi","Dějíshě","Prefecture City","乌鲁木齐市","乌鲁木齐","Wulum?qí",1.1402652,87.81256128,43.53093894
+"299","CHN",28,"Xinjiang Uygur",299,"Bortala Mongol","Zězhězhou","Autonomous Prefecture","博尔塔拉蒙古自治州","博尔塔拉","Bó'ertala Menggu",2.80156068,82.12135766,44.72705876
+"300","CHN",28,"Xinjiang Uygur",300,"Bayin'gholin Mongol","Zězhězhou","Autonomous Prefecture","巴音郭愣蒙古自治州","巴音郭愣","Bayinguol?ng Menggu",49.62722493,87.50427238,39.49975648
+"301","CHN",28,"Xinjiang Uygur",301,"Changji Hui","Zězhězhou","Autonomous Prefecture","昌吉回族自治州","昌吉","Changjí Huízú",8.754762928,88.56976674,44.35097326
+"302","CHN",28,"Xinjiang Uygur",302,"Hami","Děqu","Prefecture","哈密地区","哈密","Hamě",15.06183164,93.49987551,43.04563136
+"303","CHN",28,"Xinjiang Uygur",303,"Ili Kazakh","Zězhězhou","Autonomous Prefecture","伊犁哈萨克自治州","伊犁","Yilí Has?k?",6.247669203,82.04105597,43.42933322
+"304","CHN",28,"Xinjiang Uygur",304,"Karamay","Dějíshě","Prefecture City","克拉玛依市","克拉玛依","K?lamayi",0.896182672,85.18424812,45.49412588
+"305","CHN",28,"Xinjiang Uygur",305,"Kashgar","Děqu","Prefecture","喀什地区","喀什","Kashí",11.66577244,77.22482123,38.18702031
+"306","CHN",28,"Xinjiang Uygur",306,"Khotan","Děqu","Prefecture","和田地区","和田","Hétián",25.26066853,80.91371873,37.08434188
+"307","CHN",28,"Xinjiang Uygur",307,"Kizilsu Kirghiz","Zězhězhou","Autonomous Prefecture","克孜勒苏柯尔克孜自治州","克孜勒苏","K?zil?su Ke'erk?zi",7.091194857,75.88693068,39.63024456
+"308","CHN",28,"Xinjiang Uygur",308,"Shihezi","Dějíshě","Prefecture City","石河子市","石河子","Shíhézi",0.055268574,86.03626513,44.30701816
+"309","CHN",28,"Xinjiang Uygur",309,"Tacheng","Děqu","Prefecture","塔城地区","塔城","Tachéng",11.98484358,84.832009,45.60434478
+"310","CHN",28,"Xinjiang Uygur",310,"Turfan","Děqu","Prefecture","吐鲁番地区","吐鲁番","Tulufan",7.554329256,89.84277452,42.38444599
+"311","CHN",29,"Xizang",311,"Chamdo","Děqu","Prefecture","昌都地区","昌都","Changdu",10.00822285,97.05792827,30.78975611
+"312","CHN",29,"Xizang",312,"Lhasa","Dějíshě","Prefecture City","拉萨市","拉萨","Las?",2.764884998,91.10756303,30.03429851
+"313","CHN",29,"Xizang",313,"Nagchu","Děqu","Prefecture","那曲地区","那曲","N?qu",37.86021788,88.88174506,32.93895141
+"314","CHN",29,"Xizang",314,"Ngari","Děqu","Prefecture","阿里地区","阿里","Ali",28.23380965,82.24054327,32.83448325
+"315","CHN",29,"Xizang",315,"Nyingtri","Děqu","Prefecture","林芝地区","林芝","Línzhi",7.506764667,95.24397436,29.50058541
+"316","CHN",29,"Xizang",316,"Shannan","Děqu","Prefecture","山南地区","山南","Shannán",4.371033595,91.69721675,28.7227197
+"317","CHN",29,"Xizang",317,"Shigatse","Děqu","Prefecture","日喀则地区","日喀则","Rěkazé",16.82826076,86.42933318,29.51500936
+"318","CHN",30,"Yunnan",318,"Baoshan","Dějíshě","Prefecture City","保山市","保山","Baoshan",1.70549802,98.97238101,24.97925804
+"319","CHN",30,"Yunnan",319,"Chuxiong Yi","Zězhězhou","Autonomous Prefecture","楚雄彝族自治州","楚雄","Chuxióng Yízú",2.552283681,101.5702413,25.35348963
+"320","CHN",30,"Yunnan",320,"Deqen Tibetan","Zězhězhou","Autonomous Prefecture","迪庆藏族自治州","迪庆","Díqěng Z?ngzú",2.122555798,99.44138502,27.95834468
+"321","CHN",30,"Yunnan",321,"Dali Bai","Zězhězhou","Autonomous Prefecture","大理白族自治州","大理","D?li Báizú",2.550608819,100.0393132,25.72920944
+"322","CHN",30,"Yunnan",322,"Dehong Dai and Jingpo","Zězhězhou","Autonomous Prefecture","德宏傣族景颇族自治州","德宏","Déhóng Daizú|Jingpozú",0.991927847,98.09053533,24.5595839
+"323","CHN",30,"Yunnan",323,"Honghe Hani and Yi","Zězhězhou","Autonomous Prefecture","红河哈尼族彝族自治州","红河","Hónghé Hanízú|Yízú",2.839393588,103.036551,23.43976345
+"324","CHN",30,"Yunnan",324,"Kunming","Dějíshě","Prefecture City","昆明市","昆明","Kunmíng",1.884946757,102.8750874,25.38710811
+"325","CHN",30,"Yunnan",325,"Lijiang","Dějíshě","Prefecture City","丽江市","丽江","Lějiang",1.866760962,100.524862,26.94224722
+"326","CHN",30,"Yunnan",326,"Lincang","Dějíshě","Prefecture City","临沧市","临沧","Líncang",2.0907011,99.6772379,23.94296138
+"327","CHN",30,"Yunnan",327,"Nujiang Lisu","Zězhězhou","Autonomous Prefecture","怒江傈僳族自治州","怒江","N?jiang Lěs?zú",1.320380228,98.87367484,26.96033903
+"328","CHN",30,"Yunnan",328,"Pu'er","Dějíshě","Prefecture City","普洱市","普洱","Pu'er",3.886816954,100.721926,23.18814297
+"329","CHN",30,"Yunnan",329,"Qujing","Dějíshě","Prefecture City","曲靖市","曲靖","Qujěng",2.59420798,103.9375568,25.70407171
+"330","CHN",30,"Yunnan",330,"Wenshan Zhuang and Miao","Zězhězhou","Autonomous Prefecture","文山壮族苗族自治州","文山","Wénshan Zhu?ngzú|Miáozú",2.783534606,104.7144305,23.69150485
+"331","CHN",30,"Yunnan",331,"Xishuangbanna Dai","Zězhězhou","Autonomous Prefecture","西双版纳傣族自治州","西双版纳","Xishuangbann?|Daizú",1.67993236,100.9433244,21.93498782
+"332","CHN",30,"Yunnan",332,"Yuxi","Dějíshě","Prefecture City","玉溪市","玉溪","Y?xi",1.332158975,102.1990227,24.13815846
+"333","CHN",30,"Yunnan",333,"Zhaotong","Dějíshě","Prefecture City","昭通市","昭通","Zhaotong",2.057969925,104.0009658,27.65320964
+"334","CHN",31,"Zhejiang",334,"Hangzhou","Dějíshě","Prefecture City","杭州市","杭州","Hángzhou",1.59439421,119.4852926,29.90421042
+"335","CHN",31,"Zhejiang",335,"Huzhou","Dějíshě","Prefecture City","湖州市","湖州","Húzhou",0.546611839,119.8709505,30.74617062
+"336","CHN",31,"Zhejiang",336,"Jiaxing","Dějíshě","Prefecture City","嘉兴市","嘉兴","Jiaxing",0.374463907,120.7539063,30.65484581
+"337","CHN",31,"Zhejiang",337,"Jinhua","Dějíshě","Prefecture City","金华市","金华","Jinhuá",1.01231239,119.9536869,29.11634843
+"338","CHN",31,"Zhejiang",338,"Lishui","Dějíshě","Prefecture City","丽水市","丽水","Líshui",1.580630105,119.510213,28.19819235
+"339","CHN",31,"Zhejiang",339,"Ningbo","Dějíshě","Prefecture City","宁波市","宁波","Níngbo",0.831542847,121.4613795,29.72064032
+"340","CHN",31,"Zhejiang",340,"Quzhou","Dějíshě","Prefecture City","衢州市","衢州","Qúzhou",0.819397222,118.6768238,28.93446662
+"341","CHN",31,"Zhejiang",341,"Shaoxing","Dějíshě","Prefecture City","绍兴市","绍兴","Sh?oxing",0.741576038,120.6281041,29.71295631
+"342","CHN",31,"Zhejiang",342,"Taizhou ZJ","Dějíshě","Prefecture City","泰州市","台州","Taizhou",0.874436196,121.0887865,28.79227286
+"343","CHN",31,"Zhejiang",343,"Wenzhou","Dějíshě","Prefecture City","温州市","温州","Wenzhou",1.044483133,120.4242891,27.90360966
+"344","CHN",31,"Zhejiang",344,"Zhoushan","Dějíshě","Prefecture City","舟山市","舟山","Zhoushan",0.115241123,122.1390232,30.05541758
+"345","TWN",32,"Taiwan",345,"Fujian","Province","Province","福建","福建","Fujian",0.016301058,118.3827902,24.45419685
+"346","TWN",32,"Taiwan",346,"Kaohsiung","Special Municipality","Special Municipality","高雄","高雄","Kaohsiung",0.272374147,120.6260874,23.00086505
+"347","TWN",32,"Taiwan",347,"New Taipei","Special Municipality","Special Municipality","新北","新北","New Taipei",0.184087003,121.5993501,24.9842861
+"348","TWN",32,"Taiwan",348,"Taichung","Special Municipality","Special Municipality","台中","台中","Taichung",0.199438524,120.897715,24.23354757
+"349","TWN",32,"Taiwan",349,"Tainan","Special Municipality","Special Municipality","台南","台南","Tainan",0.196108453,120.3323616,23.14866451
+"350","TWN",32,"Taiwan",350,"Taipei","Special Municipality","Special Municipality","台北","台北","Taipei",0.135598183,121.2627249,24.900437
+"351","TWN",32,"Taiwan",351,"Taiwan","Province","Province","台湾","台湾","Taiwan",2.220772092,121.001616,23.66162528
+"352","HKG",33,"Hong Kong",352,"Hong Kong","Tequ","Special Region","香港","香港","Xianggang",0.099025249,114.1619493,22.42353391
+"371","MAC",34,"Macao",371,"Macao","Tequ","Special Region","澳门","澳门","Aomen",0.003588053,113.5588841,22.16252228
