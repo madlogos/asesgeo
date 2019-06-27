@@ -74,7 +74,7 @@ lat_coord(c(-10, 0, 20), sep=' ', prefix=c(
 }
 \dontrun{
 lon_coord(c(-10, 0, 20), sep=' ', unit='deg')
-# [1] "10 degW" "0掳"   "20 degE"
+# [1] "10 degW" "0°"   "20 degE"
 
 lon_coord(c(-10, 0, 20), sep=' ', prefix=c(
     pos='E.lon', zero='', neg='W.lon'), suffix='', unit='deg')
