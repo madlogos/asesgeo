@@ -27,5 +27,7 @@ Imports:
     tidyr
 RoxygenNote: 6.1.1
 Suggests: 
+    knitr,
     testthat,
     vdiffr
+VignetteBuilder: knitr

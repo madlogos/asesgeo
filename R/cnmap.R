@@ -19,7 +19,7 @@
 #' in size). It is useful to reduce the object size when drawing a city- or 
 #' county-level map by 50\%-95\%. Default 1 (no simplification). \cr
 #' Be careful to balance the trade-off of \code{simplify_level} and plot rendering.
-#' The larger \code{simplify_level} is, the longer it takes to simplify the polygons,
+#' The smaller \code{simplify_level} is, the longer it takes to simplify the polygons,
 #' but the shorter it takes to render the plot. 
 #' @param drop_fragment Logical, whether drop small fragments in the map (typically
 #' small islands). It is useful to reduce the object size by around 10\%. Default FALSE. 
@@ -27,27 +27,43 @@
 #'   \item at least preserve the largest polygon within a single Polygon slot;
 #'   \item at least preserve the largest polygon with duplicated ADCODE.
 #' }
-#' @param preserve_topo Logical, whether preserve the topology when applying
-#' polygon simplification algorithm (only effective when \code{simplify_level} < 1). 
-#' It is highly recommended to set \code{preserve_topo} = TRUE to avoid unexpected 
-#' deformation. Default TRUE. 
+#' @param preserve_topo Character ("all", "major", "none"), indicating how to preserve 
+#' the topology when applying polygon simplification algorithm (only effective when
+#'  \code{simplify_level} < 1). It is highly recommended to set \code{preserve_topo} == 
+#'  "all" or "major" to avoid unexpected deformation. Default "all".
+#' \itemize{
+#'   \item \strong{all}: preserve topology of all the polygons, i.e. each Polygons 
+#'     slot and its subordinate Polygon slots are retained.
+#'   \item \strong{major}: only preserve topology of the Polygons slot. Some of 
+#'     the Polygon slots inside the Polygons may be lost.
+#'   \item \strong{none}: do not try to preserve topology, i.e., some of the 
+#'     Polygons and/or Polygon slots inside them will be lost.
+#' } 
 #' @param fragment_area Numeric, the threshold area (in km^2) for "fragment" (only 
 #' effective when \code{drop_fragment} = TRUE). It is not recommended to set this 
 #' value too high. Default 0.003 (the size of the smallest county in China). 
-#'
-#' @return An \pkg{sp}::\code{\link[sp]{SpatialPolygonsDataFrame}} object. You can 
-#' further process it by \describe{
+#' @param output Character, "spdf", "map", "df", "sf". Default "spdf" 
+#' (\code{sp::SpatialPolygonsDataFrame}).
+#' 
+#' @return By default, an \pkg{sp}::\code{\link[sp]{SpatialPolygonsDataFrame}} 
+#' object (\code{output} == "spdf"). You can further process it by \describe{
 #'  \item{convert to a \pkg{maps}::\code{\link[maps]{map}} object}{
 #'    \pkg{maps}::\code{\link[maps]{SpatialPolygons2map}()}}
-#'  \item{convert to a data.frame}{\pkg{broom}::\code{\link[broom]{tidy}()}}
+#'  \item{convert to a data.frame}{\pkg{ggplot2}::\code{\link[ggplot2]{fortify}()}}
 #'  \item{convert to an \code{sf} object}{\pkg{sf}::\code{\link{st_as_sf}()}}
 #' }
-#' @importFrom rmapshaper ms_simplify
+#' @importFrom rmapshaper ms_simplify ms_dissolve
 #' @importFrom sf st_as_sf as_Spatial
 #' @importFrom sp SpatialPolygonsDataFrame
+#' @importFrom maps SpatialPolygons2map
+#' @importFrom ggplot2 fortify
 #' @export
 #'
-#' @seealso \code{\link[rmapshaper]{ms_simplify}}, \code{\link[sp]{SpatialPolygonsDataFrame}}
+#' @seealso \itemize{
+#'   \item check the vignettes: \code{vignette("drawChinaMap", package="asesgeo")}
+#'   \item other useful functions: \code{\link[rmapshaper]{ms_simplify}}, 
+#'      \code{\link[rmapshaper]{ms_dissolve}}, \code{\link[sp]{SpatialPolygonsDataFrame}}
+#' }
 #' @note \describe{
 #'  \item{Direct vs indirect loading}{You can also directly load the map datasets 
 #'   using \code{data(cnmap0)}, \code{data(cnmap1)}, \code{data(cnmap2)}, or \code{data(cnmap3)}.
@@ -67,7 +83,7 @@
 #'   }}
 #' \item{Coordinate reference system}{
 #'   The embeded map datasets are applying WGS84 coordinate system. You can define 
-#'   your own coordinate reference system when plotting a map. Official 
+#'   your own coordinate reference system when plotting a map. China's official 
 #'   recommendations:  \itemize{
 #'   \item \pkg{maps}::\code{\link{map}}() or \pkg{ggplot2}::\code{\link[ggplot2]{coord_map}}:
 #'     set it with \pkg{mapproj}::\code{\link{mapproject}()} \itemize{
@@ -108,11 +124,13 @@
 #'   geom_sf(data=bjmap3, color="gray50", size=0.5) +
 #'   geom_sf(data=bjmap2, fill="transparent", color="gray5", size=0.8) +
 #'   geom_sf_text(aes(label=NAME_LAB), data=bjmap3, family="Microsoft YaHei") +
-#'   theme_minimal()
+#'   coord_sf(crs="+init=epsg:4490 +proj=laea +ellps=GRS80 
+#'            +lon_0=105 +lat_0=30") +theme_minimal()
 #' }
 cnmap <- function(level=c("nation", "province", "city", "county"), regions=NULL, 
-                  simplify_level=1, drop_fragment=FALSE, preserve_topo=TRUE,
-                  fragment_area=0.003){
+                  simplify_level=1, drop_fragment=FALSE, 
+                  preserve_topo=c("all", "major", "none"),
+                  fragment_area=0.003, output=c("spdf", "map", "df", "sf")){
     # check args
     if (is.character(level)){
         level <- match.arg(level)
@@ -120,9 +138,11 @@ cnmap <- function(level=c("nation", "province", "city", "county"), regions=NULL,
         stopifnot(level %in% 0:3)
         level <- c("nation", "province", "city", "county")[level+1]
     }
+    preserve_topo <- match.arg(preserve_topo)
+    output <- match.arg(output)
     stopifnot(is.numeric(simplify_level) && (simplify_level >=0 && simplify_level <= 1))
-    mapobj <- switch(level, nation=chnmap0, province=chnmap1, city=chnmap2, 
-                     county=chnmap3)
+    mapobj <- switch(level, nation=asesgeo::chnmap0, province=asesgeo::chnmap1, 
+                     city=asesgeo::chnmap2, county=asesgeo::chnmap3)
     meta <- mapobj@data
     
     # filter the map
@@ -146,8 +166,14 @@ cnmap <- function(level=c("nation", "province", "city", "county"), regions=NULL,
     
     # simplify map obj
     if (simplify_level < 1){
-        mapobj <- sf::as_Spatial(rmapshaper::ms_simplify(
-            sf::st_as_sf(mapobj), keep=simplify_level, keep_shapes=preserve_topo))
+        mapobj <- rmapshaper::ms_simplify(
+            sf::st_as_sf(mapobj), keep=simplify_level, 
+            keep_shapes=preserve_topo %in% c("all", "major"),
+            explode=preserve_topo == "all")
+        mapobj <- sf::as_Spatial(rmapshaper::ms_dissolve(
+            mapobj, field="ADCODE", sum_fields=c("AREA", "PERIMETER"), 
+            copy_fields=names(mapobj)[
+                ! names(mapobj) %in% c("ADCODE", "AREA", "PERIMETER")]))
     }
     
     # drop fragments
@@ -157,39 +183,47 @@ cnmap <- function(level=c("nation", "province", "city", "county"), regions=NULL,
             thres=list(fld="area", fun=`>=`, val=fragment_area))
     }
     
-    return(mapobj)
+    return(switch(output,
+                  spdf = mapobj,
+                  map = maps::SpatialPolygons2map(mapobj, namefield="ADCODE"),
+                  df = ggplot2::fortify(mapobj),
+                  sf = st_as_sf(mapobj)))
 }
 
 #' @export
 #' @rdname cnmap
-cnmap0 <- function(regions=NULL, simplify_level=1, drop_fragment=FALSE, preserve_topo=TRUE,
-                   fragment_area=0.003){
+cnmap0 <- function(regions=NULL, simplify_level=1, drop_fragment=FALSE, 
+                   preserve_topo=c("all", "major", "none"), fragment_area=0.003,
+                   output=c("spdf", "map", "df", "sf")){
     cnmap(0, regions=regions, simplify_level=simplify_level, preserve_topo=preserve_topo,
-          drop_fragment=drop_fragment, fragment_area=fragment_area)
+          drop_fragment=drop_fragment, fragment_area=fragment_area, output=output)
 }
 
 #' @export
 #' @rdname cnmap
-cnmap1 <- function(regions=NULL, simplify_level=1, drop_fragment=FALSE, preserve_topo=TRUE,
-                   fragment_area=0.003){
+cnmap1 <- function(regions=NULL, simplify_level=1, drop_fragment=FALSE, 
+                   preserve_topo=c("all", "major", "none"), fragment_area=0.003,
+                   output=c("spdf", "map", "df", "sf")){
     cnmap(1, regions=regions, simplify_level=simplify_level, preserve_topo=preserve_topo,
-          drop_fragment=drop_fragment, fragment_area=fragment_area)
+          drop_fragment=drop_fragment, fragment_area=fragment_area, output=output)
 }
 
 #' @export
 #' @rdname cnmap
-cnmap2 <- function(regions=NULL, simplify_level=1, drop_fragment=FALSE, preserve_topo=TRUE,
-                   fragment_area=0.003){
+cnmap2 <- function(regions=NULL, simplify_level=1, drop_fragment=FALSE, 
+                   preserve_topo=c("all", "major", "none"), fragment_area=0.003,
+                   output=c("spdf", "map", "df", "sf")){
     cnmap(2, regions=regions, simplify_level=simplify_level, preserve_topo=preserve_topo,
-          drop_fragment=drop_fragment, fragment_area=fragment_area)
+          drop_fragment=drop_fragment, fragment_area=fragment_area, output=output)
 }
 
 #' @export
 #' @rdname cnmap
-cnmap3 <- function(regions=NULL, simplify_level=1, drop_fragment=FALSE, preserve_topo=TRUE,
-                   fragment_area=0.003){
+cnmap3 <- function(regions=NULL, simplify_level=1, drop_fragment=FALSE, 
+                   preserve_topo=c("all", "major", "none"), fragment_area=0.003,
+                   output=c("spdf", "map", "df", "sf")){
     cnmap(3, regions=regions, simplify_level=simplify_level, preserve_topo=preserve_topo,
-          drop_fragment=drop_fragment, fragment_area=fragment_area)
+          drop_fragment=drop_fragment, fragment_area=fragment_area, output=output)
 }
 
 drop_map_fragment <- function(

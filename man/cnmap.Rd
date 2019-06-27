@@ -10,19 +10,24 @@
 \usage{
 cnmap(level = c("nation", "province", "city", "county"),
   regions = NULL, simplify_level = 1, drop_fragment = FALSE,
-  preserve_topo = TRUE, fragment_area = 0.003)
+  preserve_topo = c("all", "major", "none"), fragment_area = 0.003,
+  output = c("spdf", "map", "df", "sf"))
 
-cnmap0(regions = NULL, simplify_level = 1, drop_fragment = TRUE,
-  preserve_topo = TRUE, fragment_area = 0.003)
+cnmap0(regions = NULL, simplify_level = 1, drop_fragment = FALSE,
+  preserve_topo = c("all", "major", "none"), fragment_area = 0.003,
+  output = c("spdf", "map", "df", "sf"))
 
-cnmap1(regions = NULL, simplify_level = 1, drop_fragment = TRUE,
-  preserve_topo = TRUE, fragment_area = 0.003)
+cnmap1(regions = NULL, simplify_level = 1, drop_fragment = FALSE,
+  preserve_topo = c("all", "major", "none"), fragment_area = 0.003,
+  output = c("spdf", "map", "df", "sf"))
 
-cnmap2(regions = NULL, simplify_level = 1, drop_fragment = TRUE,
-  preserve_topo = TRUE, fragment_area = 0.003)
+cnmap2(regions = NULL, simplify_level = 1, drop_fragment = FALSE,
+  preserve_topo = c("all", "major", "none"), fragment_area = 0.003,
+  output = c("spdf", "map", "df", "sf"))
 
-cnmap3(regions = NULL, simplify_level = 1, drop_fragment = TRUE,
-  preserve_topo = TRUE, fragment_area = 0.003)
+cnmap3(regions = NULL, simplify_level = 1, drop_fragment = FALSE,
+  preserve_topo = c("all", "major", "none"), fragment_area = 0.003,
+  output = c("spdf", "map", "df", "sf"))
 }
 \arguments{
 \item{level}{Character or integer, "nation" (0), "province" (1), "city" (2) or
@@ -39,7 +44,7 @@ If set 1, then the function will load maps with highest border precision (bigger
 in size). It is useful to reduce the object size when drawing a city- or 
 county-level map by 50\%-95\%. Default 1 (no simplification). \cr
 Be careful to balance the trade-off of \code{simplify_level} and plot rendering.
-The larger \code{simplify_level} is, the longer it takes to simplify the polygons,
+The smaller \code{simplify_level} is, the longer it takes to simplify the polygons,
 but the shorter it takes to render the plot.}
 
 \item{drop_fragment}{Logical, whether drop small fragments in the map (typically
@@ -49,21 +54,32 @@ small islands). It is useful to reduce the object size by around 10\%. Default F
   \item at least preserve the largest polygon with duplicated ADCODE.
 }}
 
-\item{preserve_topo}{Logical, whether preserve the topology when applying
-polygon simplification algorithm (only effective when \code{simplify_level} < 1). 
-It is highly recommended to set \code{preserve_topo} = TRUE to avoid unexpected 
-deformation. Default TRUE.}
+\item{preserve_topo}{Character ("all", "major", "none"), indicating how to preserve 
+the topology when applying polygon simplification algorithm (only effective when
+ \code{simplify_level} < 1). It is highly recommended to set \code{preserve_topo} == 
+ "all" or "major" to avoid unexpected deformation. Default "all".
+\itemize{
+  \item \strong{all}: preserve topology of all the polygons, i.e. each Polygons 
+    slot and its subordinate Polygon slots are retained.
+  \item \strong{major}: only preserve topology of the Polygons slot. Some of 
+    the Polygon slots inside the Polygons may be lost.
+  \item \strong{none}: do not try to preserve topology, i.e., some of the 
+    Polygons and/or Polygon slots inside them will be lost.
+}}
 
 \item{fragment_area}{Numeric, the threshold area (in km^2) for "fragment" (only 
 effective when \code{drop_fragment} = TRUE). It is not recommended to set this 
 value too high. Default 0.003 (the size of the smallest county in China).}
+
+\item{output}{Character, "spdf", "map", "df", "sf". Default "spdf" 
+(\code{sp::SpatialPolygonsDataFrame}).}
 }
 \value{
-An \pkg{sp}::\code{\link[sp]{SpatialPolygonsDataFrame}} object. You can 
-further process it by \describe{
+By default, an \pkg{sp}::\code{\link[sp]{SpatialPolygonsDataFrame}} 
+object (\code{output} == "spdf"). You can further process it by \describe{
  \item{convert to a \pkg{maps}::\code{\link[maps]{map}} object}{
    \pkg{maps}::\code{\link[maps]{SpatialPolygons2map}()}}
- \item{convert to a data.frame}{\pkg{broom}::\code{\link[broom]{tidy}()}}
+ \item{convert to a data.frame}{\pkg{ggplot2}::\code{\link[ggplot2]{fortify}()}}
  \item{convert to an \code{sf} object}{\pkg{sf}::\code{\link{st_as_sf}()}}
 }
 }
@@ -95,7 +111,7 @@ are convenient wrappers for \code{level} 0 (nation), 1 (province), 2 (city/prefe
   }}
 \item{Coordinate reference system}{
   The embeded map datasets are applying WGS84 coordinate system. You can define 
-  your own coordinate reference system when plotting a map. Official 
+  your own coordinate reference system when plotting a map. China's official 
   recommendations:  \itemize{
   \item \pkg{maps}::\code{\link{map}}() or \pkg{ggplot2}::\code{\link[ggplot2]{coord_map}}:
     set it with \pkg{mapproj}::\code{\link{mapproject}()} \itemize{
@@ -137,9 +153,14 @@ ggplot() +
   geom_sf(data=bjmap3, color="gray50", size=0.5) +
   geom_sf(data=bjmap2, fill="transparent", color="gray5", size=0.8) +
   geom_sf_text(aes(label=NAME_LAB), data=bjmap3, family="Microsoft YaHei") +
-  theme_minimal()
+  coord_sf(crs="+init=epsg:4490 +proj=laea +ellps=GRS80 
+           +lon_0=105 +lat_0=30") +theme_minimal()
 }
 }
 \seealso{
-\code{\link[rmapshaper]{ms_simplify}}, \code{\link[sp]{SpatialPolygonsDataFrame}}
+\itemize{
+  \item check the vignettes: \code{vignette("drawChinaMap", package="asesgeo")}
+  \item other useful functions: \code{\link[rmapshaper]{ms_simplify}}, 
+     \code{\link[rmapshaper]{ms_dissolve}}, \code{\link[sp]{SpatialPolygonsDataFrame}}
+}
 }
