@@ -1,0 +1,478 @@
+---
+title: "Draw China Maps with `cnmap()`"
+date: "`r Sys.time()`"
+output: 
+  rmarkdown::html_vignette:
+    number_sections: yes
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Draw China Maps with `cnmap()`}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r setup, include=FALSE}
+Sys.setlocale("LC_CTYPE", 'Chs')
+knitr::opts_chunk$set(fig.width=7, fig.height=5.5)
+```
+
+```{r UDF, include=FALSE}
+capOpt <- function(fig=c('Figure ', 'Fig.', 'Fig ', '图'),
+                   tab=c('Table ', 'Tab.', 'Tab ', '表'),
+                   sep=c('-', '.'), chap=0, sect=0, use.head=1){
+    fig <- match.arg(fig)
+    tab <- match.arg(tab)
+    sep <- match.arg(sep)
+    return(list(fig=fig, tab=tab, sep=sep, chap=chap, sect=sect, use.head=use.head))
+}
+
+cap <- capOpt(fig='Figure ', tab='Table ', sep='-', chap=1, sect=1, use.head=2)
+
+fn = local({  ## counter for figures
+    i = 0
+    function(x, renum = c(-1, 0, 1, 2), use.head=cap$use.head, reset.base=1,
+             chap=NULL, sect=NULL) {
+        ## Calc title numbers
+        ##  x: chart title
+        ##  renum: if -1/0, no effect; 1, reset chap and i; 2, reset sect and i.
+        ##  use.head: if -1/0, 'Table 1'; if 1, 'Table 1-1'; if 2, 'Table 1-1-1'
+        ##  reset.base: if reset chap/sect, reset to this value. default 1.
+        ##  chap: explicitly declare the chap value (overwrite cap$chap). default NULL.
+        ##  sect: explicitly declare the sect value (overwrite cap$sect). default NULL.
+        renum = renum[[1]]
+        use.head = use.head[[1]]
+        stopifnot(renum >= -1 && renum <= 2)
+        stopifnot(use.head >= -1 && use.head <= 2)
+        stopifnot(is.null(chap) || is.numeric(chap))
+        stopifnot(is.null(sect) || is.numeric(sect))
+        
+        if (!is.null(chap)) cap$chap <<- chap -1 
+        if (!is.null(sect)) cap$sect <<- sect -1 
+        
+        if (renum > use.head) renum <- use.head
+        if (renum > 0) { 
+            i <<- 0
+            if (renum == 1) {
+                cap$chap <<- cap$chap + 1
+                cap$sect <<- reset.base
+            }
+            if (renum == 2) {
+                cap$sect <<- cap$sect + 1
+            }
+        }
+        i <<- i + 1
+        if (use.head == 1) cap.head <- paste0(cap$chap, cap$sep)
+        if (use.head == 2) cap.head <- paste0(cap$chap, cap$sep, cap$sect, cap$sep)
+        paste0('<b>', cap$fig, cap.head, i, '</b>: ', x)
+    }
+})
+tn = local( {  ## counter for tables
+    j = 0
+    function(x, renum = c(-1, 0, 1, 2), use.head = cap$use.head, reset.base=1,
+             chap=NULL, sect=NULL) {
+        renum = renum[[1]]
+        use.head = use.head[[1]]
+        stopifnot(renum >= -1 && renum <= 2)
+        stopifnot(use.head >= -1 && use.head <= 2)
+        stopifnot(is.null(chap) || is.numeric(chap))
+        stopifnot(is.null(sect) || is.numeric(sect))
+        
+        if (!is.null(chap)) cap$chap <<- chap -1 
+        if (!is.null(sect)) cap$sect <<- sect -1 
+        
+        if (renum > use.head) renum <- use.head
+        if (renum > 0) {
+            j <<- 0
+            if (renum == 1) {
+                cap$chap <<- cap$chap + 1
+                cap$sect <<- reset.base
+            }
+            if (renum == 2) {
+                cap$sect <<- cap$sect + 1
+            }
+        }
+        j <<- j + 1
+        if (use.head == 1) cap.head <- paste0(cap$chap, cap$sep)
+        if (use.head == 2) cap.head <- paste0(cap$chap, cap$sep, cap$sect, cap$sep)
+        paste0('<b>', cap$tab, cap.head, j, '</b>: ', x)
+    }
+})
+```
+
+# Introduction
+
+You can always use `package:ggplot2` to draw maps. But when it comes to China maps, you might have a difficult time in getting map data. This document is to guide you to draw province-level and city-level China maps more easily.
+
+We provided four datasets in the `package:asesgeo` package covering the four administrative levels (nation, province/municipality, prefecture, county/district). You can easily call them by function `cnmap()`. Compared to conventional China map datasets in packages such as `package:maps`, `package:mapdata` and other open-source data such as GADM [^gadm], `cnmap()` has a couple of advantages:
+
+- **More complete**. The map in `package:maps` does not contain Taiwan, and only provides nationwide borders.
+- **More up-to-date**. The map in `package:mapdata` does not contain Chongqing.
+- **More precise**. The map by GADM does not have an accurate border in Tibet and Xinjiang.
+
+## How to Use
+
+You can load `package:asesgeo` and then call `?cnmap` to read the manual. When calling `cnmap()`, it will load one of the four embeded datasets (nation-level `chnmap0`, province-level `chnmap1`, prefecture-level `chnmap2`, and county-level `chnmap3`).
+
+## Structure of the Map Datasets
+
+All the four datasets are of `sp::SpatialPolygonsDataFrame` class. As S4 objects, they are comprised of 5 slots:
+
+1. **data** [_data.frame_]: the meta data of the map object
+1. **polygons** [_list_]: a list of `sp::Polygons` objects lengthing the number of rows of the metadata data.frame. Each list contains 5 slots:
+
+    1. **Polygons** [_list_]: a list of `sp::Polygon` objects. Each list contains 5 slots:
+  
+        1. latpt [_numeric vector_]: the coordinate pair of the centroid point
+        1. area [_numeric scalar_]: the area of the polygon
+        1. hole [_logical scalar_]: whether the polygon is a hole
+        1. ringDir [_integer scalar_]: -1 or 1
+        1. coords [_numeric matrix_]: point pairs of the polygon, each point in a row
+  
+    1. **plotOrder** [_integer vector_]: the order to plot the polygons, lengthing the count of the Polygons.
+    1. **labpt** [_numeric vector_]: : the coordinate pair of the centroid point
+    1. **ID** [_character scalar_]: ID of the Polygons. All the IDs should be align with the row.names of the metadata data.frame.
+    1. **area** [_numeric scalar_]: the total area of the Polygons
+
+1. **plotOrder** [_integer vector_]: the order to plot the polygons, lengthing the count of the Polygons.
+1. **bbox** [_numeric matrix_]: the coordinate limits of the map
+1. **proj4string** [_CRS string_]: the PROJ.4 definition of the map
+
+
+## Structure of the Map Metadata
+
+The structure of the four datasets:
+
+```{r mapL1 str, echo=FALSE, results='markup'}
+invisible(library(asesgeo))
+lapply(structure(list(chnmap0, chnmap1, chnmap2, chnmap3), 
+                 names=c("Nation", "Province", "Prefecture", "County")), 
+       function(obj) {
+         str(obj@data)
+         invisible()
+       })
+```
+
+There are some important fields in common:
+
+Field     | Type | Implication
+:---------|:-----|:------------------
+ID        | chr  | Identifier of each row. Note that `row.names` of the metadata is aligned with the IDs of the polygons
+NAME      | chr  | Full Chinese name of each Polygons object
+NAME_EN   | chr  | Short English name of each Polygons object
+NAME_LAB  | chr  | Short Chinese name of each Polygons object
+ADCODE    | chr  | 6-digit administrative code in 'aabbcc' format (aa: province code; bb: prefecture code; cc: county code). E.g., 110000 for 'Beijing' municipality, '110101' for 'Dongcheng, Beijing'. 
+AREA      | num  | Total area of the Polygons
+PERIMETER | num  | Total perimeter of the Polygons
+PTX       | num  | Longitude (x-coordinate) of the centroid point
+PTY       | num  | Lattitude (y-coordinate) of the centroid point
+
+Table: `r tn('Key Fields in the Metadata')`
+
+## Fetch More Data
+
+- Visit [GADM site](http://gadm.org) to get more datasets;
+- Download R datasets you want;
+- Use `readRDS` to read the S4 object from the rds file;
+- Use `broom::tidy` function to extract polygon data from the S4 object;
+- `<object name>@data` is the meta data.
+
+[^gadm]: http://gadm.org/ "Global Administrative Areas"
+
+> Note that the GADM certificate forbids commercial use. And the borders are not aligned with Chinese official data.
+
+
+# Base Maps
+
+Either `geom_map`, `geom_polygon` or `geom_sf` can be used to plot maps [^ggplot2].
+
+[^ggplot2]: Refer to ggplot2 official manual at <https://ggplot2.tidyverse.org/reference/>.
+
+## Level-0 (Nation) Base Map
+
+Use dataset `chnmap0` to draw a level-0 China base map.
+
+### Using `maps::map()`
+
+```{r L0 basemap map, fig.cap=fn('China Base Map by `map` (Nation Level)', 1, chap=2)}
+library(maps)
+op <- par(mar=c(0, 0, 0, 0))
+map(cnmap0(), projection="albers", parameters=c(24, 47))
+par(op)
+```
+
+### Using `ggplot2::geom_map()` or `ggplot2::geom_polygon()`
+
+```{r L0 basemap geom_map, fig.cap=fn('China Base Map by `geom_map` (Nation Level)')}
+library(ggplot2)
+map0 <- fortify(cnmap0())
+ggplot(data=map0, aes(map_id=id)) + 
+    geom_map(map=map0, fill='white', colour='lightgray') +
+    expand_limits(x=map0$long, y=map0$lat) +
+    coord_map(projection="albers", parameters=c(24, 47))
+```
+
+The syntax could also be upgrade to a more extendable form:
+
+```r
+map0 <- fortify(cnmap0())
+ggplot() + 
+    geom_map(aes(map_id=id), data=map0, map=map0, fill='white', colour='lightgray') +
+    expand_limits(x=map0$long, y=map0$lat) + 
+    coord_map(projection="albers", parameters=c(24, 47))
+```
+
+or even easier, with `geom_polygon()`:
+
+```r
+map0 <- fortify(cnmap0())
+ggplot() + 
+    geom_polygon(aes(x=long, y=lat, group=group), data=map0, fill='white', 
+                 colour='lightgray') +
+    coord_map(projection="albers", parameters=c(24, 47))
+```
+
+### Using `ggplot2::geom_sf()`
+
+```{r L0 basemap geom_sf, fig.cap=fn('China Base Map by `geom_sf` (Nation Level)')}
+chn_crs <- "+init=epsg:4490 +proj=laea +ellps=GRS80 +lon_0=105 +lat_0=30"
+library(sf)
+map0 <- st_as_sf(cnmap0())
+ggplot() + 
+    geom_sf(data=map0, fill='white', colour='lightgray') +
+    coord_sf(crs=chn_crs)
+```
+
+## Level-1 (Province) Base Map
+
+Use dataset `chnmap1` to draw a level-1 China base map. You can use its metadata to show the name labels over the polygons.
+
+```{r L1 basemap with lab geom_polygon, fig.cap=fn('China Base Map by `geom_polygon` (Province Level)', 2)}
+library(extrafont)
+map1 <- fortify(cnmap1())
+meta1 <- cnmap1()@data
+ggplot() + 
+    geom_polygon(aes(x=long, y=lat, group=group), data=map1, fill='white', 
+                 colour='lightgray') +
+    geom_text(aes(PTX, PTY, label=NAME_LAB), data=meta1, colour='gray',
+              family="Microsoft YaHei") +
+    coord_map(projection="albers", parameters=c(24, 47))
+```
+
+Or use `geom_sf` coupled with `package:sf`.
+
+```{r L1 basemap with lab geom_sf, fig.cap=fn('China Base Map by `geom_sf` (Province Level)')}
+map1 <- st_as_sf(cnmap1())
+ggplot() + 
+    geom_sf(data=map1, fill='white', colour='lightgray') +
+    geom_sf_text(aes(label=NAME_LAB), data=map1, colour='gray',
+                 family="Microsoft YaHei") +
+    coord_sf(crs=chn_crs)
+```
+
+
+## Level-2 Base Map
+
+Use dataset `chnmap2` to draw a level-2 China base map. Take `geom_sf` as exmaple.
+
+```{r L2 basemap geom_sf, fig.cap=fn('China Base Map (City Level)', 2)}
+map2 <- st_as_sf(cnmap2())
+ggplot() + 
+    geom_sf(data=map2, fill='white', colour='lightgray') +
+    coord_sf(crs=chn_crs)
+```
+
+## Level-3 Base Map
+
+Use dataset `chnmap3` to draw a level-3 China base map. Take `geom_sf` as exmaple.
+
+```{r L3 basemap geom_sf, fig.cap=fn('China Base Map (County Level)', 2)}
+map3 <- st_as_sf(cnmap3())
+ggplot() + 
+    geom_sf(data=map3, fill='white', colour='lightgray') +
+    coord_sf(crs=chn_crs)
+```
+
+## Mixed Base Map
+
+By stacking layers of polygons/sf, you can get a mixed-level base map.
+
+```{r mixed basemap, fig.cap=fn('China Base Map - Mixed Levels', 2)}
+ggplot() + 
+    geom_sf(data=map3, fill='white', colour='grey85') +
+    geom_sf(data=map2, fill='transparent', colour='grey60') +
+    geom_sf(data=map1, fill='transparent', colour='grey30') +
+    geom_sf(data=map0, fill='transparent', colour='grey5') +
+    coord_sf(crs=chn_crs)
+```
+
+## Partial Base Map
+
+You can also extract part of China to draw a map. For example, plot a submap of Guangdong + Hong Kong + Macau. 
+
+```{r get adcode of GD, HK, MC, fig.cap=tn('ADCODE of GD, HK & MC')}
+suppressWarnings(library(dplyr))
+knitr::kable(cnmap1()@data %>% filter(NAME_EN %in% c("Guangdong", "Hong Kong", "Macau")) %>% 
+    select(NAME, NAME_EN, ADCODE), caption=tn('ADCODE of GD, HK & MC', 2, sect=6))
+```
+
+Now we know that ADCODE for these areas are "^44", "^81" and "^82". Here we go.
+
+```{r sub basemap, fig.cap=fn('China Base Map with Labels - GD, HK & MC', 2)}
+submap1 <- st_as_sf(cnmap1(regions=c("^44", "^8[12]")))
+submap2 <- st_as_sf(cnmap2(regions=c("^44", "^8[12]")))
+ggplot() +
+    geom_sf(data=submap2, fill="white", color="gray") +
+    geom_sf(data=submap1, fill="transparent", color="darkgray") +
+    geom_sf_text(aes(label=NAME_LAB), data=submap2, colour='darkgray',
+                 family="Microsoft YaHei") +
+    coord_sf(crs=chn_crs)
+```
+
+The `regions` argument in `cnmap()` can match `NAME`, `NAME_EN`, `NAME_LAB` and `ADCODE`, so you mix all the regular expression patterns for fast filtering.
+
+Besides, you can also `filter` the `sf` objects later in `geom_sf`, so as to reuse `sfmap1` and `sfmap2` more conveniently.
+
+```r
+sfmap1 <- st_as_sf(cnmap1())
+sfmap2 <- st_as_sf(cnmap2())
+ggplot() +
+    geom_sf(data=sfmap2 %>% filter(grepl("^(44|8[12])", ADCODE)), 
+            fill="white", color="gray") +
+    geom_sf(data=sfmap1 %>% filter(grepl("^(44|8[12])", ADCODE)),
+            fill="transparent", color="darkgray") +
+    geom_sf_text(aes(label=NAME_LAB), 
+                 data=sfmap2 %>% filter(grepl("^(44|8)", ADCODE)), 
+                 colour='darkgray', family="Microsoft YaHei") +
+    coord_sf(crs=chn_crs)
+```
+
+
+# Scatter Plots on A Map
+
+Use embedded dataset 'world.cities' in `package:maps` to draw a scatterplot.
+
+```{r pop data, fig.cap=fn('Big Cities of China on Cartesian Coordinate System', 1)}
+data('world.cities')
+big.cities <- world.cities[world.cities$country.etc %in% c('China', 'Taiwan'), ]
+ggplot() + 
+    geom_point(aes(x=long, y=lat, size=pop), data=big.cities, color='red', 
+               alpha=0.3)
+```
+
+> Note that `geom_map` and `geom_polygon` apply WGS coordinate system. So if you have some data from Baidu, you should use `asesgeo::bd2wgs` function to convert the coordinates.
+
+We have yielded a scatterplot in cartesian coordinate system. Now let's plot it on top of a base map.
+
+> Note: the 'world.cities' dataset applies the default CRS 'EPSG:4326' or 4326 (proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs).
+
+```{r scatter on basemap, fig.cap=fn('Big Cities of China')}
+big.cities$capital <- as.factor(big.cities$capital)
+levels(big.cities$capital) <- c(
+    'City', 'Capital', 'Municipality', 'Province capital')
+big.cities <- st_as_sf(
+    big.cities, coords=c("long", "lat"), crs="+init=epsg:4326", agr="constant")
+ggplot() + 
+    geom_sf(data=map1, fill='white', color='gray85', size=0.2) +
+    geom_sf(aes(size=pop, color=capital), data=big.cities, shape=19,
+            alpha=0.5, show.legend="point") + 
+    coord_sf(crs=chn_crs)
+
+```
+
+# Fortify the Map
+
+## Simplification
+
+The original map dataset is bit large. Sometimes you may want to reduce the object size. You will need to turn on `simplify_level` argument in `cnmap()`.
+
+```{r simplify the map}
+map1_simp1 <- cnmap1(simplify_level=0.05)
+map1_simp2 <- cnmap1(simplify_level=0.05, drop_fragment=TRUE)
+
+size_orig <- object.size(cnmap1()) / 1024^2
+size_simp1 <- object.size(map1_simp1) / 1024^2
+size_simp2 <- object.size(map1_simp2) / 1024^2
+```
+
+The simplifed map retaining islands is as below. `simplified_level`=0.05 means it will only keep 5% of the points.
+
+```{r simplify the map 1, fig.cap=fn('Simplified China Map (Retain Islands)', 1)}
+ggplot() + 
+    geom_sf(data=st_as_sf(map1_simp1), fill='white', colour='lightgray') +
+    coord_sf(crs=chn_crs)
+```
+
+The simplified map dropping small islands is as below -- looks more concise.
+
+```{r simplify the map 2, fig.cap=fn('Simplified China Map (Drop Islands)')}
+ggplot() + 
+    geom_sf(data=st_as_sf(map1_simp2), fill='white', colour='lightgray') +
+    coord_sf(crs=chn_crs)
+```
+
+How effective is it to reduce the object size?  
+
+Map           | Object Size (MB) | % of Original Size
+:-------------|-----------------:|---------------------:
+Original map0 | `r sprintf("%.2f", size_orig)` | 100.00
+simplified_level = 0.05 | `r sprintf("%.2f", size_simp1)` | `r sprintf("%.2f", 100*size_simp1/size_orig)`
+simplified_level = 0.05 & drop_fragment = TRUE | `r sprintf("%.2f", size_simp2)` | `r sprintf("%.2f", 100*size_simp2/size_orig)`
+
+Table: `r tn('Object Size Before And After Simplification', 1, chap=4)`
+
+## Fortification
+
+Put a gray layer beneath the plot, to render the plot more '3-D'. You will need to do affine translations (see `vignette("sf3", "sf")`) first.
+
+```{r 3d scatter, fig.cap=fn('Big Cities of China - Shadow 3D', 2)}
+# translate the geometry of map0 by 1 degree west and 0.5 degree south
+map0_geom_translated <- st_geometry(map0) + c(-1, -0.5)
+# apply the tranlated geometry
+map0_bg <- st_set_geometry(map0, map0_geom_translated) %>% 
+    st_set_crs(st_crs(map0))
+# add the translated geometry layer
+ggplot() + 
+    geom_sf(data=map0_bg, fill='grey50', color='gray50', size=0.2) +
+    geom_sf(data=map1, fill='white', color='gray85', size=0.2) +
+    geom_sf(aes(size=pop, color=capital), data=big.cities, shape=19,
+            alpha=0.5, show.legend="point") + 
+    coord_sf(crs=chn_crs)
+```
+
+
+# Choropleth Plot
+
+Use area of each city to plot a choropleth plot.
+
+## `geom_polygon`
+
+Using `geom_polygon`, we will need to merge attributes dataset and map data before plotting a choropleth. Note that you always need to type `group=group` in `aes` mapping parameter in the initiation command `ggplot()`.
+
+```{r choropleth geom_polygon, fig.cap=fn('Size of China Cities using `geom_polygon`', 1)}
+area.map <- fortify(cnmap2()) %>% left_join(
+    cnmap2()@data %>% select(NAME, AREA, ID), by=c("id"="ID"))
+ggplot() +
+    geom_polygon(aes(x=long, y=lat, group=group, fill=AREA), data=area.map, 
+                 color='white', size=0.05) +
+    scale_fill_gradient(low='skyblue', high='darkgreen') +
+    coord_map('albers', parameters=c(24, 47)) 
+```
+
+## `geom_sf`
+
+```{r choropleth geom_sf, fig.cap=fn('Size of China Cities using `geom_sf`', 2)}
+ggplot() +
+    geom_sf(aes(fill=AREA), data=map2, color='white', size=0.05) +
+    scale_fill_gradient(low='skyblue', high='darkgreen') +
+    coord_sf(crs=chn_crs) 
+```
+
+A quick call for `sf` is simply `plot()`
+
+```r
+plot(map2['AREA'])
+```
+
+# References
+
+
