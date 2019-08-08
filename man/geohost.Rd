@@ -72,6 +72,9 @@ geohost(ip = c("61.135.169.81", "12.215.42.19"), api = "ipinfo")
 }
 \seealso{
 \code{\link{geocode}}, \code{\link{revgeocode}}, \code{\link{parse_geohosts}}.
+
+\code{\link{synthesize_ipinfo_api}()}, \code{\link{synthesize_ipify_api}()},
+\code{\link{synthesize_ipstack_api}()}
 }
 \author{
 Jun Cai (\email{cai-j12@mails.tsinghua.edu.cn}), PhD student from

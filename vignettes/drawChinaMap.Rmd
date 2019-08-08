@@ -270,7 +270,7 @@ ggplot() +
 ```
 
 
-## Level-2 Base Map
+## Level-2 (Prefecture) Base Map
 
 Use dataset `chnmap2` to draw a level-2 China base map. Take `geom_sf` as exmaple.
 
@@ -281,7 +281,7 @@ ggplot() +
     coord_sf(crs=chn_crs)
 ```
 
-## Level-3 Base Map
+## Level-3 (County) Base Map
 
 Use dataset `chnmap3` to draw a level-3 China base map. Take `geom_sf` as exmaple.
 

@@ -38,6 +38,8 @@
 #'  \item ipstack.com IP lookup API at \url{https://ipstack.com/documentation} \cr
 #'  \item ipinfo.io IP lookup API at \url{https://ipinfo.io/developers}
 #' }
+#' @seealso \code{\link{synthesize_ipinfo_api}()}, \code{\link{synthesize_ipify_api}()},
+#' \code{\link{synthesize_ipstack_api}()}
 #' @export
 #'
 #' @examples
@@ -65,7 +67,7 @@ geohost <- function(ip='', api=c('ipinfo', 'ipify', 'ipstack'),
     
     check_my_ip()  # reuse options()[['my_ip]]
     if (identical(ip, '')) ip <- options()[["my_ip"]]
-    ip <- ip[validate_ip(ip)]
+    ip <- ip[aseskit:::validate_ip(ip)]
     
     # API-specific functions
     geohost_api <- list(ipinfo  = geohost_ipinfo_api,
@@ -125,12 +127,14 @@ parse_geohost_result <- function(gh, ...) {
     UseMethod(".parse_geohost_result", gh)
 }
 
+#' @export
 #' @importFrom aseskit iif ifnull
+#' @importFrom dplyr mutate
 .parse_geohost_result.ipify_geohost <- function(
     gh, output=c('country', 'region', 'city', 'all'), name_out=NULL, ...){
     
     output <- match.arg(output)
-    name_out <- ifnull(name_out, attr(gh, 'name_out'))
+    name_out <- aseskit::ifnull(name_out, attr(gh, 'name_out'))
     
     # fail?
     if (length(gh) == 0 || identical(unclass(gh), 'ACCESS RESTRICTED')){
@@ -149,21 +153,23 @@ parse_geohost_result <- function(gh, ...) {
     return(o)
 }
 
+#' @export
 #' @importFrom aseskit iif ifnull
 #' @importFrom tidyr separate
 .parse_geohost_result.ipinfo_geohost <- function(
     gh, output=c('country', 'region', 'city', 'all'), name_out=NULL, ...){
     
     output <- match.arg(output)
-    name_out <- ifnull(name_out, attr(gh, 'name_out'))
+    name_out <- aseskit::ifnull(name_out, attr(gh, 'name_out'))
     
     o <- gh %>% unclass %>% as.list %>% as.data.frame(stringsAsFactors=FALSE)
-    o <- separate(o, loc, into=c('lat', 'lng'), sep=',', convert=TRUE, fill='left')
+    o <- tidyr::separate(o, loc, into=c('lat', 'lng'), sep=',', convert=TRUE, fill='left')
     return(o)
 }
 
+#' @export
 #' @importFrom aseskit iif ifnull
-#' @importFrom dplyr rename
+#' @importFrom dplyr rename mutate
 .parse_geohost_result.ipstack_geohost <- function(
     gh, output=c('country', 'region', 'city', 'all'), name_out=NULL, ...){
     
@@ -179,7 +185,7 @@ parse_geohost_result <- function(gh, ...) {
     }else{
         o <- as.data.frame(ifnull(gh[1:(length(gh)-1)], NA_character_), 
                            stringsAsFactors=FALSE)
-        loc <- ifnull(gh$location, NA_character_)
+        loc <- aseskit::ifnull(gh$location, NA_character_)
         o <- o %>% 
             mutate(capital=loc$capital, language=loc$languages$code,
                    language_name=loc$languages$name, 
@@ -191,6 +197,7 @@ parse_geohost_result <- function(gh, ...) {
     return(o)
 }
 
+#' @export
 .parse_geohost_result.default <- function(
     gh, output=c('country', 'region', 'city', 'all'), ...){
     stop('parse_geohost_result fails. gh should be of subclasses of "api_data", ', 
@@ -208,10 +215,10 @@ geohost_ipinfo_api <- function(ip, output=c('country', 'region', 'city', 'all', 
     output <- match.arg(output)
     
     # synthesize urls
-    urls <- synthesize_api(ip, provider="ipinfo", api='geohost', key=key)
+    urls <- aseskit::synthesize_api(ip, provider="ipinfo", api='geohost', key=key)
     
     # read api
-    ghlst <- get_api_data(urls, use_curl=use_curl, time=time, name_out=ip)
+    ghlst <- aseskit::get_api_data(urls, use_curl=use_curl, time=time, name_out=ip)
     
     # parse result
     if (output == 'raw') return(ghlst)
@@ -228,10 +235,10 @@ geohost_ipify_api <- function(ip, output=c('country', 'region', 'city', 'all', '
     output <- match.arg(output)
     
     # synthesize urls
-    urls <- synthesize_api(ip, provider="ipify", api='geohost', key=key)
+    urls <- aseskit::synthesize_api(ip, provider="ipify", api='geohost', key=key)
     
     # read api
-    ghlst <- get_api_data(urls, use_curl=use_curl, time=time, name_out=ip)
+    ghlst <- aseskit::get_api_data(urls, use_curl=use_curl, time=time, name_out=ip)
     
     # parse result
     if (output == 'raw') return(ghlst)
@@ -239,6 +246,7 @@ geohost_ipify_api <- function(ip, output=c('country', 'region', 'city', 'all', '
 }
 
 # work functions
+#' @export
 #' @importFrom aseskit get_api_data synthesize_api
 geohost_ipstack_api <- function(ip, output=c('country', 'region', 'city', 'all', 'raw'), 
                                 time=0, use_curl=FALSE, key=NULL, ...){
@@ -248,10 +256,10 @@ geohost_ipstack_api <- function(ip, output=c('country', 'region', 'city', 'all',
     output <- match.arg(output)
 
     # synthesize urls
-    urls <- synthesize_api(ip, provider="ipstack", api='geohost', key=key)
+    urls <- aseskit::synthesize_api(ip, provider="ipstack", api='geohost', key=key)
     
     # read api
-    ghlst <- get_api_data(urls, use_curl=use_curl, time=time, name_out=ip)
+    ghlst <- aseskit::get_api_data(urls, use_curl=use_curl, time=time, name_out=ip)
     
     # parse result
     if (output == 'raw') return(ghlst)
@@ -266,12 +274,13 @@ parse_getip_result <- function(ip, ...) {
     UseMethod(".parse_getip_result", ip)
 }
 
+#' @export
 #' @importFrom aseskit iif ifnull
 .parse_getip_result.ipify_getip <- function(
     ip, output=c('all'), name_out=NULL, ...){
     
     output <- match.arg(output)
-    name_out <- ifnull(name_out, attr(ip, 'name_out'))
+    name_out <- aseskit::ifnull(name_out, attr(ip, 'name_out'))
     
     o <- ip[[1]]$ip
     
@@ -279,18 +288,22 @@ parse_getip_result <- function(ip, ...) {
 }
 
 #' @importFrom aseskit get_api_data synthesize_api iif ifnull
-check_my_ip <- function(overide=FALSE, lifecycle=3600){
+check_my_ip <- function(overide=FALSE, lifecycle=c(secs=3600)){
     # update options('my_ip')
     # return nothing
     stopifnot(is.logical(overide))
     stopifnot(is.numeric(lifecycle))
+    names(lifecycle) <- match.arg(names(lifecycle), 
+                                  c("secs", "mins", "hours", "days", "weeks"))
     
     my_ip_updated <- attr(getOption("my_ip"), "updated")
     if (! is.character(getOption("my_ip")) || 
-        (! overide && Sys.time() - ifnull(my_ip_updated, 0) > lifecycle)){
+        (! overide && difftime(
+            Sys.time(), aseskit::ifnull(my_ip_updated, 0), units=names(lifecycle)) > lifecycle)){
         # my_ip no set or updated > an hour ago
-        url_char <- synthesize_api('', provider='ipify', api='getip', name_out='my_ip')
-        ip_data <- get_api_data(url_char, use_curl=FALSE)
+        url_char <- aseskit::synthesize_api('', provider='ipify', api='getip', 
+                                            name_out='my_ip')
+        ip_data <- aseskit::get_api_data(url_char, use_curl=FALSE)
         options(my_ip = structure(ip_data[[1]][["ip"]], updated=Sys.time()))
     }
     invisible()
@@ -315,10 +328,11 @@ show_my_ip <- function(){
 
 # option ip.country to store IP country and avoid calling geohost() repeatedly
 # when geocoding multiple addresses or revgeocoding multiple locations
-ip.country <- function(api=c("ipinfo", "ipify", "ipstack")){
+ip.country <- function(api=c("ipinfo", "ipify", "ipstack"), 
+                       key=if (api=="ipinfo") NA else NULL){
     api <- match.arg(api)
     if (! "ip.country" %in% names(options())) {
-        ip_data <- geohost(api = api)
+        ip_data <- geohost(api = api, key = key)
         options(ip.country = unname(ip_data[["country"]]))
     }
     getOption("ip.country")

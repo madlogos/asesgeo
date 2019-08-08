@@ -1,7 +1,8 @@
 Package: asesgeo
 Type: Package
 Title: ASES Analytic Toolkit on Geographics
-Version: 0.1.0
+Version: 0.1.1
+Date: 2019-07-26
 Author: Yiying Wang <wangy@aetna.com>
 Maintainer: Yiying Wang <wangy@aetna.com>
 Contributor: Shanshan Zou <zous@aetna.com>
@@ -10,24 +11,11 @@ Description: This package contains frequently used functions on geographic
 License: GPL
 Encoding: UTF-8
 LazyData: true
-Imports:
-	aseskit,
-    curl,
-    dplyr,
-    ggplot2,
-    glue,
-    magrittr,
-    maps,
-    maptools,
-    raster,
-    rmapshaper,
-    scales,
-    sf,
-    sp,
-    tidyr
+Imports: aseskit, curl, dplyr, ggplot2, glue, magrittr, maps, maptools,
+        raster, rmapshaper, scales, sf, sp, tidyr
 RoxygenNote: 6.1.1
-Suggests: 
-    knitr,
-    testthat,
-    vdiffr
+Suggests: knitr, testthat, vdiffr
 VignetteBuilder: knitr
+NeedsCompilation: no
+Packaged: 2019-08-06 03:10:30 UTC; a303821
+Depends: R (>= 3.5.0)

@@ -39,7 +39,7 @@ Beijing area (case insensitive). It supports regular expression. Default NULL,
 indicating that all the regions will be shown.}
 
 \item{simplify_level}{Numeric (0 ~ 1), the proportion of points to retain when
-applying polygon simplification. See \pkg{rmapshaper}::\code{\link[rmapshaper]{ms_simplify}}.
+applying polygon simplification. See \pkg{\link{rmapshaper}}::\code{\link[rmapshaper]{ms_simplify}}.
 If set 1, then the function will load maps with highest border precision (bigger
 in size). It is useful to reduce the object size when drawing a city- or 
 county-level map by 50\%-95\%. Default 1 (no simplification). \cr
@@ -85,10 +85,15 @@ object (\code{output} == "spdf"). You can further process it by \describe{
 }
 \description{
 Load the China map and do tiny modifications. Unlike the China map in packages 
-\pkg{maps} and \pkg{mapdata}, the dataset in this package is based on Chinese 
-official data. \code{cnmap0}, \code{cnmap1}, \code{cnmap2}, \code{cnmap3}
-are convenient wrappers for \code{level} 0 (nation), 1 (province), 2 (city/prefecture), 
+\pkg{maps} and \pkg{mapdata}, the dataset in this package is based on up-to-date 
+Chinese official data. And unlike some public data sources such as GADM, the
+dataset in this package is compliant to Chinese official requirements. 
+\code{cnmap0}, \code{cnmap1}, \code{cnmap2}, \code{cnmap3} are convenient 
+wrappers for \code{level} 0 (nation), 1 (province), 2 (city/prefecture), 
 3 (county) respectively. \cr
+}
+\details{
+You can obtain maps by running the codes in examples. \cr
 \figure{cnmap.png} \figure{bjmap.png}
 }
 \note{
@@ -124,8 +129,9 @@ are convenient wrappers for \code{level} 0 (nation), 1 (province), 2 (city/prefe
         +ellps=krass +lon_0=105 +lat_1=25 +lat_2=47")}
       \item larger maps: \code{coord_sf(crs="+init=epsg:4490 +proj=laea 
         +ellps=GRS80 +lon_0=105 +lat_0=30")}
-    }
-  }}
+    }}
+  Refer to \code{coordcn} to use the parameters directly. 
+  }
 }
 }
 \examples{
@@ -153,8 +159,7 @@ ggplot() +
   geom_sf(data=bjmap3, color="gray50", size=0.5) +
   geom_sf(data=bjmap2, fill="transparent", color="gray5", size=0.8) +
   geom_sf_text(aes(label=NAME_LAB), data=bjmap3, family="Microsoft YaHei") +
-  coord_sf(crs="+init=epsg:4490 +proj=laea +ellps=GRS80 
-           +lon_0=105 +lat_0=30") +theme_minimal()
+  coord_sf(crs=coordcn$large$crs) + theme_minimal()
 }
 }
 \seealso{

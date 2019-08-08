@@ -1,7 +1,9 @@
 context("Test geocode")
+if (! ".asesEnv" %in% ls(all.names=TRUE, envir=globalenv())) 
+    .asesEnv <- new.env(parent=globalenv())
 
 test_that("geocode with google map api", {
-    if (is.null(asesgeo_env$API_KEY$google)) 
+    if (is.null(.asesEnv$API_KEY$googlemap)) 
         skip("You are recommended to test this file separately")
     
     in1 <- "Beijing railway station"
@@ -14,7 +16,7 @@ test_that("geocode with google map api", {
 
 
 test_that("geocode with baidu map api", {
-    if (is.null(asesgeo_env$API_KEY$baidu)) 
+    if (is.null(.asesEnv$API_KEY$baidumap)) 
         skip("You are recommended to test this file separately")
     
     in1 <- "\u5317\u4eac\u706b\u8f66\u7ad9"
@@ -26,7 +28,7 @@ test_that("geocode with baidu map api", {
 })
 
 test_that("geocode with gaode map api", {
-    if (is.null(asesgeo_env$API_KEY$gaode)) 
+    if (is.null(.asesEnv$API_KEY$gaodemap)) 
         skip("You are recommended to test this file separately")
     
     in1 <- c("\u4e0a\u6d77\u81ea\u7136\u535a\u7269\u9986",

@@ -1,6 +1,6 @@
 library(testthat)
 library(ggplot2)
 if (require("vdiffr")) library(vdiffr)
-library(aseshms)
+library(asesgeo)
 
-test_check("aseshms")
+test_check("asesgeo")

@@ -68,18 +68,26 @@
 #'  }}
 #'  \item{\code{api} == 'gaode'}{\itemize{
 #'   \item \code{city}: a valid city character to limit the search range, accepts
-#'    4 form: Chinaese city name, full pinyin (e.g., beijing), citycode (e.g., 010)
-#'    or adcode (110000).
+#'    4 forms: \itemize{
+#'      \item Chinese city name \cr
+#'      \item full pinyin (e.g., "beijing") \cr
+#'      \item city code (e.g., "010") \cr
+#'      \item adcode (e.g., "110000")}
+#'   \item \code{batch}: Logical, whether apply batch mode. In batch mode, 
+#'      \code{address} must be wrapped into character with pipe "|", e.g., 
+#'      "beijing|tianjin".
 #'  }}
 #' }
 #' @return a data.frame with variables lat/lng or more info
 #' @author \itemize{
-#'  \item Creat: Jun Cai (\email{cai-j12@@mails.tsinghua.edu.cn}), PhD student from
+#'  \item Create: Jun Cai (\email{cai-j12@@mails.tsinghua.edu.cn}), PhD student from
 #'   Center for Earth System Science, Tsinghua University \cr
 #'  \item Update: Yiying Wang (\email{wangy@@aetna.com})
 #' }
-#' @seealso \code{\link{revgeocode}()}, \code{\link{set_api_key}()}, \code{\link{geohost}()},
-#'  \code{\link{parse_geocodes}()}
+#' @seealso \code{\link{revgeocode}()}, \code{\link[aseskit]{set_api_key}()}, 
+#'  \code{\link{geohost}()}, \code{\link{parse_geocodes}()} \cr
+#'  \code{\link{synthesize_googlemap_api}()}, \code{\link{synthesize_baidumap_api}()},
+#'  \code{\link{synthesize_gaodemap_api}()}
 #' @references \itemize{
 #'  \item Google Maps API guide: 
 #'    \url{https://developers.google.com/maps/documentation/geocoding/start?csw=1} \cr
@@ -91,7 +99,7 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' set_api_key(c("google", "baidu", "gaode"), 
+#' aseskit::set_api_key(c("googlemap", "baidumap", "gaodemap"), 
 #'             c(<GOOGLE MAPS API KEY>, <BAIDU MAPS API KEY>,
 #'               <GAODE MAPS API KEY>))
 #' 
@@ -219,7 +227,7 @@ parse_geocodes <- function(
                    MoreArgs=list(output=output, gcs=gcs, ...), 
                    SIMPLIFY=FALSE) %>% 
         bind_rows %>% as_tibble
-    invalid_latlng <- ifna(abs(gcdf$lat) > 90 & abs(gcdf$lng) > 180, FALSE)
+    invalid_latlng <- aseskit::ifna(abs(gcdf$lat) > 90 & abs(gcdf$lng) > 180, FALSE)
     if (any(invalid_latlng)) gcdf[invalid_latlng, ] <- NA
     
     out_dict <- list(
@@ -239,6 +247,7 @@ parse_geocode_result <- function(gc, ...){
     UseMethod(".parse_geocode_result", gc)
 }
 
+#' @export
 #' @importFrom aseskit iif ifnull
 #' @importFrom dplyr bind_rows filter
 #' @importFrom tidyr unnest
@@ -257,7 +266,7 @@ parse_geocode_result <- function(gc, ...){
     if (!missing(ics_china)) ics_china <- match.arg(ics_china, c('WGS-84', 'GCJ-02', 'BD-09'))
     if (!missing(ics_intl)) ics_intl <- match.arg(ics_intl, c('WGS-84', 'GCJ-02', 'BD-09'))
     name_type <- match.arg(name_type)
-    name_out <- ifnull(name_out, attr(gc, 'name_out'))
+    name_out <- aseskit::ifnull(name_out, attr(gc, 'name_out'))
     
     ## valid attributes
     valid_attrs <- structure(
@@ -286,15 +295,15 @@ parse_geocode_result <- function(gc, ...){
                     call. = FALSE)
     }else{
         coord <- data.frame(
-            lat = ifnull(gc$results$geometry$location[['lat']], NA_real_),
-            lng = ifnull(gc$results$geometry$location[['lng']], NA_real_),
-            loctype = ifnull(gc$results$geometry$location_type, NA_character_),
-            address = ifnull(gc$results$formatted_address, NA_character_),
+            lat = aseskit::ifnull(gc$results$geometry$location[['lat']], NA_real_),
+            lng = aseskit::ifnull(gc$results$geometry$location[['lng']], NA_real_),
+            loctype = aseskit::ifnull(gc$results$geometry$location_type, NA_character_),
+            address = aseskit::ifnull(gc$results$formatted_address, NA_character_),
             stringsAsFactors=FALSE)
         if (output == 'all'){
             # address components
             attrdf <- lapply(gc$results$address_components, function(df) 
-                unnest(df) %>% filter(! is.na(types)))
+                tidyr::unnest(df) %>% filter(! is.na(types)))
             coord <- lapply(seq_len(nrow(coord)), function(i){
                 # named vector
                 vec_attr <- structure(attrdf[[i]][[attr_name]], 
@@ -320,6 +329,7 @@ parse_geocode_result <- function(gc, ...){
     return(out)
 }
 
+#' @export
 #' @importFrom aseskit iif ifnull
 #' @importFrom dplyr mutate
 .parse_geocode_result.baidu_geocode <- function(
@@ -335,7 +345,7 @@ parse_geocode_result <- function(gc, ...){
 
     if (!missing(ics_china)) ics_china <- match.arg(ics_china, c('WGS-84', 'GCJ-02', 'BD-09'))
     if (!missing(ics_intl)) ics_intl <- match.arg(ics_intl, c('WGS-84', 'GCJ-02', 'BD-09'))
-    name_out <- ifnull(name_out, attr(gc, 'name_out'))
+    name_out <- aseskit::ifnull(name_out, attr(gc, 'name_out'))
     
     # did geocode fail?
     if (length(gc) == 0 || as.numeric(gc$status) != 0) {
@@ -347,16 +357,16 @@ parse_geocode_result <- function(gc, ...){
                            'details in the response code table of Baidu Geocoding API'),
                     call. = FALSE)
     }else{
-        coord <- data.frame(lat = ifnull(gc$result$location['lat'], NA_real_),
-                            lng = ifnull(gc$result$location['lng'], NA_real_),
-                            loctype = ifnull(gc$result$level, NA_character_),
+        coord <- data.frame(lat = aseskit::ifnull(gc$result$location['lat'], NA_real_),
+                            lng = aseskit::ifnull(gc$result$location['lng'], NA_real_),
+                            loctype = aseskit::ifnull(gc$result$level, NA_character_),
                             address = NA_character_,
                             stringsAsFactors=FALSE)
         if (output == 'all'){
             attrdf <- data.frame(
-                precise = ifnull(gc$result$precise, NA_integer_),
-                conf = ifnull(gc$result$confidence, NA_integer_),
-                compreh = ifnull(gc$result$comprehension, NA_integer_),
+                precise = aseskit::ifnull(gc$result$precise, NA_integer_),
+                conf = aseskit::ifnull(gc$result$confidence, NA_integer_),
+                compreh = aseskit::ifnull(gc$result$comprehension, NA_integer_),
                 stringsAsFactors=FALSE)
             coord <- cbind(coord, attrdf) %>% 
                 mutate(street_no=tryCatch(as.integer(street_no), 
@@ -372,6 +382,7 @@ parse_geocode_result <- function(gc, ...){
     return(out)
 }
 
+#' @export
 #' @importFrom aseskit iif ifnull ifempty ifna
 #' @importFrom dplyr mutate select rename
 #' @importFrom tidyr separate
@@ -388,7 +399,7 @@ parse_geocode_result <- function(gc, ...){
     
     if (!missing(ics_china)) ics_china <- match.arg(ics_china, c('WGS-84', 'GCJ-02', 'BD-09'))
     if (!missing(ics_intl)) ics_intl <- match.arg(ics_intl, c('WGS-84', 'GCJ-02', 'BD-09'))
-    name_out <- ifnull(name_out, attr(gc, 'name_out'))
+    name_out <- aseskit::ifnull(name_out, attr(gc, 'name_out'))
     
     # did geocode fail?
     if (length(gc) == 0 || as.numeric(gc$status) != 1) {
@@ -408,12 +419,12 @@ parse_geocode_result <- function(gc, ...){
                                 loctype = NA_character_,
                                 address = NA_character_)
         }else{
-            coord <- ifempty(gc$geocodes[c('formatted_address', 'level', 'location')],
-                             NA_character_)
-            coord$location <- ifna(coord$location, ',') %>% unlist()
+            coord <- aseskit::ifempty(gc$geocodes[c('formatted_address', 'level', 'location')],
+                                      NA_character_)
+            coord$location <- aseskit::ifna(coord$location, ',') %>% unlist()
             # divide location to lng and lat, and exchange them
-            coord <- separate(coord, location, into=c('lng', 'lat'), sep=',', 
-                              convert=TRUE, fill='left') %>% 
+            coord <- tidry::separate(coord, location, into=c('lng', 'lat'), sep=',', 
+                                     convert=TRUE, fill='left') %>% 
                 mutate(tmp=lat, lat=lng, lng=tmp) %>% select(-tmp) %>% 
                 rename(address=formatted_address, loctype=level, lat=lng, lng=lat)
             
@@ -435,7 +446,7 @@ parse_geocode_result <- function(gc, ...){
                 #     return(unlist(o))
                 # }, FUN.VALUE = character(n_out)) 
                 
-                attrdf <- ifempty(attrdf, NA_character_) %>% 
+                attrdf <- aseskit::ifempty(attrdf, NA_character_) %>% 
                     mutate(adcode = as.integer(adcode), 
                            number = as.integer(number)) %>% 
                     rename(street_no = number) %>% 
@@ -456,6 +467,7 @@ parse_geocode_result <- function(gc, ...){
     return(out)
 }
 
+#' @export
 .parse_geocode_reuslt.default <- function(
     gc, output=c('latlng', 'latlngc', 'latlnga', 'all'), gcs=NULL,
     ics_china='GCJ-02', ics_intl='WGS-84',
@@ -487,17 +499,17 @@ geocode_google_api <- function(
     ip.country()  # check ip country and store the result in options
     
     ## authorization parameters
-    client <- ifnull(client, '')
-    signature <- ifnull(signature, '')
+    client <- aseskit::ifnull(client, '')
+    signature <- aseskit::ifnull(signature, '')
     if (nchar(client) > 0 && nchar(signature) > 0){
         key <- NULL
     }else if (is.null(key)){
-        key <- getApiKey("google")
+        key <- aseskit::getApiKey("googlemap")
     }else if (! is.character(key) || key == ""){
         stop("Please use either a valid client + signature pair (premium account), ",
              "or a google maps API key.")
     }
-    name_type <- ifnull(name_type, 'long')
+    name_type <- aseskit::ifnull(name_type, 'long')
     name_type <- match.arg(name_type, c('long', 'short'))
     ## address vector
     if (length(address) > 1) {  # if many addresses are given, warn it.
@@ -508,18 +520,18 @@ geocode_google_api <- function(
             message("You passed in 50+ addresses. Mind your quota and costs.")
     }
     address <- gsub("\\s+", "\\+", address)  # replace spaces in addresses with '+'
-    region <- ifnull(region, '')
-    components <- ifnull(components, '')
+    region <- aseskit::ifnull(region, '')
+    components <- aseskit::ifnull(components, '')
     
     # -----synthesize urls-----
-    urls <- synthesize_api(
-        url_body=address, provider='google', api='geocode', region=region, 
+    urls <- aseskit::synthesize_api(
+        url_body=address, provider='googlemap', api='geocode', region=region, 
         components=components, key=key, client=client, signature=signature, 
         use_curl=use_curl, name_type=name_type, language=language, ...)
 
     # -----geocode------
-    gclst <- get_api_data(urls, use_curl=use_curl, time=time, messaging=messaging,
-                          name_out=address)
+    gclst <- aseskit::get_api_data(urls, use_curl=use_curl, time=time, 
+                                   messaging=messaging, name_out=address)
     
     # ----- output -----
     if (output == 'raw') return(gclst)
@@ -541,24 +553,24 @@ geocode_baidu_api <- function(
     output <- match.arg(output)
     ocs <- match.arg(ocs)
     ics <- if (ocs == 'WGS-84') 'BD-09' else ocs
-    city <- ifnull(city, '')
+    city <- aseskit::ifnull(city, '')
     stopifnot(is.character(city))
     stopifnot(is.character(address))
     
     if (is.null(key)){
-        key <- getApiKey("baidu")
+        key <- aseskit::getApiKey("baidumap")
     }else if (!is.character(key) || key == ""){
         stop("Please use a valid baidu map API key.")
     }
     
     # -----synthesize urls-------
-    urls <- synthesize_api(
-        url_body=address, provider='baidu', api='geocode', city=city, key=key, 
+    urls <- aseskit::synthesize_api(
+        url_body=address, provider='baidumap', api='geocode', city=city, key=key, 
         use_curl=use_curl, ...)
     
     # -----geocode------
-    gclst <- get_api_data(urls, use_curl=use_curl, time=time, messaging=messaging,
-                          name_out=address)
+    gclst <- aseskit::get_api_data(urls, use_curl=use_curl, time=time, 
+                                   messaging=messaging, name_out=address)
     
     # ----- output -----
     if (output == 'raw') return(gclst)
@@ -580,7 +592,7 @@ geocode_gaode_api <- function(
     stopifnot(is.logical(batch))
     
     if (is.null(key)){
-        key <- getApiKey("gaode")
+        key <- aseskit::getApiKey("gaodemap")
     }else if (!is.character(key) || key == ""){
         stop("Please use a valid gaode map API key.")
     }
@@ -598,13 +610,13 @@ geocode_gaode_api <- function(
     }
     
     # -----synthesize urls-------
-    urls <- synthesize_api(
-        url_body=address, provider='gaode', api='geocode', city=city, key=key, 
+    urls <- aseskit::synthesize_api(
+        url_body=address, provider='gaodemap', api='geocode', city=city, key=key, 
         sig=sig, use_curl=use_curl, batch=batch, ...)
     
     # -----geocode------
-    gclst <- get_api_data(urls, use_curl=use_curl, time=time, messaging=messaging,
-                          name_out=address)
+    gclst <- aseskit::get_api_data(urls, use_curl=use_curl, time=time, 
+                                   messaging=messaging, name_out=address)
     
     # ----- output -----
     if (output == 'raw') return(gclst)

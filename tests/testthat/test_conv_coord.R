@@ -1,8 +1,10 @@
 context("Test conv_coord")
+if (! ".asesEnv" %in% ls(all.names=TRUE, envir=globalenv())) 
+    .asesEnv <<- new.env(parent=globalenv())
 
 test_that("convCoord with baidu api", {
     # ak <- "0QxKBNPPD2BrnnRkNtkoG3XI"
-    if (is.null(asesgeo_env$API_KEY$baidu)) 
+    if (is.null(.asesEnv$API_KEY$baidumap)) 
         skip("You are recommended to test this file separately")
     
     out1 <- data.frame(lat= 39.90245063, lng=116.42702745)
@@ -22,7 +24,7 @@ test_that("convCoord with baidu api", {
 })
 
 test_that("convCoord with gaode api", {
-    if (is.null(asesgeo_env$API_KEY$gaode)) 
+    if (is.null(.asesEnv$API_KEY$gaodemap)) 
         skip("You are recommended to test this file separately")
     
     out1 <- data.frame(lat= 39.902445203994, lng=116.427020941841)
@@ -32,9 +34,9 @@ test_that("convCoord with gaode api", {
                    "calling 1 APIs: https://restapi.amap.com/v3/assistant")
     expect_equal(conv_coord(39.90105, 116.42079, from='WGS-84', to='GCJ-02', 
                             api='gaode', idf=FALSE), out1)
-    expect_warning(convCoord(39.90105, 116.42079, from='GCJ-02', to='WGS-84', 
+    expect_error(convCoord(39.90105, 116.42079, from='GCJ-02', to='WGS-84', 
                              api='gaode', idf=FALSE),
-                   "gaode map only supports conversion to GCJ-02")
+                   "'arg' should be one of “GCJ-02”")
     expect_equal(suppressWarnings(
         convCoord(39.90105, 116.42079, from='GCJ-02', to='WGS-84', api='gaode', 
                   idf=FALSE)),
@@ -45,10 +47,10 @@ test_that("convCoord with gaode api", {
 test_that("convCoord without api", {
     wgs <- data.frame(lat=39.90105589, lng=116.42079784)
     gcj <- data.frame(lat=39.90245219, lng=116.42702991)
-    wgs_out <- data.frame(lat=39.90106178, lng=116.42080568)
+    wgs_out <- data.frame(lat=39.9010558944, lng=116.4207978498)
     bd_out <- data.frame(lat=39.90850546, lng=116.43350894)
     
-    expect_equal(convCoord(wgs$lat, wgs$lng, from="WGS", to="GCJ"), gcj)
-    expect_equal(convCoord(gcj$lat, gcj$lng, from="GCJ", to="WGS"), wgs_out)
-    expect_equal(convCoord(wgs$lat, wgs$lng, from="WGS", to="BD"), bd_out)
+    expect_equal(convCoord(wgs$lat, wgs$lng, from="WGS", to="GCJ")[, c("lat", "lng")], gcj)
+    expect_equal(convCoord(gcj$lat, gcj$lng, from="GCJ", to="WGS")[, c("lat", "lng")], wgs_out)
+    expect_equal(convCoord(wgs$lat, wgs$lng, from="WGS", to="BD")[, c("lat", "lng")], bd_out)
 })

@@ -1,8 +1,8 @@
 # --------------Work functions for coord conversion----------------
 
 #' @importFrom sp coordinates<- proj4string<- CRS proj4string
-xy2SpatialPoints <- function(y, ..., proj4string=NULL){
-    coord <- getCoordArgs(y, ...)
+xy2SpatialPoints <- function(y, ..., proj4string=NULL, auto_fix_latlng=TRUE){
+    coord <- getCoordArgs(y, ..., auto_fix=auto_fix_latlng)
     # note: does not accept NAs
     coordinates(coord) <- ~lon+lat
     if (! 'cn_bou' %in% names(pkgenv)){
@@ -213,6 +213,8 @@ coord_tick <- function(x, accuracy = 1, scale = 1, prefix=c(pos="", zero="", neg
 #' @param ylim numeric vector of length 2. The latitude limits of the China map.
 #' Default c(0.8293, 55.8271). when \code{accurate} is FALSE, the rectangle
 #' made by xlim and ylim will be used as China boundary.
+#' @param auto_fix_latlng logical, if the lat/lng data is of the opposite order,
+#' whether to let the function automatically fix it. Default TRUE.
 #' 
 #' @author Yiying Wang, \email{wangy@@aetna.com}
 #' @details The most popular open-source coordinate transformation algorithm 
@@ -231,10 +233,10 @@ coord_tick <- function(x, accuracy = 1, scale = 1, prefix=c(pos="", zero="", neg
 #' @export
 #' @rdname is_out_of_china
 #' 
-#' @return depends on \code{plot}, \itemize{
+#' @return Depends on \code{plot}, \itemize{
 #'  \item \code{TRUE}: returns a 'ggplot2' object. \cr
 #'  \item \code{FALSE}; returns a logical vector with the same length of Lat (or Lon).
-#' }
+#' }. Note that the point pairs with either lat or lng missing will yield NA anyway.
 #' @aliases is_out_of_china
 #' @seealso 
 #'  Refer to \code{\link{transform_coord}} function family for argument \code{y, ...}
@@ -258,9 +260,10 @@ coord_tick <- function(x, accuracy = 1, scale = 1, prefix=c(pos="", zero="", neg
 #' }
 isOutOfChina <- function(y, ..., accurate=TRUE, gcs=c('WGS-84', 'GCJ-02', 'BD-09'), 
                          plot=FALSE, canvas=c('china', 'world'), 
-                         xlim=c(72.004, 137.8347), ylim=c(0.8293, 55.8271)){
+                         xlim=c(72.004, 137.8347), ylim=c(0.8293, 55.8271),
+                         auto_fix_latlng=TRUE){
     # to check if the places are out of China
-    latlng <- getCoordArgs(y, ...)
+    latlng <- getCoordArgs(y, ..., auto_fix=auto_fix_latlng)
     stopifnot(is.logical(accurate))
     gcs <- match.arg(gcs)
     stopifnot(is.logical(plot))
@@ -280,7 +283,7 @@ isOutOfChina <- function(y, ..., accurate=TRUE, gcs=c('WGS-84', 'GCJ-02', 'BD-09
     na_coord <- is.na(latlng$lat) | is.na(latlng$lon)
     
     if (all(na_coord)){
-        o <- rep(FALSE, nrow(latlng))
+        o <- rep(NA, nrow(latlng))
     }else{
         coord <- xy2SpatialPoints(latlng[! na_coord, ])
         o <- rep(NA, nrow(latlng))
@@ -369,7 +372,7 @@ transformLon <- function(x, y){
     return(ret)
 }
 
-formatCoordArgs <- function(input){
+formatCoordArgs <- function(input, auto_fix=TRUE){
     # clean up the output of getCoordArgs
     # yield data.frame [lat, lon]
     if (! is.null(input)){
@@ -378,26 +381,46 @@ formatCoordArgs <- function(input){
             as.data.frame(input, stringsAsFactors=FALSE) else input
         names(out) <- c('lat', 'lon')
         out[is.na(out$lat) | is.na(out$lon), ] <- c(NA_real_, NA_real_)
-        if (any(abs(out['lat']) > 90 | abs(out['lon']) > 180, na.rm=TRUE))
-            stop("input shoudl be arranged as [lat, lon]. Lat should be within ",
-                 "[-90, 90], Lon should be within [-180, 180].\n",
-                 "Check if you have mistakenly exchanged the column order.")
+        
+        invld_rng <- which(abs(out[['lat']]) > 90 | abs(out[['lon']]) > 180)
+        can_fix <- all(abs(out[['lon']]) <= 90 & abs(out[['lat']]) <= 180)
+        
+        if (length(invld_rng) > 0){
+            warn_invld <- paste(invld_rng, collapse = ", ")
+            if (nchar(warn_invld) > 200) 
+                warn_invld <- paste(substr(warn_invld, 1, 200), "...")
+            warning("input should be arranged as [lat, lon]. Lat should be within ",
+                    "[-90, 90], Lon should be within [-180, 180].\n",
+                    "Check if you have mistakenly exchanged the column order.")
+            if (auto_fix && can_fix){
+                warning("We found that the two columns might be exchanged to ",
+                        "fix the problem. Since auto_fix == TRUE, we will do it ",
+                        "for you.")
+                out <- out[, 2:1]
+                names(out) <- c("lat", "lon")
+            }else{
+                warning("Rows ", warn_invld, " are hence been assigned NA.")
+                out[invld_rng, ] <- NA
+            }
+        }
         row.names(out) <- NULL
         return(out)
     }
 }
 
-getCoordArgs <- function(y, ...){
+getCoordArgs <- function(y, ..., auto_fix=TRUE){
     ## Coarse params to a 2-col data.frame
     UseMethod(".getCoordArgs")
 }
 
+#' @export
 #' @importFrom aseskit aline
-.getCoordArgs.vector <- function(y, ...){
+.getCoordArgs.vector <- function(y, ..., auto_fix=TRUE){
     # args
-    # y: lon vec
-    # ...: lat vec
-    #
+    # y: lat vec
+    # ...: lon vec
+    # auto_fix: if lat, lon are exchanged, auto fix it ?
+    
     y <- as.numeric(y)
     x <- list(...)
     if (length(y) == 0){
@@ -407,7 +430,7 @@ getCoordArgs <- function(y, ...){
         ## return all paired points
         if (length(x) > 0){
             x <- x[[1]]
-            x <- aline(unlist(x), length.out=length(y), append=NA_real_)
+            x <- aseskit::aline(unlist(x), length.out=length(y), append=NA_real_)
             out <- data.frame(lat=y, lon=x)
         }else{
             if (length(y) > 1){
@@ -418,12 +441,13 @@ getCoordArgs <- function(y, ...){
             }
         }
     }
-    return(formatCoordArgs(out))
+    return(formatCoordArgs(out, auto_fix=auto_fix))
 }
 
+#' @export
 #' @importFrom aseskit aline
 #' @importFrom dplyr bind_rows
-.getCoordArgs.list <- function(y, ...){
+.getCoordArgs.list <- function(y, ..., auto_fix=TRUE){
     # Args:
     # y: a series of points, e.g., list(c(1, 3), c(5, 6))
     # ...: other (lat, lon) pairs
@@ -444,8 +468,8 @@ getCoordArgs <- function(y, ...){
             }
             
             len <- max(length(lat), length(lon), na.rm=TRUE)
-            o <- matrix(c(aline(lat, len, append=NA_real_),
-                          aline(lon, len, append=NA_real_)), ncol=2)
+            o <- matrix(c(aseskit::aline(lat, len, append=NA_real_),
+                          aseskit::aline(lon, len, append=NA_real_)), ncol=2)
             return(o)
         }
         dots <- lapply(list(...), function(ll) if (is.list(ll)) ll else list(ll))
@@ -454,11 +478,12 @@ getCoordArgs <- function(y, ...){
         out <- as.data.frame(out, stringsAsFactors=FALSE)
         names(out) <- c('lat', 'lon')
     }
-    return(formatCoordArgs(out))
+    return(formatCoordArgs(out, auto_fix = auto_fix))
 }
 
+#' @export
 #' @importFrom dplyr if_else
-.getCoordArgs.matrix <- function(y, ...){
+.getCoordArgs.matrix <- function(y, ..., auto_fix=TRUE){
     if (ncol(y) == 1 || nrow(y) == 1){
         y <- as.vector(y)
         if (length(y) == 1) {
@@ -469,9 +494,9 @@ getCoordArgs <- function(y, ...){
     }else{
         stopifnot(all(abs(as.vector(y)) <= 180, na.rm=TRUE))
         colcat <- rowcat <- vector("character", length=2L)
-        colcat <- if_else(apply(y[, 1:2], 2, function(vec) 
+        colcat <- dplyr::if_else(apply(y[, 1:2], 2, function(vec) 
             any(abs(vec) > 90, na.rm=TRUE)), 'lon', 'lat')
-        rowcat <- if_else(apply(y[1:2, ], 1, function(vec) 
+        rowcat <- dplyr::if_else(apply(y[1:2, ], 1, function(vec) 
             any(abs(vec) > 90, na.rm=TRUE)), 'lon', 'lat')
         
         fail_msg <- "Cannot distinguish lat and lon in the matrix either col 1-2 or row 1-2."
@@ -486,9 +511,9 @@ getCoordArgs <- function(y, ...){
             if (colcat[1] == "lon" && rowcat[1] == "lon") stop(fail_msg)
             out <- NA
             if (ncol(y) <= nrow(y)){  # long
-                attr(out, "concat") <- if_else(colcat[1] == "lon", "row", "col")
+                attr(out, "concat") <- dplyr::if_else(colcat[1] == "lon", "row", "col")
             }else{
-                attr(out, "concat") <- if_else(rowcat[1] == "lon", "col", "row")
+                attr(out, "concat") <- dplyr::if_else(rowcat[1] == "lon", "col", "row")
             }
             if (attr(out, "concat") == "row") 
                 out <- data.frame(lat=as.numeric(y[1, ]), lon=as.numeric(y[2, ]))
@@ -501,10 +526,11 @@ getCoordArgs <- function(y, ...){
                               "reversed to match the valid lat/lon range."))
         out <- out[, c("lat", "lon")]
     }
-    return(formatCoordArgs(out))
+    return(formatCoordArgs(out, auto_fix=auto_fix))
 }
 
-.getCoordArgs.data.frame <- function(y, ...){
+#' @export
+.getCoordArgs.data.frame <- function(y, ..., auto_fix=TRUE){
     ## get the first two columns
     o <- y[, 1:2]
     out <- vapply(o, function(col) {
@@ -512,9 +538,10 @@ getCoordArgs <- function(y, ...){
         }, FUN.VALUE=numeric(nrow(o)))
     dim(out) <- dim(y)
     out <- as.data.frame(out, stringsAsFactors=FALSE)
-    return(formatCoordArgs(out))
+    return(formatCoordArgs(out, auto_fix=auto_fix))
 }
 
+#' @export
 .getCoordArgs.default <- .getCoordArgs.vector
 
 # ================Format gcdf or rgcdf=======================
@@ -592,7 +619,7 @@ get_cn_bou <- function(gcs=c('WGS-84', 'GCJ-02', 'BD-09'),
     gcs <- match.arg(gcs)
     stopifnot(is.character(proj4str))
     
-    proj4str <- CRS(proj4str)
+    proj4str <- sp::CRS(proj4str)
     cn <- map(database='world', regions=c('china', 'taiwan'), fill=TRUE, 
               plot=FALSE)
     diaoyudao <- structure(list(
@@ -639,16 +666,16 @@ get_cn_bou <- function(gcs=c('WGS-84', 'GCJ-02', 'BD-09'),
             23.472637, 24.635875, 30.725, 21.469146),
         names='china:nine segments'), class='map')
     bou_lst <- lapply(list(cn, diaoyudao, sea_bou, nine_seg), function(lst){
-        map2SpatialPolygons(lst, IDs=lst$names, proj4string=proj4str)
+        maptools::map2SpatialPolygons(lst, IDs=lst$names, proj4string=proj4str)
     })
     
     # merge
     cn_bou <- do.call('bind', bou_lst)  # raster::bind
-    cn_bou <- unionSpatialPolygons(cn_bou, IDs=rep('china', length(cn_bou)))
+    cn_bou <- maptools::unionSpatialPolygons(cn_bou, IDs=rep('china', length(cn_bou)))
     
     # convert
     if (! gcs == 'WGS-84'){
-        cn_bou_map <- SpatialPolygons2map(SpatialPolygonsDataFrame(
+        cn_bou_map <- maps::SpatialPolygons2map(sp::SpatialPolygonsDataFrame(
             cn_bou, data=data.frame(NAME='China'), match.ID=FALSE))
         if (gcs == 'GCJ-02') {
             xy <- wgs_to_gcj(cn_bou_map$y, cn_bou_map$x, force=TRUE) 
@@ -657,7 +684,7 @@ get_cn_bou <- function(gcs=c('WGS-84', 'GCJ-02', 'BD-09'),
         }       
         cn_bou_map$x <- xy$lng
         cn_bou_map$y <- xy$lat
-        cn_bou <- map2SpatialPolygons(
+        cn_bou <- maptools::map2SpatialPolygons(
             cn_bou_map, IDs=cn_bou_map$names, proj4string=proj4str)
     }
     return(cn_bou)

@@ -7,7 +7,8 @@
 \usage{
 isOutOfChina(y, ..., accurate = TRUE, gcs = c("WGS-84", "GCJ-02",
   "BD-09"), plot = FALSE, canvas = c("china", "world"),
-  xlim = c(72.004, 137.8347), ylim = c(0.8293, 55.8271))
+  xlim = c(72.004, 137.8347), ylim = c(0.8293, 55.8271),
+  auto_fix_latlng = TRUE)
 }
 \arguments{
 \item{y}{one of \itemize{
@@ -53,12 +54,15 @@ made by xlim and ylim will be used as China.}
 \item{ylim}{numeric vector of length 2. The latitude limits of the China map.
 Default c(0.8293, 55.8271). when \code{accurate} is FALSE, the rectangle
 made by xlim and ylim will be used as China boundary.}
+
+\item{auto_fix_latlng}{logical, if the lat/lng data is of the opposite order,
+whether to let the function automatically fix it. Default TRUE.}
 }
 \value{
-depends on \code{plot}, \itemize{
+Depends on \code{plot}, \itemize{
  \item \code{TRUE}: returns a 'ggplot2' object. \cr
  \item \code{FALSE}; returns a logical vector with the same length of Lat (or Lon).
-}
+}. Note that the point pairs with either lat or lng missing will yield NA anyway.
 }
 \description{
 Analyzes the coordinates (lat, lon) to check whether they are in or out of China. 

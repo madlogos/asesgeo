@@ -77,8 +77,14 @@ does not call for a key, set it to NA.}
  }}
  \item{\code{api} == 'gaode'}{\itemize{
   \item \code{city}: a valid city character to limit the search range, accepts
-   4 form: Chinaese city name, full pinyin (e.g., beijing), citycode (e.g., 010)
-   or adcode (110000).
+   4 forms: \itemize{
+     \item Chinese city name \cr
+     \item full pinyin (e.g., "beijing") \cr
+     \item city code (e.g., "010") \cr
+     \item adcode (e.g., "110000")}
+  \item \code{batch}: Logical, whether apply batch mode. In batch mode, 
+     \code{address} must be wrapped into character with pipe "|", e.g., 
+     "beijing|tianjin".
  }}
 }}
 }
@@ -96,7 +102,7 @@ check the quota carefully.
 }
 \examples{
 \dontrun{
-set_api_key(c("google", "baidu", "gaode"), 
+aseskit::set_api_key(c("googlemap", "baidumap", "gaodemap"), 
             c(<GOOGLE MAPS API KEY>, <BAIDU MAPS API KEY>,
               <GAODE MAPS API KEY>))
 
@@ -138,12 +144,14 @@ geocode(c('Tsinghua University', 'Beijing railway station'),
 }
 }
 \seealso{
-\code{\link{revgeocode}()}, \code{\link{set_api_key}()}, \code{\link{geohost}()},
- \code{\link{parse_geocodes}()}
+\code{\link{revgeocode}()}, \code{\link[aseskit]{set_api_key}()}, 
+ \code{\link{geohost}()}, \code{\link{parse_geocodes}()} \cr
+ \code{\link{synthesize_googlemap_api}()}, \code{\link{synthesize_baidumap_api}()},
+ \code{\link{synthesize_gaodemap_api}()}
 }
 \author{
 \itemize{
- \item Creat: Jun Cai (\email{cai-j12@mails.tsinghua.edu.cn}), PhD student from
+ \item Create: Jun Cai (\email{cai-j12@mails.tsinghua.edu.cn}), PhD student from
   Center for Earth System Science, Tsinghua University \cr
  \item Update: Yiying Wang (\email{wangy@aetna.com})
 }

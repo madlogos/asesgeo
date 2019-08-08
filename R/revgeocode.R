@@ -48,6 +48,8 @@
 #' Default NULL, which indicates that the function will search for cache. If no
 #' match is found, a GUI wizard will be launched to enter the api key. If the API
 #' does not call for a key, set it to NA.
+#' @param auto_fix_latlng logical, if the latlng data is of the opposite order,
+#' whether to let the function automatically fix it. Default TRUE.
 #' @param ... other arguments to pass to the function, dependent on \code{api}. 
 #' \describe{
 #'  \item{\code{api} == 'google'}{\itemize{
@@ -63,8 +65,9 @@
 #'     short_name is returned. Default 'long'.
 #'  }}
 #'  \item{\code{api} == 'baidu'}{\itemize{
-#'   \item \code{pois}: whether callback surrounding pois (1=Yes, 0=No). You will
-#'    need to apply for special service access when calling pois outside China. \cr
+#'   \item \code{pois}: 1 or 0. whether callback surrounding pois (1=Yes, 0=No). 
+#'    You will need to apply for special service access when calling pois outside 
+#'    China. \cr
 #'   \item \code{radius}: the radius for calling back pois. 0-1000 (m). \cr
 #'   \item \code{extensions_road}: callback 3 streets near the spot when set to 
 #'    \code{TRUE}. \cr
@@ -103,8 +106,10 @@
 #'  \item Update: Yiying Wang (\email{wangy@@aetna.com})
 #' }
 #' @seealso \code{\link{geocode}()}, \code{\link{set_api_key}()}, \code{\link{geohost}()}. \cr
-#' Refer to \code{\link{transform_coord}} function family to read the details about
-#'  argument \code{y}, which is consistent with \code{latlng}.
+#'  Refer to \code{\link{transform_coord}} function family to read the details about
+#'  argument \code{y}, which is consistent with \code{latlng}. \cr
+#'  \code{\link{synthesize_googlemap_api}()}, \code{\link{synthesize_baidumap_api}()},
+#'  \code{\link{synthesize_gaodemap_api}()}
 #' @references \itemize{
 #'  \item Google Maps API at 
 #'    \url{https://developers.google.com/maps/documentation/geocoding/intro#ReverseGeocoding} \cr
@@ -116,7 +121,7 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' set_api_key(c("google", "baidu", "gaode"), 
+#' set_api_key(c("googlemap", "baidumap", "gaodemap"), 
 #'             c(<GOOGLE MAPS API KEY>, <BAIDU MAPS API KEY>,
 #'               <GAODE MAPS API KEY>))
 #' 
@@ -146,7 +151,7 @@ revgeocode <- function(latlng,
                        output = c('address', 'addressc', 'all', 'raw'), 
                        api = c('google', 'baidu', 'gaode'), 
                        messaging = FALSE, time = 0, use_curl=TRUE, 
-                       key = NULL, ...){
+                       key = NULL, auto_fix_latlng=TRUE, ...){
     # updated 2019-1 
     
     # -------check parameters-----
@@ -157,7 +162,7 @@ revgeocode <- function(latlng,
     stopifnot(is.numeric(time))
     
     # --------format latlng--------
-    latlng <- getCoordArgs(latlng)
+    latlng <- getCoordArgs(latlng, auto_fix=auto_fix_latlng)
     
     # ------dict fun-----------
     fun_dict <- list(google=revgeocode_google_api, baidu=revgeocode_baidu_api,
@@ -243,14 +248,14 @@ parse_revgeocodes <- function(
     #     rgcdf <- rgcdf %>% 
     #     mutate(street_no=tryCatch(as.integer(street_no), error=function(e) NA_integer_), 
     #            postal_code=tryCatch(as.integer(postal_code), error=function(e) NA_integer_))
-    invalid_latlng <- ifna(abs(rgcdf$lat) > 90 & abs(rgcdf$lng) > 180, FALSE)
+    invalid_latlng <- aseskit::ifna(abs(rgcdf$lat) > 90 & abs(rgcdf$lng) > 180, FALSE)
     if (any(invalid_latlng)) rgcdf[invalid_latlng, ] <- NA
     
     which_addrc_rm <- which(names(rgcdf) %in% c(
         if (idf) NULL else 'idf', 'lat', 'lng', 'loctype'))
     
     out_dict <- list(
-        address = c(if_else(idf, 'idf', NULL), 'address'),
+        address = c(dplyr::if_else(idf, 'idf', NULL), 'address'),
         addressc = - which_addrc_rm,
         all = if (idf) names(rgcdf) else names(rgcdf)[names(rgcdf) != 'idf']
     )
@@ -264,6 +269,7 @@ parse_revgeocode_result <- function(rgc, ...){
 }
 
 # google: geocode = revgeocode
+#' @export
 .parse_revgeocode_result.google_revgeocode <- function(
     rgc, output=c('latlng', 'latlngc', 'latlnga', 'all'), gcs=NULL,
     ics_china='GCJ-02', ics_intl='WGS-84', name_type=c('long', 'short'),
@@ -274,6 +280,7 @@ parse_revgeocode_result <- function(rgc, ...){
         name_type=name_type, name_out=name_out, idf=idf, ...)
 }
 
+#' @export
 #' @importFrom aseskit iif ifnull ifempty
 #' @importFrom dplyr bind_rows bind_cols
 .parse_revgeocode_result.baidu_revgeocode <- function(
@@ -290,7 +297,7 @@ parse_revgeocode_result <- function(rgc, ...){
     
     if (!missing(ics_china)) ics_china <- match.arg(ics_china, c('BD-09', 'WGS-84', 'GCJ-02'))
     if (!missing(ics_intl)) ics_intl <- match.arg(ics_intl, c('BD-09', 'WGS-84', 'GCJ-02'))
-    name_out <- ifnull(name_out, attr(gc, 'name_out'))
+    name_out <- aseskit::ifnull(name_out, attr(gc, 'name_out'))
     
     # did geocode fail?
     if (length(rgc) == 0 || as.numeric(rgc$status) != 0) {
@@ -301,13 +308,13 @@ parse_revgeocode_result <- function(rgc, ...){
                            'details in the response code table of Baidu Geocoding API'), 
                     call. = FALSE)
     }else{
-        loc <- ifempty(rgc$result$location, list(lat=NA_real_, lng=NA_real_))
-        adr <- ifempty(rgc$result$formatted_address, NA_character_)
+        loc <- aseskit::ifempty(rgc$result$location, list(lat=NA_real_, lng=NA_real_))
+        adr <- aseskit::ifempty(rgc$result$formatted_address, NA_character_)
         rgcdf <- data.frame(address=adr, lat=loc['lat'], lng=loc['lng'],
                             stringsAsFactors=FALSE)
         if (output == 'all'){
-            biz <- ifempty(rgc$result$business, NA_character_)
-            adc <- ifempty(rgc$result$addressComponent, list(
+            biz <- aseskit::ifempty(rgc$result$business, NA_character_)
+            adc <- aseskit::ifempty(rgc$result$addressComponent, list(
                 country=NA_character_, province=NA_character_, city=NA_character_,
                 city_level=NA_integer_, district=NA_character_, town=NA_character_,
                 street=NA_character_, street_no=NA_character_, direction=NA_character_,
@@ -331,14 +338,14 @@ parse_revgeocode_result <- function(rgc, ...){
                 poidf <- list(poidf, poidf, poidf) %>% bind_rows
             }else{
                 poidf <- data.frame(
-                    poi_addr = ifempty(poi[['addr']], NA_character_), 
-                    poi_name = ifempty(poi[['name']], NA_character_), 
-                    poi_type = ifempty(poi[['poiType']], NA_character_), 
-                    poi_lat = ifempty(poi[['point']][['y']], NA_real_),
-                    poi_lng = ifempty(poi[['point']][['x']], NA_real_), 
+                    poi_addr = aseskit::ifempty(poi[['addr']], NA_character_), 
+                    poi_name = aseskit::ifempty(poi[['name']], NA_character_), 
+                    poi_type = aseskit::ifempty(poi[['poiType']], NA_character_), 
+                    poi_lat = aseskit::ifempty(poi[['point']][['y']], NA_real_),
+                    poi_lng = aseskit::ifempty(poi[['point']][['x']], NA_real_), 
                     stringsAsFactors = FALSE)
             }
-            poidf <- flatten_df(poidf, output='data.frame')
+            poidf <- aseskit:::flatten_df(poidf, output='data.frame')
             
             if (length(prg) == 0){
                 prgdf <- data.frame(reg_name = NA_character_, 
@@ -346,9 +353,9 @@ parse_revgeocode_result <- function(rgc, ...){
                                     description = NA_character_)
             }else{
                 prgdf <- data.frame(
-                    reg_name = ifempty(prg[['name']], NA_character_), 
-                    reg_tag = ifempty(prg[['tag']], NA_character_), 
-                    description = ifempty(dsc, NA_character_), 
+                    reg_name = aseskit::ifempty(prg[['name']], NA_character_), 
+                    reg_tag = aseskit::ifempty(prg[['tag']], NA_character_), 
+                    description = aseskit::ifempty(dsc, NA_character_), 
                     stringsAsFactors=FALSE)
             }
             
@@ -362,6 +369,7 @@ parse_revgeocode_result <- function(rgc, ...){
     return(out)
 }
 
+#' @export
 #' @importFrom aseskit iif ifnull ifempty
 #' @importFrom dplyr bind_rows mutate select
 #' @importFrom tidyr separate
@@ -376,9 +384,11 @@ parse_revgeocode_result <- function(rgc, ...){
     if (! is.null(gcs)) 
         gcs <- match.arg(gcs, c('WGS-84', 'GCJ-02', 'BD-09'))
     
-    if (!missing(ics_china)) ics_china <- match.arg(ics_china, c('WGS-84', 'GCJ-02', 'BD-09'))
-    if (!missing(ics_intl)) ics_intl <- match.arg(ics_intl, c('WGS-84', 'GCJ-02', 'BD-09'))
-    name_out <- ifnull(name_out, attr(gc, 'name_out'))
+    if (!missing(ics_china)) 
+        ics_china <- match.arg(ics_china, c('WGS-84', 'GCJ-02', 'BD-09'))
+    if (!missing(ics_intl)) 
+        ics_intl <- match.arg(ics_intl, c('WGS-84', 'GCJ-02', 'BD-09'))
+    name_out <- aseskit::ifnull(name_out, attr(gc, 'name_out'))
     
     # did revgeocode fail?
     if (length(rgc) == 0 || as.numeric(rgc$status) != 1) {
@@ -411,7 +421,7 @@ parse_revgeocode_result <- function(rgc, ...){
             }else{
                 rgcdf$location <- rgc$addressComponent$streetNumber$number
             }
-            rgcdf$location <- ifempty(rgcdf$location, ',')
+            rgcdf$location <- aseskit::ifempty(rgcdf$location, ',')
             rgcdf[c('nbrhd_name', 'nbrhd_type')] <- with(
                 rgc$addressComponent$neighborhood, list(name, type))
             rgcdf[c('blding_name', 'blding_type')] <- with(
@@ -423,17 +433,19 @@ parse_revgeocode_result <- function(rgc, ...){
             }else{
                 rgcdf[paste0('biz_loc', 1:3)] <- lapply(1:3, function(i) {
                     vapply(bizAreas, function(bizArea) {
-                        ifnull(bizArea$location[i], ',')}, FUN.VALUE=character(1L))})
+                        aseskit::ifnull(bizArea$location[i], ',')
+                    }, FUN.VALUE=character(1L))})
                 rgcdf[paste0('biz_name', 1:3)] <- lapply(1:3, function(i) {
                     vapply(bizAreas, function(bizArea) {
-                        ifnull(bizArea$name[i], NA_character_)}, FUN.VALUE=character(1L))})
+                        aseskit::ifnull(bizArea$name[i], NA_character_)
+                    }, FUN.VALUE=character(1L))})
             }
             rgcdf[paste0('biz_lat', 1:3)] <- rep(list(rep(NA_real_, n_out)), 3)
             rgcdf[paste0('biz_lng', 1:3)] <- rep(list(rep(NA_real_, n_out)), 3)
             
             # coerce nested list() to NAs
             nms <- names(rgcdf)
-            rgcdf <- ifempty(rgcdf, NA_character_)
+            rgcdf <- aseskit::ifempty(rgcdf, NA_character_)
             rgcdf_var_islist <- vapply(rgcdf, is.list, FUN.VALUE=logical(1L))
             if (any(rgcdf_var_islist))
                 for (i in which(rgcdf_var_islist)) rgcdf[[i]] <- unlist(rgcdf[[i]])
@@ -441,14 +453,14 @@ parse_revgeocode_result <- function(rgc, ...){
             names(rgcdf) <- nms
             
             # coords
-            rgcdf <- separate(rgcdf, location, into=c('lat', 'lng'), sep=',',
-                              convert=TRUE, fill='left') %>% 
-                separate(biz_loc1, into=c('biz_lng1', 'biz_lat1'), sep=',',
-                         convert=TRUE, fill='left') %>% 
-                separate(biz_loc2, into=c('biz_lng2', 'biz_lat2'), sep=',',
-                         convert=TRUE, fill='left') %>% 
-                separate(biz_loc3, into=c('biz_lng3', 'biz_lat3'), sep=',',
-                         convert=TRUE, fill='left') 
+            rgcdf <- tidyr::separate(rgcdf, location, into=c('lng', 'lat'), sep=',',
+                                     convert=TRUE, fill='left') %>% 
+                tidyr::separate(biz_loc1, into=c('biz_lng1', 'biz_lat1'), sep=',',
+                                convert=TRUE, fill='left') %>% 
+                tidyr::separate(biz_loc2, into=c('biz_lng2', 'biz_lat2'), sep=',',
+                                convert=TRUE, fill='left') %>% 
+                tidyr::separate(biz_loc3, into=c('biz_lng3', 'biz_lat3'), sep=',',
+                                convert=TRUE, fill='left') 
             
             rgcdf <- rgcdf %>% 
                 mutate(adcode=as.integer(adcode), 
@@ -491,17 +503,17 @@ revgeocode_google_api <- function(
     ip.country()  # check ip country and store the result in options
     
     ## authorization parameters
-    client <- ifnull(client, '')
-    signature <- ifnull(signature, '')
+    client <- aseskit::ifnull(client, '')
+    signature <- aseskit::ifnull(signature, '')
     if (nchar(client) > 0 && nchar(signature) > 0){
         key <- NULL
     }else if (is.null(key)){
-        key <- getApiKey("google")
+        key <- aseskit::getApiKey("googlemap")
     }else if (! is.character(key) || key == ""){
         stop("Please use either a valid client + signature pair (premium account), ",
              "or a google maps API key.")
     }
-    name_type <- ifnull(name_type, 'long')
+    name_type <- aseskit::ifnull(name_type, 'long')
     name_type <- match.arg(name_type, c('long', 'short'))
 
     ## latlng vector
@@ -515,14 +527,14 @@ revgeocode_google_api <- function(
     latlng <- paste(latlng$lat, latlng$lon, sep=",")  # paste lat, lon
     
     # -----synthesize urls-----
-    urls <- synthesize_api(
-        url_body=latlng, provider='google', api='revgeocode', key=key, 
+    urls <- aseskit::synthesize_api(
+        url_body=latlng, provider='googlemap', api='revgeocode', key=key, 
         name_type=name_type, client=client, signature=signature, use_curl=use_curl, 
         language=language, location_type=location_type, result_type=result_type, ...)
     
     # -----geocode------
-    rgclst <- get_api_data(urls, use_curl=use_curl, time=time, 
-                           messaging=messaging, name_out=latlng)
+    rgclst <- aseskit::get_api_data(urls, use_curl=use_curl, time=time, 
+                                    messaging=messaging, name_out=latlng)
     
     # ----- output -----
     if (output == 'raw') return(rgclst)
@@ -548,7 +560,7 @@ revgeocode_baidu_api <- function(
     stopifnot(is.character(city))
     
     if (is.null(key)){
-        key <- getApiKey("baidu")
+        key <- aseskit::getApiKey("baidumap")
     }else if (!is.character(key) || key == ""){
         stop("Please use a valid baidu map API key.")
     }
@@ -565,13 +577,13 @@ revgeocode_baidu_api <- function(
     # }
     
     # -----synthesize urls-------
-    urls <- synthesize_api(
-        url_body=latlng, provider='baidu', api='revgeocode', city=city, key=key, 
+    urls <- aseskit::synthesize_api(
+        url_body=latlng, provider='baidumap', api='revgeocode', city=city, key=key, 
         use_curl=use_curl,...)
     
     # -----geocode------
-    rgclst <- get_api_data(urls, use_curl=use_curl, time=time, messaging=messaging,
-                           name_out=latlng)
+    rgclst <- aseskit::get_api_data(urls, use_curl=use_curl, time=time, 
+                                    messaging=messaging, name_out=latlng)
     
     # ----- output -----
     if (output == 'raw') return(rgclst)
@@ -596,7 +608,7 @@ revgeocode_gaode_api <- function(
     extensions <- match.arg(extensions)
     
     if (is.null(key)){
-        key <- getApiKey("gaode")
+        key <- aseskit::getApiKey("gaodemap")
     }else if (!is.character(key) || key == ""){
         stop("Please use a valid gaode map API key.")
     }
@@ -614,14 +626,14 @@ revgeocode_gaode_api <- function(
     }
     
     # -----synthesize urls-------
-    urls <- synthesize_api(
-        url_body=latlng, provider='gaode', api='revgeocode', key=key, sig=sig, 
+    urls <- aseskit::synthesize_api(
+        url_body=latlng, provider='gaodemap', api='revgeocode', key=key, sig=sig, 
         use_curl=use_curl, batch=batch, extensions=extensions, poitype=poitype, 
         radius=radius, roadlevel=roadlevel, homeorcorp=homeorcorp, ...)
     
     # -----geocode------
-    rgclst <- get_api_data(urls, use_curl=use_curl, time=time, messaging=messaging,
-                           name_out=latlng)
+    rgclst <- aseskit::get_api_data(urls, use_curl=use_curl, time=time, 
+                                    messaging=messaging, name_out=latlng)
     
     # ----- output -----
     if (output == 'raw') return(rgclst)

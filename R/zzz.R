@@ -72,19 +72,28 @@ NULL
 
 .onUnload <- function(libname, pkgname="asesgeo"){
     op <- aseskit:::.resetPkgPara(pkgname)
-    options(op)    
+    if ('.asesEnv' %in% ls(all.names=TRUE))
+        .asesEnv$API_KEY <- NULL
+    options(op)
 }
 
 
 .onAttach <- function(libname, pkgname="asesgeo"){
     ver.warn <- ""
-    latest.ver <- getOption(pkgname)$latest.version
+    if (is.null(getOption("ases.cran"))) {
+        asesrepo <- aseskit:::.getPkgPara(pkgname)$ases.cran
+    }else{
+        asesrepo <- getOption("ases.cran")
+    }
+    avpkg <- available.packages(repos=asesrepo, type="binary")
+    latest.ver <- tryCatch(avpkg[pkgname, "Version"], error=function(e) NULL,
+                           finally=invisible())
     current.ver <- getOption(pkgname)$version
     if (!is.null(latest.ver) && !is.null(current.ver))
         if (latest.ver > current.ver)
             ver.warn <- paste0("\nThe most up-to-date version of ", pkgname, " is ",
-			                   latest.ver, ". You are currently using ", current.ver)
-    packageStartupMessage(paste("Welcome to", pkgname, current.ver, 
-                                 ver.warn))
+                               latest.ver, ". You are currently using ", current.ver)
+    packageStartupMessage(paste(
+        "Welcome to", pkgname, current.ver, ver.warn))
 }
 

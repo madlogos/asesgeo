@@ -7,7 +7,7 @@
 revgeocode(latlng, ics = c("WGS-84", "GCJ-02", "BD-09"),
   output = c("address", "addressc", "all", "raw"), api = c("google",
   "baidu", "gaode"), messaging = FALSE, time = 0, use_curl = TRUE,
-  key = NULL, ...)
+  key = NULL, auto_fix_latlng = TRUE, ...)
 }
 \arguments{
 \item{latlng}{a location in latitude/longitude format, either a vector, list, 
@@ -58,6 +58,9 @@ Default NULL, which indicates that the function will search for cache. If no
 match is found, a GUI wizard will be launched to enter the api key. If the API
 does not call for a key, set it to NA.}
 
+\item{auto_fix_latlng}{logical, if the latlng data is of the opposite order,
+whether to let the function automatically fix it. Default TRUE.}
+
 \item{...}{other arguments to pass to the function, dependent on \code{api}. 
 \describe{
  \item{\code{api} == 'google'}{\itemize{
@@ -73,8 +76,9 @@ does not call for a key, set it to NA.}
     short_name is returned. Default 'long'.
  }}
  \item{\code{api} == 'baidu'}{\itemize{
-  \item \code{pois}: whether callback surrounding pois (1=Yes, 0=No). You will
-   need to apply for special service access when calling pois outside China. \cr
+  \item \code{pois}: 1 or 0. whether callback surrounding pois (1=Yes, 0=No). 
+   You will need to apply for special service access when calling pois outside 
+   China. \cr
   \item \code{radius}: the radius for calling back pois. 0-1000 (m). \cr
   \item \code{extensions_road}: callback 3 streets near the spot when set to 
    \code{TRUE}. \cr
@@ -120,7 +124,7 @@ check the quota carefully.
 }
 \examples{
 \dontrun{
-set_api_key(c("google", "baidu", "gaode"), 
+set_api_key(c("googlemap", "baidumap", "gaodemap"), 
             c(<GOOGLE MAPS API KEY>, <BAIDU MAPS API KEY>,
               <GAODE MAPS API KEY>))
 
@@ -158,8 +162,10 @@ revgeocode(latlng, ics = 'WGS-84', output = 'all', api = 'google',
 }
 \seealso{
 \code{\link{geocode}()}, \code{\link{set_api_key}()}, \code{\link{geohost}()}. \cr
-Refer to \code{\link{transform_coord}} function family to read the details about
- argument \code{y}, which is consistent with \code{latlng}.
+ Refer to \code{\link{transform_coord}} function family to read the details about
+ argument \code{y}, which is consistent with \code{latlng}. \cr
+ \code{\link{synthesize_googlemap_api}()}, \code{\link{synthesize_baidumap_api}()},
+ \code{\link{synthesize_gaodemap_api}()}
 }
 \author{
 \itemize{

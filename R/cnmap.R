@@ -1,10 +1,14 @@
 #' Load China Map on the Levels of Nation, Province, City or County
 #'
 #' Load the China map and do tiny modifications. Unlike the China map in packages 
-#' \pkg{maps} and \pkg{mapdata}, the dataset in this package is based on Chinese 
-#' official data. \code{cnmap0}, \code{cnmap1}, \code{cnmap2}, \code{cnmap3}
-#' are convenient wrappers for \code{level} 0 (nation), 1 (province), 2 (city/prefecture), 
+#' \pkg{maps} and \pkg{mapdata}, the dataset in this package is based on up-to-date 
+#' Chinese official data. And unlike some public data sources such as GADM, the
+#' dataset in this package is compliant to Chinese official requirements. 
+#' \code{cnmap0}, \code{cnmap1}, \code{cnmap2}, \code{cnmap3} are convenient 
+#' wrappers for \code{level} 0 (nation), 1 (province), 2 (city/prefecture), 
 #' 3 (county) respectively. \cr
+#' 
+#' @details You can obtain maps by running the codes in examples. \cr
 #' \figure{cnmap.png} \figure{bjmap.png}
 #' 
 #' @param level Character or integer, "nation" (0), "province" (1), "city" (2) or
@@ -14,7 +18,7 @@
 #' Beijing area (case insensitive). It supports regular expression. Default NULL, 
 #' indicating that all the regions will be shown.
 #' @param simplify_level Numeric (0 ~ 1), the proportion of points to retain when
-#' applying polygon simplification. See \pkg{rmapshaper}::\code{\link[rmapshaper]{ms_simplify}}.
+#' applying polygon simplification. See \pkg{\link{rmapshaper}}::\code{\link[rmapshaper]{ms_simplify}}.
 #' If set 1, then the function will load maps with highest border precision (bigger
 #' in size). It is useful to reduce the object size when drawing a city- or 
 #' county-level map by 50\%-95\%. Default 1 (no simplification). \cr
@@ -96,8 +100,9 @@
 #'         +ellps=krass +lon_0=105 +lat_1=25 +lat_2=47")}
 #'       \item larger maps: \code{coord_sf(crs="+init=epsg:4490 +proj=laea 
 #'         +ellps=GRS80 +lon_0=105 +lat_0=30")}
-#'     }
-#'   }}
+#'     }}
+#'   Refer to \code{coordcn} to use the parameters directly. 
+#'   }
 #' }
 #' @examples
 #' \dontrun{
@@ -124,8 +129,7 @@
 #'   geom_sf(data=bjmap3, color="gray50", size=0.5) +
 #'   geom_sf(data=bjmap2, fill="transparent", color="gray5", size=0.8) +
 #'   geom_sf_text(aes(label=NAME_LAB), data=bjmap3, family="Microsoft YaHei") +
-#'   coord_sf(crs="+init=epsg:4490 +proj=laea +ellps=GRS80 
-#'            +lon_0=105 +lat_0=30") +theme_minimal()
+#'   coord_sf(crs=coordcn$large$crs) + theme_minimal()
 #' }
 cnmap <- function(level=c("nation", "province", "city", "county"), regions=NULL, 
                   simplify_level=1, drop_fragment=FALSE, 
@@ -254,7 +258,7 @@ drop_map_fragment <- function(
               "210282", "210283", "210604", "210624", "210681", "210711", "210802",
               "211481", "320623", "320703", "330206", "330225", "330226", "330283",
               "330305", "330326", "330327", "330381", "330382", "331002", "331004",
-              " 331021", "331022", "331081", "331082", "350105", "350122", "350128",
+              "331021", "331022", "331081", "331082", "350105", "350122", "350128",
               "350181", "350182", "350203", "350213", "350305", "350505", "350521",
               "350527", "350622", "350623", "350624", "350626", "350681", "350902",
               "350921", "350981", "350982", "370211", "370212", "370282", "370521",

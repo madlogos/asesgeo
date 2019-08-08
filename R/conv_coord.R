@@ -185,11 +185,12 @@ parse_convcoord_result <- function(cv, ...){
     UseMethod(".parse_convcoord_result", cv)
 }
 
+#' @export
 #' @importFrom aseskit iif ifnull ifna
 .parse_convcoord_result.baidu_convcoord <- function(
     cv, output='all', cvname=NULL, idf=TRUE, ...){
     
-    cvname <- ifnull(cvname, 'unknown')
+    cvname <- aseskit::ifnull(cvname, 'unknown')
     idf_col <- cvname %>% as.factor %>% levels %>% strsplit(';') %>% unlist
     
     if (as.numeric(cv$status) == 0 || length(cv) == 0){  # success
@@ -207,18 +208,19 @@ parse_convcoord_result <- function(cv, ...){
         cvdf <- data.frame(lat = rep(NA_real_, len), 
                            lng = rep(NA_real_, len))
     }
-    invalid_latlng <- ifna(abs(cvdf$lat) > 90 & abs(cvdf$lng) > 180, FALSE)
+    invalid_latlng <- aseskit::ifna(abs(cvdf$lat) > 90 & abs(cvdf$lng) > 180, FALSE)
     if (any(invalid_latlng)) cvdf[invalid_latlng, ] <- NA
     if (idf) cvdf <- data.frame(idf=idf_col, cvdf, stringsAsFactors=FALSE)
     
     return(cvdf)
 }
 
+#' @export
 #' @importFrom aseskit iif ifnull
 .parse_convcoord_result.gaode_convcoord <- function(
     cv, output='all', cvname=NULL, idf=TRUE, ...){
     
-    cvname <- ifnull(cvname, 'unknown')
+    cvname <- aseskit::ifnull(cvname, 'unknown')
     idf_col <- cvname %>% as.factor %>% levels %>% strsplit(';') %>% unlist
     
     if (as.numeric(cv$status) == 1 || length(cv) == 0){  # success
@@ -241,6 +243,7 @@ parse_convcoord_result <- function(cv, ...){
     return(cvdf)
 }
 
+#' @export
 .parse_convcoord_reuslt.default <- function(
     cv, output=c('all'), cvname=NULL, idf=TRUE,
     ...){
@@ -271,13 +274,13 @@ conv_coord_api_baidu <- function(lat, lon, from=c('WGS-84', 'GCJ-02', 'BD-09'),
     }, FUN.VALUE=character(1L))
     
     # synthesize urls
-    urls <- synthesize_api(
-        url_body=latlngs, provider='baidu', api='convcoord', 
+    urls <- aseskit::synthesize_api(
+        url_body=latlngs, provider='baidumap', api='convcoord', 
         coord_from=from, coord_to=to, key=key)
     
     # result list
-    cv <- get_api_data(urls, use_curl=FALSE, messaging=messaging,
-                       name_out=latlngs)
+    cv <- aseskit::get_api_data(
+        urls, use_curl=FALSE, messaging=messaging, name_out=latlngs)
     
     # parse
     if (output == 'raw') return(cv)
@@ -304,13 +307,13 @@ conv_coord_api_gaode <- function(lat, lon, from=c('WGS-84', 'GCJ-02', 'BD-09'),
     }, FUN.VALUE=character(1L))
     
     # synthesize urls
-    urls <- synthesize_api(
-        url_body=latlngs, provider='gaode', api='convcoord', 
+    urls <- aseskit::synthesize_api(
+        url_body=latlngs, provider='gaodemap', api='convcoord', 
         coord_from=from, coord_to=to, key=key)
     
     # result list
-    cv <- get_api_data(urls, use_curl=FALSE, messaging=messaging, 
-                       name_out=latlngs)
+    cv <- aseskit::get_api_data(
+        urls, use_curl=FALSE, messaging=messaging, name_out=latlngs)
     
     # parse
     if (output == 'raw') return(cv)

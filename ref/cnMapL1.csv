@@ -1,0 +1,35 @@
+ISO,ID,NAME,HASC,TYPE,ENGTYPE,NAME_CHS,NAME_CHT,NAME_LAB,VARNAME,AREA,PTX,PTY
+CHN,1,Anhui,CN.AH,Sheng,Province,安徽,安徽,安徽,Anhui,13.3687396,117.2262303,31.82578581
+CHN,2,Beijing,CN.BJ,Zhíxiáshì,Municipality,北京,北京,北京,Beijing,1.734891144,116.4106715,40.1849142
+CHN,3,Chongqing,CN.CQ,Zhíxiáshì,Municipality,重庆,重慶,重庆,Chóngqìng,7.713129154,107.8748401,30.05864874
+CHN,4,Fujian,CN.FJ,Sheng,Province,福建,福建,福建,Fújiàn,11.01921219,117.9815086,26.08640531
+CHN,5,Gansu,CN.GS,Sheng,Province,甘肃,甘肅,甘肃,Gansù,41.50390506,100.9338739,37.82078887
+CHN,6,Guangdong,CN.GD,Sheng,Province,广东,廣東,广东,Guangdong,15.70403122,113.4163865,23.34225053
+CHN,7,Guangxi,CN.GX,Zìzhìqu,Autonomous Region,广西壮族自治区,廣西壯族自治區,广西,Guangxi Zhuàngzú,20.96070649,108.7872105,23.82787335
+CHN,8,Guizhou,CN.GZ,Sheng,Province,贵州,貴州,贵州,Gùizhou,15.97827755,106.8738212,26.81518922
+CHN,9,Hainan,CN.HA,Sheng,Province,海南,海南,海南,Hainán,2.925935525,109.7455789,19.19573798
+CHN,10,Hebei,CN.HB,Sheng,Province,河北,河北,河北,Hébei,19.66349965,116.1241417,39.54361767
+CHN,11,Heilongjiang,CN.HL,Sheng,Province,黑龙江,黑龍江,黑龙江,Heilóngjiang,54.69861713,127.7823601,47.84154247
+CHN,12,Henan,CN.HE,Sheng,Province,河南,河南,河南,Hénán,16.1347353,113.613553,33.88259152
+CHN,13,Hubei,CN.HU,Sheng,Province,湖北,湖北,湖北,Húbei,17.56576441,112.2690854,30.97599381
+CHN,14,Hunan,CN.HN,Sheng,Province,湖南,湖南,湖南,Húnán,19.39417374,111.7082641,27.60690212
+CHN,15,Jiangsu,CN.JS,Sheng,Province,江苏,江蘇,江苏,Jiangsu,9.811206506,119.4554304,32.97324193
+CHN,16,Jiangxi,CN.JX,Sheng,Province,江西,江西,江西,Jiangxi,15.27170087,115.7208219,27.61366261
+CHN,17,Jilin,CN.JL,Sheng,Province,吉林,吉林,吉林,Jílín,21.31905724,126.1940038,43.66440549
+CHN,18,Liaoning,CN.LN,Sheng,Province,辽宁,遼寧,辽宁,Liáoníng,15.67753314,122.6090251,41.30372714
+CHN,19,Nei Mongol,CN.NM,Zìzhìqu,Autonomous Region,内蒙古自治区,內蒙古自治區,内蒙古,Inner Mongol|Nèimenggu,129.1137532,113.9144874,44.0863963
+CHN,20,Ningxia Hui,CN.NX,Zìzhìqu,Autonomous Region,宁夏回族自治区,寧夏回族自治區,宁夏,Níngxià Húizú,5.269146379,106.1648622,37.27093378
+CHN,21,Qinghai,CN.QH,Sheng,Province,青海,青海,青海,Qinghai,71.35189461,96.00369368,35.74928715
+CHN,22,Shaanxi,CN.SA,Sheng,Province,陕西,陝西,陕西,Shanxi,20.39026335,108.8705819,35.19516887
+CHN,23,Shandong,CN.SD,Sheng,Province,山东,山東,山东,Shandong,15.61451441,118.148974,36.35119383
+CHN,24,Shanghai,CN.SH,Zhíxiáshì,Municipality,上海,上海,上海,Shànghai,0.651444874,121.4036651,31.08461642
+CHN,25,Shanxi,CN.SX,Sheng,Province,山西,山西,山西,Shanxi,15.96466734,112.2919732,37.57589687
+CHN,26,Sichuan,CN.SC,Sheng,Province,四川,四川,四川,Sìchuan,45.53715339,102.7099641,30.61575411
+CHN,27,Tianjin,CN.TJ,Zhíxiáshì,Municipality,天津,天津,天津,Tianjin,1.221815503,117.3330017,39.31040122
+CHN,28,Xinjiang Uygur,CN.XJ,Zìzhìqu,Autonomous Region,新疆维吾尔自治区,新疆維吾爾自治區,新疆,Xinjiang Wéiwúer,174.9775617,85.20363342,41.11196232
+CHN,29,Xizang,CN.XZ,Zìzhìqu,Autonomous Region,西藏自治区,西藏自治區,西藏,Tibet|Xizàng,107.5731944,88.13130923,31.69003921
+CHN,30,Yunnan,CN.YN,Sheng,Province,云南,雲南,云南,Yúnnán,34.2596776,101.4894024,24.97600289
+CHN,31,Zhejiang,CN.ZJ,Sheng,Province,浙江,浙江,浙江,Zhèjiang,9.53508901,120.0521362,29.17318549
+TWN,32,Taiwan,TW,NA,NA,台湾,台灣,台湾,Taiwan,3.224679461,120.9735901,23.75143161
+HKG,33,Hong Kong,HK,Tequ,Special Region,香港,香港,香港,Xianggang,0.099025249,114.1619493,22.42353391
+MAC,34,Macao,MC,Tequ,Special Region,澳门,澳门,澳门,Aomen,0.003588053,113.5588841,22.16252228

@@ -75,9 +75,9 @@
     api_url, use_curl=FALSE, parse_json=TRUE, time=0, encoding='UTF-8', 
     url_encode=TRUE, name_out=NULL, ...){
     # use_curl = FALSE, and encoding='UTF-8'
-    extract_api_data(api_url=api_url, use_curl=use_curl, parse_json=TRUE, 
-                     time=time, encoding=encoding, url_encode=url_encode, 
-                     name_out=name_out, ...)
+    aseskit:::extract_api_data(
+        api_url=api_url, use_curl=use_curl, parse_json=TRUE, time=time, 
+        encoding=encoding, url_encode=url_encode, name_out=name_out, ...)
 }
 
 #' @export
@@ -91,9 +91,9 @@
     api_url, use_curl=FALSE, parse_json=TRUE, time=0, encoding='UTF-8', 
     url_encode=TRUE, name_out=NULL, ...){
     # use_curl = FALSE, and encoding='UTF-8'
-    extract_api_data(api_url=api_url, use_curl=use_curl, parse_json=TRUE, 
-                     time=time, encoding=encoding, url_encode=url_encode, 
-                     name_out=name_out, ...)
+    aseskit:::extract_api_data(
+        api_url=api_url, use_curl=use_curl, parse_json=TRUE, time=time, 
+        encoding=encoding, url_encode=url_encode, name_out=name_out, ...)
 }
 
 #' @export
@@ -107,9 +107,9 @@
     api_url, use_curl=FALSE, parse_json=TRUE, time=0, encoding='unknown', 
     url_encode=TRUE, name_out=NULL, ...){
     # use_curl = FALSE, and encoding='UTF-8'
-    extract_api_data(api_url=api_url, use_curl=use_curl, parse_json=TRUE, 
-                     time=time, encoding=encoding, url_encode=url_encode, 
-                     name_out=name_out, ...)
+    aseskit:::extract_api_data(
+        api_url=api_url, use_curl=use_curl, parse_json=TRUE, time=time, 
+        encoding=encoding, url_encode=url_encode, name_out=name_out, ...)
 }
 
 #' @export
@@ -126,7 +126,31 @@
 
 ## -------------Google api-----------------
 
-synthesize_google_api <- function(
+#' Synthesize googlemap API
+#' 
+#' Working function for \code{\link[aseskit]{synthesize_api}()}. It will call
+#' lower functions \code{\link{synthesize_google_api_geocode}()} or 
+#' \code{\link{synthesize_google_api_revgeocode}()}.
+#' @param url_body character, the leading argument in the API URL.
+#' @param api character, 'geocode' or 'revgeocode'.
+#' @param use_curl logical, whether use \code{curl}(). Default TRUE.
+#' @param ... other arguments to pass to the function, e.g., \code{language}, 
+#' \code{client}, \code{signature}, \code{key}
+#'
+#' @note When \code{key} is omitted or set NULL, the function will search for it
+#' in the cache. If nothing is found, a GUI wizard will be launched for you to 
+#' input the API key. If you want to bypass API key, set \code{key} = NA.
+#' 
+#' @return A \code{url} object for \code{\link{get_api_data}()} use.
+#' @export
+#'
+#' @references Googlemaps API documentation: 
+#' \url{https://developers.google.com/maps/documentation}
+#' @examples
+#' \dontrun{
+#' synthesize_googlemap_api("<Address>", key="<YOUR GOOGLEMAP KEY>")
+#' }
+synthesize_googlemap_api <- function(
     url_body, api=c('geocode', 'revgeocode'), use_curl=TRUE, ...){
     
     api <- match.arg(api)
@@ -142,7 +166,7 @@ synthesize_google_api <- function(
 
 #' @importFrom glue glue
 #' @importFrom aseskit iif ifnull aline
-embed_google_api_generic <- function(
+embed_googlemap_api_generic <- function(
     url_char, language=NULL, client='', signature='', key=NULL, ...){
     # generic function to add auth in API
     stopifnot(is.character(url_char))
@@ -157,17 +181,17 @@ embed_google_api_generic <- function(
             "te", "hu", "th", "id", "tl", "it", "tr", "iw", "uk", "ja", "uz", 
             "kk", "vi", "kn", "zh-CN","ko", "zh-TW", "ky")
         lang <- match.arg(language, valid_lang, several.ok=TRUE)
-        url_char <- glue('{url_char}&language={aline(lang, len)}')
+        url_char <- glue::glue('{url_char}&language={aline(lang, len)}')
     }
     # add authorization part
     if (nchar(ifnull(client, '')) > 0 && nchar(ifnull(signature, '')) > 0){
-        url_char <- glue('{url_char}&client={client}&signature={signature}')
+        url_char <- glue::glue('{url_char}&client={client}&signature={signature}')
     }else if (is.null(key)) {
-        url_char <- glue('{url_char}&key={getApiKey("google")}')
+        url_char <- glue::glue('{url_char}&key={getApiKey("google")}')
     }else if (is.na(key)){
         url_char <- url_char
     }else if (is.character(key) && nchar(key) > 0) {
-        url_char <- glue('{url_char}&key={key}')
+        url_char <- glue::glue('{url_char}&key={key}')
     }else{
         stop('either client and signature, or a valid API key must be provided ',
              'for Google API!')
@@ -175,8 +199,18 @@ embed_google_api_generic <- function(
     return(url_char)
 }
 
+#' @param region character, for geocoding. The region code, specified as a ccTLD 
+#' ("top-level domain") two-character value. This parameter will only influence,
+#'  not fully restrict, results from the geocoder.
+#' @param components character, for geocoding. A components filter with elements 
+#' separated by a pipe (|). The components filter is required if the request doesn't 
+#' include an address. Each element in the components filter consists of a 
+#' \code{component:value} pair, and fully restricts the results from the geocoder. 
+#'
 #' @importFrom aseskit iif ifnull check_curl aline
 #' @importFrom glue glue
+#' @export
+#' @rdname synthesize_googlemap_api
 synthesize_google_api_geocode <- function(
     url_body, region=NULL, components=NULL, use_curl=TRUE, ...){
     
@@ -184,7 +218,7 @@ synthesize_google_api_geocode <- function(
     dots <- list(...)
     stopifnot(is.null(region) || is.character(region))
     stopifnot(is.null(components) || is.character(components))
-    name_out <- ifnull(dots$name_out, url_body)
+    name_out <- aseskit::ifnull(dots$name_out, url_body)
     
     len <- length(url_body)
     
@@ -198,31 +232,60 @@ synthesize_google_api_geocode <- function(
         api_url <- 'https://maps.googleapis.com/maps/api/'
     
     # start
-    api_url <- glue('{api_url}geocode/json')
-    use_curl <- check_curl(api_url, "Google Maps Geocoding", use_curl)
+    api_url <- glue::glue('{api_url}geocode/json')
+    use_curl <- aseskit::check_curl(api_url, "Google Maps Geocoding", use_curl)
     
-    url_char <- glue('{api_url}?address={url_body}')
+    url_char <- glue::glue('{api_url}?address={url_body}')
     
     if (! is.null(region)){
-        region <- aline(region, length(url_body))
+        region <- aseskit::aline(region, length(url_body))
         valid_reg <- which(nchar(region) > 0)
         if (length(valid_reg) > 0) url_char[valid_reg] <- glue(
             '{url_char[valid_reg]}&region={region[valid_reg]}')
     }
     if (! is.null(components)){
-        components <- aline(components, length(url_body))
+        components <- aseskit::aline(components, length(url_body))
         valid_cmp <- which(nchar(components) > 0)
         if (length(valid_cmp) > 0) url_char[valid_cmp] <- glue(
             '{url_char[valid_cmp]}&components={components[valid_cmp]}')
     }
-    url_char <- embed_google_api_generic(url_char, ...)
+    url_char <- embed_googlemap_api_generic(url_char, ...)
     return(mapply(structure, url_char, name_out=name_out, MoreArgs=list(
         class=c('google_api_geocode', 'url'), use_curl=use_curl),
         SIMPLIFY=FALSE))
 }
 
+
+#' @param result_type character, for regeocoding. A filter of one or more address 
+#' types, separated by a pipe (|). If the parameter contains multiple address types,
+#'  the API returns all addresses that match any of the types. A note about 
+#'  processing: The result_type parameter does not restrict the search to the 
+#'  specified address type(s). Rather, the result_type acts as a post-search 
+#'  filter: the API fetches all results for the specified latlng, then discards 
+#'  those results that do not match the specified address type(s). Note: 
+#'  This parameter is available only for requests that include an API key or 
+#'  a client ID. The following values are supported: \cr
+#'  'street_address', 'route', 'intersection', 'political', 'country', 
+#'  'administrative_area_level_1', 'administrative_area_level_2',
+#'  'administrative_area_level_3', 'administrative_area_level_4', 
+#'  'administrative_area_level_5', 'colloquial_area', 'locality', 'sublocality', 
+#'  'neighborhood', 'premise', 'subpremise', 'postal_code', 'natural_feature', 
+#'  'airport', 'park', 'point_of_interest.'
+#' @param location_type character, for revgeocoding. A filter of one or more 
+#' location types, separated by a pipe (|). If the parameter contains multiple 
+#' location types, the API returns all addresses that match any of the types. 
+#' A note about processing: The location_type parameter does not restrict the 
+#' search to the specified location type(s). Rather, the location_type acts as 
+#' a post-search filter: the API fetches all results for the specified latlng, 
+#' then discards those results that do not match the specified location type(s). 
+#' Note: This parameter is available only for requests that include an API key 
+#' or a client ID. The following values are supported: \cr
+#' 'ROOFTOP', 'RANGE_INTERPOLATED', 'GEOMETRIC_CENTER', 'APPROXIMATE.'
+#'
 #' @importFrom glue glue
 #' @importFrom aseskit iif ifnull check_curl aline
+#' @export
+#' @rdname synthesize_googlemap_api
 synthesize_google_api_revgeocode <- function(
     url_body, result_type=NULL, location_type=NULL, use_curl=TRUE, 
     ...){
@@ -235,10 +298,10 @@ synthesize_google_api_revgeocode <- function(
     stopifnot(is.character(url_body))
     valid_url_body <- grepl("^\\-?\\d+?\\.?\\d*?,\\-?\\d+?\\.?\\d*$", url_body)
     if (! all(valid_url_body))
-        warning('latlng must be in the format of "lat,lon;lat,lon". Coordinates #',
+        warning('latlng must be in the format of "lat,lon". Coordinates #',
                 paste(which(! valid_url_body), collapse=', '), 
-                'are not correctly formatted.')
-    name_out <- ifnull(dots$name_out, url_body)
+                ' are not correctly formatted.')
+    name_out <- aseskit::ifnull(dots$name_out, url_body)
     
     len <- length(url_body)
     
@@ -252,9 +315,9 @@ synthesize_google_api_revgeocode <- function(
         api_url <- 'https://maps.googleapis.com/maps/api/'
     
     # start
-    api_url <- glue('{api_url}geocode/json')
-    use_curl <- check_curl(api_url, "Google Maps Geocoding", use_curl)
-    url_char <- glue('{api_url}?latlng={url_body}')
+    api_url <- glue::glue('{api_url}geocode/json')
+    use_curl <- aseskit::check_curl(api_url, "Google Maps Geocoding", use_curl)
+    url_char <- glue::glue('{api_url}?latlng={url_body}')
     
     if (length(result_type) > 0){
         result_type_dict <- c(
@@ -263,7 +326,7 @@ synthesize_google_api_revgeocode <- function(
             'locality', 'sublocality', paste('sublocality_level_', 1:5, sep=''),
             'neighborhood', 'premise', 'subpremise', 'postal_code', 'natural_feature',
             'airport', 'park', 'point_of_interest')
-        result_type <- aline(result_type, len)
+        result_type <- aseskit::aline(result_type, len)
         valid_rslt_type <- vapply(
             strsplit(result_type, '\\|'), function(rslt_type){
                 all(rslt_type %in% result_type_dict)}, FUN.VALUE=logical(1L))
@@ -271,13 +334,13 @@ synthesize_google_api_revgeocode <- function(
             warning('result_type must be in ', paste(result_type_dict, collapse=', '),
                     ' or these valid values concatenated with pipe (|).')
         if (any(valid_rslt_type))
-            url_char[valid_rslt_type] <- glue(
+            url_char[valid_rslt_type] <- glue::glue(
                 '{url_char[valid_rslt_type]}&result_type={result_type[valid_rslt_type]}')
     }
     if (length(location_type) > 0){
         location_type_dict <- c(
             'ROOFTOP', 'RANGE_INTERPOLATED', 'GEOMETRIC_CENTER', 'APPROXIMATE')
-        location_type <- aline(location_type, len)
+        location_type <- aseskit::aline(location_type, len)
         valid_loc_type <- vapply(
             strsplit(location_type, '\\|'), function(loc_type){
                 all(loc_type %in% location_type_dict)}, FUN.VALUE=logical(1L))
@@ -285,10 +348,10 @@ synthesize_google_api_revgeocode <- function(
             warning('location_type must be in ', paste(location_type_dict, collapse=', '),
                     ' or these valid values concatenated with pipe (|).')
         if (any(valid_loc_type))
-            url_char[valid_loc_type] <- glue(
+            url_char[valid_loc_type] <- glue::glue(
                 '{url_char[valid_loc_type]}&location_type={location_type[valid_loc_type]}')
     }
-    url_char <- embed_google_api_generic(url_char, ...)
+    url_char <- embed_googlemap_api_generic(url_char, ...)
     url_char[! valid_url_body] <- NA_character_
     return(mapply(structure, url_char, name_out=url_body, MoreArgs=list(
         class=c('google_api_revgeocode', 'url'), use_curl=use_curl),
@@ -297,7 +360,31 @@ synthesize_google_api_revgeocode <- function(
 
 # --------------baidu api-----------------------
 
-synthesize_baidu_api <- function(
+#' Synthesize baidumap API
+#' 
+#' Working function for \code{\link[aseskit]{synthesize_api}()}. It will call
+#' lower functions \code{\link{synthesize_baidu_api_geocode}()} or 
+#' \code{\link{synthesize_baidu_api_revgeocode}()}
+#' or \code{synthesize_baidu_api_convcoord}.
+#' @param url_body character, the leading argument in the API URL.
+#' @param api character, 'geocode', 'revgeocode', 'convcoord'.
+#' @param use_curl logical, whether use \code{curl}(). Default TRUE.
+#' @param ... other arguments to pass to the function, e.g., \code{key}
+#'
+#' @note When \code{key} is omitted or set NULL, the function will search for it
+#' in the cache. If nothing is found, a GUI wizard will be launched for you to 
+#' input the API key. If you want to bypass API key, set \code{key} = NA.
+#' 
+#' @return A \code{url} object for \code{\link{get_api_data}()} use.
+#' @export
+#'
+#' @references Baidu map API documentation: 
+#' \url{http://lbsyun.baidu.com/index.php?title=webapi/guide}
+#' @examples
+#' \dontrun{
+#' synthesize_baidumap_api("<Address>", key="<YOUR BAIDUMAP KEY>")
+#' }
+synthesize_baidumap_api <- function(
     url_body, api=c('geocode', 'revgeocode', 'convcoord'), use_curl=FALSE, ...){
     
     api <- match.arg(api)
@@ -313,23 +400,29 @@ synthesize_baidu_api <- function(
 
 #' @importFrom glue glue
 #' @importFrom aseskit getApiKey iif
-embed_baidu_api_generic <- function(url_char, key=NULL, ...){
+embed_baidumap_api_generic <- function(url_char, key=NULL, ...){
     stopifnot(is.character(url_char))
     if (is.null(key)){
-        key <- getApiKey("baidu")
-        url_char <- glue('{url_char}&ak={key}')
+        key <- aseskit::getApiKey("baidu")
+        url_char <- glue::glue('{url_char}&ak={key}')
     }else if (is.na(key)){
         
     }else if (is.character(key) && nchar(key) > 0){
-        url_char <- glue('{url_char}&ak={key}')
+        url_char <- glue::glue('{url_char}&ak={key}')
     }else{
         stop("Please use a valid baidu API key.")
     }
     return(url_char)
 }
 
+#' @param ics character, for geocoding. 'BD-09', 'GCJ-02' or 'WGS-84'.
+#' @param ocs character, for geocoding. 'BD-09', 'GCJ-02' or 'WGS-84'
+#' @param city character, for geocoding. A valid Chinese city name to limit the search range.
+#'
 #' @importFrom aseskit check_curl aline iif ifnull
 #' @importFrom glue glue
+#' @export
+#' @rdname synthesize_baidumap_api
 synthesize_baidu_api_geocode <- function(
     url_body, ics=c('BD-09', 'GCJ-02', 'WGS-84'), 
     ocs=c('BD-09', 'GCJ-02', 'WGS-84'), city=NULL, use_curl=FALSE, ...){
@@ -340,34 +433,58 @@ synthesize_baidu_api_geocode <- function(
     ocs <- if (! is.null(ocs)) match.arg(ocs, several.ok=TRUE) else 'BD-09'
     
     dots <- list(...)
-    name_out <- ifnull(dots$name_out, url_body)
+    name_out <- aseskit::ifnull(dots$name_out, url_body)
     
     len <- length(url_body)
-    ocs <- aline(ocs, len)
-    ics <- aline(ics, len)
+    ocs <- aseskit::aline(ocs, len)
+    ics <- aseskit::aline(ics, len)
     
     # start
     api_url <- 'http://api.map.baidu.com/geocoder/v2/'
-    use_curl <- check_curl(api_url, "Baidu Map Geocoding", use_curl)
+    use_curl <- aseskit::check_curl(api_url, "Baidu Map Geocoding", use_curl)
     
-    url_char <- glue('{api_url}?address={url_body}&output=json')
+    url_char <- glue::glue('{api_url}?address={url_body}&output=json')
     ocs_gcj <- which(ocs == "GCJ-02")
     if (length(ocs_gcj) > 0)
-        url_char[ocs_gcj] <- glue('{url_char[ocs_gcj]}&ret_coordtype=gcj02ll')
+        url_char[ocs_gcj] <- glue::glue('{url_char[ocs_gcj]}&ret_coordtype=gcj02ll')
     if (! is.null(city)) {
-        city <- aline(city, len)
+        city <- aseskit::aline(city, len)
         valid_city <- city[nchar(city) > 0]
-        url_char[valid_city] <- glue(
+        url_char[valid_city] <- glue::glue(
             '{url_char[valid_city]}&city={city[valid_city]}')
     }
-    url_char <- embed_baidu_api_generic(url_char, ...)
+    url_char <- embed_baidumap_api_generic(url_char, ...)
     return(mapply(structure, url_char, name_out=url_body, MoreArgs=list(
         class=c('baidu_api_geocode', 'url'), use_curl=use_curl),
         SIMPLIFY=FALSE))
 }
 
+
+#' @param pois numeric 1 or 0, for revgeocode. whether callback surrounding pois
+#'  (1=Yes, 0=No). You will need to apply for special service access when calling 
+#'  pois outside China. Default NULL (0).
+#' @param radius numeric 0-1000, for revgeocode. The radius (m) for calling back pois.
+#'  Default NULL (indicating 1000).
+#' @param extensions_road logical, for revgeocode. Callback 3 streets near the spot 
+#'  when set to \code{TRUE}. Default FALSE.
+#' @param extensions_town logical, for revgeocode. Callback info of town when set 
+#'  to \code{TRUE}. Default FALSE.
+#' @param language character, for revgeocode. Valid language: "local" or "el", "gu", 
+#' "en", "vi", "ca", "it", "iw", "sv", "eu", "ar", "cs", "gl", "id", "es", "ru", 
+#' "sr", "nl", "pt", "tr", "tl", "lv", "lt", "th", "ro", "fil", "ta", "fr", "bg", 
+#' "hr", "bn", "de", "hu", "fa", "hi", "fi", "da","ja", "te", "ml", "ko", "kn", 
+#' "sk", "pl", "uk", "sl", "mr", "local", "en-GB", "en-AU", "zh-TW", "pt-BR", 
+#' "pt-PT", "zh-CN". Default NULL.
+#' @param language_auto numeric 1 or 0, for revgeocode. whether auto fill the 
+#'  admin area (1=Yes, 0=No). You will need to apply for special service access
+#'  when using multi-language functionality. Default NULL (ignored).
+#' @param latest_admin numeric 1 or 0, for revgeocode. whether get the latest 
+#'  administrative area info (1=Yes, 0=No). Default 0.
+#'
 #' @importFrom glue glue
 #' @importFrom aseskit iif ifnull check_curl aline
+#' @export
+#' @rdname synthesize_baidumap_api
 synthesize_baidu_api_revgeocode <- function(
     url_body, ics=c('BD-09', 'GCJ-02', 'WGS-84'), 
     ocs=c('BD-09', 'GCJ-02', 'WGS-84'), pois=NULL, radius=NULL, 
@@ -394,44 +511,44 @@ synthesize_baidu_api_revgeocode <- function(
     ocs <- if (! is.null(ocs)) match.arg(ocs, several.ok=TRUE) else 'BD-09'
     
     dots <- list(...)
-    name_out <- ifnull(dots$name_out, url_body)
+    name_out <- aseskit::ifnull(dots$name_out, url_body)
     
     len <- length(url_body)
-    ocs <- aline(ocs, len)
-    ics <- aline(ics, len)
+    ocs <- aseskit::aline(ocs, len)
+    ics <- aseskit::aline(ics, len)
     
     # start
     api_url <- 'http://api.map.baidu.com/geocoder/v2/'
-    use_curl <- check_curl(api_url, "Baidu Map RevGeocoding", use_curl)
-    url_char <- glue('{api_url}?location={url_body}&output=json')
+    use_curl <- aseskit::check_curl(api_url, "Baidu Map RevGeocoding", use_curl)
+    url_char <- glue::glue('{api_url}?location={url_body}&output=json')
     
     # if ics == 'BD-09', coordtype can be blank
     ics_gcj <- which(ics == "GCJ-02")
     ics_wgs <- which(ics == "WGS-84")
-    url_char[ics_gcj] <- glue('{url_char[ics_gcj]}&coordtype=gcj02ll')
-    url_char[ics_wgs] <- glue('{url_char[ics_wgs]}&coordtype=wgs84ll')
+    url_char[ics_gcj] <- glue::glue('{url_char[ics_gcj]}&coordtype=gcj02ll')
+    url_char[ics_wgs] <- glue::glue('{url_char[ics_wgs]}&coordtype=wgs84ll')
     ocs_gcj <- which(ocs == 'GCJ-02')
-    url_char[ocs_gcj] <- glue('{url_char[ocs_gcj]}&ret_coordtype=gcj02ll')
+    url_char[ocs_gcj] <- glue::glue('{url_char[ocs_gcj]}&ret_coordtype=gcj02ll')
     
     if (! is.null(pois)) {
-        pois <- aline(pois, len)
+        pois <- aseskit::aline(pois, len)
         valid_pois <- which(pois %in% 0:1)
         if (length(valid_pois) > 0) url_char[valid_pois] <- glue(
             '{url_char[valid_pois]}&pois={pois[valid_pois]}')
     }
     if (! is.null(radius)){
-        radius <- aline(radius, len)
+        radius <- aseskit::aline(radius, len)
         valid_radius <- which(radius > 0)
         if (length(valid_radius) > 0) url_char[valid_radius] <- glue(
             '{url_char[valid_radius]}&radius={radius[valid_radius]}')
     }
-    ext_road <- aline(extensions_road, len)
+    ext_road <- aseskit::aline(extensions_road, len)
     if (any(ext_road))
-        url_char[ext_road] <- glue(
+        url_char[ext_road] <- glue::glue(
             '{url_char[ext_road]}&extensions_road=true')
-    ext_town <- aline(extensions_town, len)
+    ext_town <- aseskit::aline(extensions_town, len)
     if (any(ext_town))
-        url_char[ext_town] <- glue(
+        url_char[ext_town] <- glue::glue(
             '{url_char[ext_town]}&extensions_town=true')
     if (! is.null(language)){
         valid_lang <- c(
@@ -442,31 +559,36 @@ synthesize_baidu_api_revgeocode <- function(
             "sl", "mr", "local", "en-GB", "en-AU", "zh-TW", "pt-BR", "pt-PT", 
             "zh-CN")
         language <- match.arg(language, valid_lang, several.ok=TRUE)
-        url_char <- glue('{url_char}&language={aline(language, len)}')
+        url_char <- glue::glue('{url_char}&language={aline(language, len)}')
     }
     if (! is.null(language_auto)) if (any(language_auto %in% 0:1)){
-        language_auto <- aline(language_auto, len)
+        language_auto <- aseskit::aline(language_auto, len)
         valid_lang_auto <- which(language_auto %in% 0:1)
-        url_char[valid_lang_auto] <- glue(
+        url_char[valid_lang_auto] <- glue::glue(
             '{url_char[valid_lang_auto]}&language_auto=',
             '{language_auto[valid_lang_auto]}')
     }
     if (any(latest_admin == 1)){
-        latest_admin <- aline(latest_admin, len)
+        latest_admin <- aseskit::aline(latest_admin, len)
         valid_ladmin <- which(latest_admin == 1)
-        url_char[valid_ladmin] <- glue(
+        url_char[valid_ladmin] <- glue::glue(
             '{url_char[valid_ladmin]}&latest_admin=',
             '{latest_admin[valid_ladmin]}')
     }
-    url_char <- embed_baidu_api_generic(url_char, ...)
+    url_char <- embed_baidumap_api_generic(url_char, ...)
     url_char[! valid_url_body] <- NA_character_
     return(mapply(structure, url_char, name_out=url_body, MoreArgs=list(
         class=c('baidu_api_revgeocode', 'url'), use_curl=use_curl),
         SIMPLIFY=FALSE))
 }
 
+#' @param coord_from character, for conv coord. 'BD-09', 'GCJ-02', or 'WGS-84'
+#' @param coord_to character, for conv coord. 'BD-09', 'GCJ-02', or 'WGS-84'
+#'
 #' @importFrom glue glue
 #' @importFrom aseskit iif ifnull check_curl
+#' @export
+#' @rdname synthesize_baidumap_api
 synthesize_baidu_api_convcoord <- function(
     url_body, coord_from=c('BD-09', 'GCJ-02', 'WGS-84'),
     coord_to=c('BD-09', 'GCJ-02', 'WGS-84'), use_curl=FALSE,
@@ -478,7 +600,7 @@ synthesize_baidu_api_convcoord <- function(
     coord_to <- match.arg(coord_to)
     coord_to <- coordsys_code[coord_to]
     dots <- list(...)
-    name_out <- ifnull(dots$name_out, url_body)
+    name_out <- aseskit::ifnull(dots$name_out, url_body)
     # valid url? if invalid, replace with 999,999
     url_body <- unlist(strsplit(url_body, ';'))
     valid_url_body <- grepl("^\\-?\\d+?\\.?\\d*?,\\-?\\d+?\\.?\\d*$", url_body)
@@ -492,18 +614,43 @@ synthesize_baidu_api_convcoord <- function(
 
     # start
     api_url <- 'http://api.map.baidu.com/geoconv/v1/'
-    use_curl <- check_curl(api_url, "Baidu Coords Convert", use_curl)
-    url_char <- glue('{api_url}?coords={url_body}&from={coord_from}',
-                     '&to={coord_to}')
-    url_char <- embed_baidu_api_generic(url_char, ...)
+    use_curl <- aseskit::check_curl(api_url, "Baidu Coords Convert", use_curl)
+    url_char <- glue::glue('{api_url}?coords={url_body}&from={coord_from}',
+                           '&to={coord_to}')
+    url_char <- embed_baidumap_api_generic(url_char, ...)
     return(mapply(structure, url_char, name_out=url_body, MoreArgs=list(
         class=c('baidu_api_convcoord', 'url'), use_curl=use_curl),
         SIMPLIFY=FALSE))
 }
 
 # -------------- Gaode api--------------------------
-
-synthesize_gaode_api <- function(
+#' Synthesize gaode map API
+#' 
+#' Working function for \code{\link[aseskit]{synthesize_api}()}. It will call
+#' lower functions \code{\link{synthesize_gaode_api_geocode}()} or 
+#' \code{\link{synthesize_gaode_api_revgeocode}()}
+#' or \code{\link{synthesize_gaode_api_convcoord}()}.
+#' @param url_body character, the leading argument in the API URL. If you want to
+#' use batch mode, you can synthesize them with pipe "|" (no more than 10 per batch).
+#' E.g., "beijing|tianjin|shanghai".
+#' @param api character, 'geocode', 'revgeocode', 'convcoord'.
+#' @param use_curl logical, whether use \code{curl}(). Default TRUE.
+#' @param ... other arguments to pass to the function, e.g., \code{key}
+#'
+#' @note When \code{key} is omitted or set NULL, the function will search for it
+#' in the cache. If nothing is found, a GUI wizard will be launched for you to 
+#' input the API key. If you want to bypass API key, set \code{key} = NA.
+#' 
+#' @return A \code{url} object for \code{\link{get_api_data}()} use.
+#' @export
+#'
+#' @references Gaode map API documentation: 
+#' \url{https://lbs.amap.com/api/webservice/guide/api}
+#' @examples
+#' \dontrun{
+#' synthesize_gaodemap_api("<Address>", key="<YOUR GAODEMAP KEY>")
+#' }
+synthesize_gaodemap_api <- function(
     url_body, api=c('geocode', 'revgeocode', 'convcoord'), use_curl=FALSE, ...){
     
     api <- match.arg(api)
@@ -519,30 +666,35 @@ synthesize_gaode_api <- function(
 
 #' @importFrom glue glue
 #' @importFrom aseskit getApiKey iif ifnull
-embed_gaode_api_generic <- function(
+embed_gaodemap_api_generic <- function(
     url_char, key=NULL, sig=NULL, ...){
     
     stopifnot(is.character(url_char))
     
     if (is.null(key)){
-        key <- getApiKey("gaode")
-        url_char <- glue('{url_char}&key={key}')
+        key <- aseskit::getApiKey("gaode")
+        url_char <- glue::glue('{url_char}&key={key}')
     }else if (is.na(key)){
         
     }else if (is.character(key) && nchar(key) > 0){
-        url_char <- glue('{url_char}&key={key}')
+        url_char <- glue::glue('{url_char}&key={key}')
     }else{
         stop("Please use a valid gaode map API key.")
     }
     
-    if (nchar(ifnull(sig, '')) > 0) 
-        url_char <- glue('{url_char}&sig={sig}')
+    if (nchar(aseskit::ifnull(sig, '')) > 0) 
+        url_char <- glue::glue('{url_char}&sig={sig}')
     
     return(url_char)
 }
 
+#' @param batch logical, for geocoding, If use batch inquery mode. Default FALSE.
+#' @param city character, for geocoding. A valid Chinese city name to limit results.
+#'
 #' @importFrom aseskit check_curl aline iif ifnull
 #' @importFrom glue glue
+#' @export
+#' @rdname synthesize_gaodemap_api
 synthesize_gaode_api_geocode <- function(
     url_body, batch=FALSE, city=NULL, use_curl=FALSE, ...){
 
@@ -550,28 +702,49 @@ synthesize_gaode_api_geocode <- function(
     dots <- list(...)
     stopifnot(is.logical(batch))
     stopifnot(is.null(city) || is.character(city))
-    name_out <- ifnull(dots$name_out, url_body)
+    name_out <- aseskit::ifnull(dots$name_out, url_body)
     
     len <- length(url_body)
+    batch <- aseskit::aline(batch, length(url_body))
     
     # start
     api_url <- 'https://restapi.amap.com/v3/geocode/geo'
-    use_curl <- check_curl(api_url, "Gaode Map (Amap) Geocoding", use_curl)
+    use_curl <- aseskit::check_curl(api_url, "Gaode Map (Amap) Geocoding", use_curl)
     
-    url_char <- glue('{api_url}?address={url_body}&output=JSON')
+    url_char <- glue::glue('{api_url}?address={url_body}&output=JSON')
     if (! is.null(city)) 
-        url_char <- glue('{url_char}&city={aline(city, len)}')
+        url_char <- glue::glue('{url_char}&city={aline(city, len)}')
     if (any(batch)) 
-        url_char[batch] <- glue('{url_char[batch]}&batch=true')
+        url_char[batch] <- glue::glue('{url_char[batch]}&batch=true')
     
-    url_char <- embed_gaode_api_generic(url_char, ...)
+    url_char <- embed_gaodemap_api_generic(url_char, ...)
     return(mapply(structure, enc2utf8(url_char), name_out=name_out, MoreArgs=list(
         class=c('gaode_api_geocode', 'url'), use_curl=use_curl),
         SIMPLIFY=FALSE))
 }
 
+#' @param extensions character, 'all' or 'base', for revgeocode. Return basic 
+#'  info ('base') or base+additional info ('all'). Default "all".
+#' @param poitype character, for revgeocode. One or more POI type codes (separated 
+#'  by a pipe '|'). The valid POI type codes refers to 
+#'  \url{https://lbs.amap.com/api/webservice/download}. 
+#'  It will not take effect when applying batch mode (multiple \code{latlng}s 
+#'  are provided). Only effective when \code{extensions=="all"}. Default NULL.
+#' @param radius numeric (0-3000), for revgeocode. The radius (m) for calling 
+#'  back pois. Default NULL (1000).
+#' @param roadlevel numeric 0 or 1, for revgeocode. Return all the roads (0) or 
+#'  main roads only (1)
+#' @param homeorcorp numeric 0-2, for revgeocode. Order the callback pois, \itemize{
+#'  \item 0: do not intervene the order of the pois. \cr
+#'  \item 1: home-related pois are prioritized. \cr
+#'  \item 2: coorporate-related pois are prioritized.
+#'  } Default NULL (0).
+#'
 #' @importFrom glue glue
 #' @importFrom aseskit iif ifnull check_curl aline
+#' @export
+#' @rdname synthesize_gaodemap_api
+#' 
 synthesize_gaode_api_revgeocode <- function(
     url_body, batch=FALSE, extensions=c('all', 'base'), poitype=NULL, radius=NULL, 
     roadlevel=NULL, homeorcorp=NULL, use_curl=FALSE, ...){
@@ -594,17 +767,17 @@ synthesize_gaode_api_revgeocode <- function(
     stopifnot(is.null(radius) || is.numeric(radius))
     stopifnot(is.null(roadlevel) || is.numeric(roadlevel))
     stopifnot(is.null(homeorcorp) || is.numeric(homeorcorp))
-    name_out <- ifnull(dots$name_out, url_body)
+    name_out <- aseskit::ifnull(dots$name_out, url_body)
     
     # start 
     api_url <- 'https://restapi.amap.com/v3/geocode/regeo'
-    use_curl <- check_curl(api_url, "Gaode Map (Amap) RevGeocoding", use_curl)
-    url_char <- glue('{api_url}?location={url_body}&output=JSON')
+    use_curl <- aseskit::check_curl(api_url, "Gaode Map (Amap) RevGeocoding", use_curl)
+    url_char <- glue::glue('{api_url}?location={url_body}&output=JSON')
     if (any(batch)) 
-        url_char[batch] <- glue('{url_char[batch]}&batch=true')
+        url_char[batch] <- glue::glue('{url_char[batch]}&batch=true')
     if (!is.null(extensions)) if (any(extensions == 'all')){
         ext_all <- which(extensions == 'all')
-        url_char[ext_all] <- glue('{url_char[ext_all]}&extensions=all')
+        url_char[ext_all] <- glue::glue('{url_char[ext_all]}&extensions=all')
         if (! is.null(poitype)){
             valid_poitype <- grepl('^(\\d{6}\\|)*\\d{6}$', poitype)
             if (! (all(valid_poitype))) {
@@ -618,25 +791,25 @@ synthesize_gaode_api_revgeocode <- function(
             }
         }
         if (! is.null(radius)) {
-            radius <- aline(radius, len)
+            radius <- aseskit::aline(radius, len)
             valid_radius <- which(radius > 0)
-            if (length(valid_radius) > 0) url_char[valid_radius] <- glue(
+            if (length(valid_radius) > 0) url_char[valid_radius] <- glue::glue(
                 '{url_char[valid_radius]}&radius={radius[valid_radius]}')
         }
         if (! is.null(roadlevel)) {
-            roadlevel <- aline(roadlevel, len)
+            roadlevel <- aseskit::aline(roadlevel, len)
             valid_roadlvl <- which(roadlevel %in% 0:1)
-            if (length(vald_roadlvl)) url_char[valid_roadlvl] <- glue(
+            if (length(vald_roadlvl)) url_char[valid_roadlvl] <- glue::glue(
                 '{url_char[valid_roadlvl]}&roadlevel={roadlevel[valid_roadlvl]}')
         }
         if (! is.null(homeorcorp)){
-            homeorcorp <- aline(homeorcorp, len)
+            homeorcorp <- aseskit::aline(homeorcorp, len)
             valid_hoc <- which(homeorcorp %in% 0:2)
-            if (length(valid_hoc) > 0) url_char[valid_hoc] <- glue(
+            if (length(valid_hoc) > 0) url_char[valid_hoc] <- glue::glue(
                 '{url_char[valid_hoc]}&homeorcorp={homeorcorp[valid_hoc]}')
         }
     }
-    url_char <- embed_gaode_api_generic(url_char, ...)
+    url_char <- embed_gaodemap_api_generic(url_char, ...)
     
     return(mapply(structure, enc2utf8(url_char), name_out=name_out, MoreArgs=list(
         class=c('gaode_api_revgeocode', 'url'), use_curl=use_curl),
@@ -644,11 +817,18 @@ synthesize_gaode_api_revgeocode <- function(
 }
 
 
+#' @param coord_from character, for conv coord. 'BD-09', 'GCJ-02', or 'WGS-84'. 
+#' Default 'GCJ-02'.
+#' @param coord_to character, for conv coord. 'BD-09', 'GCJ-02', or 'WGS-84'.
+#' Only 'GCJ-02' is now supported.
+#'
 #' @importFrom glue glue
 #' @importFrom aseskit iif ifnull check_curl
+#' @export
+#' @rdname synthesize_gaodemap_api
 synthesize_gaode_api_convcoord <- function(
-    url_body, batch=FALSE, coord_from=c('BD-09', 'GCJ-02', 'WGS-84'),
-    coord_to=c('BD-09', 'GCJ-02', 'WGS-84'), use_curl=FALSE, ...){
+    url_body, batch=FALSE, coord_from=c('WGS-84', 'BD-09', 'GCJ-02'),
+    coord_to=c('GCJ-02', 'BD-09', 'WGS-84'), use_curl=FALSE, ...){
     
     # check args
     dots <- list(...)
@@ -662,7 +842,7 @@ synthesize_gaode_api_convcoord <- function(
     coord_to <- match.arg(coord_to)
     if (coord_to != "GCJ-02") 
         stop('gaode map API now only supports conversion to GCJ-02 (autonavi).')
-    name_out <- ifnull(dots$name_out, url_body)
+    name_out <- aseskit::ifnull(dots$name_out, url_body)
     # url_body valid? If invalid, replace with 999,999
     stopifnot(is.character(url_body))
     url_body <- unlist(strsplit(url_body, ';'))
@@ -677,10 +857,10 @@ synthesize_gaode_api_convcoord <- function(
     
     # start
     api_url <- 'https://restapi.amap.com/v3/assistant/coordinate/'
-    use_curl <- check_curl(api_url, "Baidu Coords Convert", use_curl)
-    url_char <- glue('{api_url}convert?locations={url_body}',
-                     '&coordsys={coord_from}&output=json')
-    url_char <- embed_gaode_api_generic(url_char, ...)
+    use_curl <- aseskit::check_curl(api_url, "Baidu Coords Convert", use_curl)
+    url_char <- glue::glue('{api_url}convert?locations={url_body}',
+                           '&coordsys={coord_from}&output=json')
+    url_char <- embed_gaodemap_api_generic(url_char, ...)
     
     return(mapply(structure, enc2utf8(url_char), name_out=name_out, MoreArgs=list(
         class=c('gaode_api_convcoord', 'url'), use_curl=use_curl),
@@ -689,6 +869,29 @@ synthesize_gaode_api_convcoord <- function(
 
 # -----------------ipify api------------------
 
+#' Synthesize ipify API
+#' 
+#' Working function for \code{\link[aseskit]{synthesize_api}()}. It will call
+#' lower functions \code{\link{synthesize_ipify_api_geohost}()} or 
+#' \code{\link{synthesize_ipify_api_getip}()}.
+#' @param url_body character, the leading argument of the API URL.
+#' @param api character, 'geohost', 'getip'.
+#' @param use_curl logical, whether use \code{curl}(). Default TRUE.
+#' @param ... other arguments to pass to the function, e.g., \code{key}
+#'
+#' @note When \code{key} is omitted or set NULL, the function will search for it
+#' in the cache. If nothing is found, a GUI wizard will be launched for you to 
+#' input the API key. If you want to bypass API key, set \code{key} = NA.
+#' 
+#' @return A \code{url} object for \code{\link{get_api_data}()} use.
+#' @export
+#'
+#' @references ipify API documentation: 
+#' \url{https://www.ipify.org}
+#' @examples
+#' \dontrun{
+#' synthesize_ipify_api("<IP Address>", key="<YOUR IPIFY KEY>")
+#' }
 synthesize_ipify_api <- function(
     url_body, api=c('geohost', 'getip'), use_curl=FALSE, ...){
     
@@ -707,28 +910,31 @@ embed_ipify_api_generic <- function(url_char, key=NULL, ...){
     stopifnot(is.character(url_char))
     
     if (is.null(key)){
-        key <- getApiKey('ipify')
+        key <- aseskit::getApiKey('ipify')
     }else if (is.na(key)){
         return(url_char)
     }
-    url_char <- glue('{url_char}?apiKey={key}')
+    url_char <- glue::glue('{url_char}?apiKey={key}')
     return(url_char)
 }
 
+
 #' @importFrom glue glue
 #' @importFrom aseskit iif ifnull
+#' @export
+#' @rdname synthesize_ipify_api
 synthesize_ipify_api_geohost <- function(url_body, use_curl=FALSE,...){
     # check args
     dots <- list(...)
     stopifnot(is.character(url_body))
-    name_out <- ifnull(dots$name_out, url_body)
+    name_out <- aseskit::ifnull(dots$name_out, url_body)
     
     # start
     api_url <- "https://geo.ipify.org/api/v1"
-    use_curl <- check_curl(api_url, "ipify geohost", use_curl)
+    use_curl <- aseskit::check_curl(api_url, "ipify geohost", use_curl)
     url_char <- api_url
     url_char <- embed_ipify_api_generic(url_char, ...)  # key first
-    url_char <- glue('{url_char}&ipAddress={url_body}')
+    url_char <- glue::glue('{url_char}&ipAddress={url_body}')
     
     return(mapply(structure, url_char, name_out=name_out, MoreArgs=list(
         class=c('ipify_api_geohost', 'url'), use_curl=use_curl),
@@ -737,15 +943,17 @@ synthesize_ipify_api_geohost <- function(url_body, use_curl=FALSE,...){
 
 #' @importFrom aseskit iif ifnull
 #' @importFrom glue glue
+#' @export
+#' @rdname synthesize_ipify_api
 synthesize_ipify_api_getip <- function(url_body, use_curl=FALSE,...){
     # check args
     dots <- list(...)
     stopifnot(is.character(url_body))
-    name_out <- ifnull(dots$name_out, url_body)
+    name_out <- aseskit::ifnull(dots$name_out, url_body)
     
     # start
     api_url <- "https://api.ipify.org?format=json"
-    use_curl <- check_curl(api_url, "ipify getip", use_curl)
+    use_curl <- aseskit::check_curl(api_url, "ipify getip", use_curl)
     url_char <- api_url
     
     return(mapply(structure, url_char, name_out=name_out, MoreArgs=list(
@@ -755,6 +963,28 @@ synthesize_ipify_api_getip <- function(url_body, use_curl=FALSE,...){
 
 # -----------ipstack api-----------
 
+#' Synthesize ipstack API
+#' 
+#' Working function for \code{\link[aseskit]{synthesize_api}()}. It will call
+#' lower functions \code{\link{synthesize_ipstack_api_geohost}()}.
+#' @param url_body character, the leading argument in the API URL.
+#' @param api character, 'geohost'.
+#' @param use_curl logical, whether use \code{curl}(). Default TRUE.
+#' @param ... other arguments to pass to the function, e.g., \code{key}
+#'
+#' @note When \code{key} is omitted or set NULL, the function will search for it
+#' in the cache. If nothing is found, a GUI wizard will be launched for you to 
+#' input the API key. If you want to bypass API key, set \code{key} = NA.
+#' 
+#' @return A \code{url} object for \code{\link{get_api_data}()} use.
+#' @export
+#'
+#' @references ipstack API documentation: 
+#' \url{https://ipstack.com/documentation}
+#' @examples
+#' \dontrun{
+#' synthesize_ipstack_api("<IP Address>", key="<YOUR IPSTACK KEY>")
+#' }
 synthesize_ipstack_api <- function(
     url_body, api=c('geohost'), use_curl=FALSE, ...){
     
@@ -771,26 +1001,29 @@ synthesize_ipstack_api <- function(
 embed_ipstack_api_generic <- function(url_char, key=NULL, ...){
     stopifnot(is.character(url_char))
     if (is.null(key)) {
-        key <- getApiKey('ipstack')
+        key <- aseskit::getApiKey('ipstack')
     }else if (is.na(key)) {  # if NA, do not use the key
         return(url_char)
     }
-    url_char <- glue('{url_char}?access_key={key}')
+    url_char <- glue::glue('{url_char}?access_key={key}')
     return(url_char)
 }
 
+
 #' @importFrom aseskit iif ifnull
 #' @importFrom glue glue
+#' @export
+#' @rdname synthesize_ipstack_api
 synthesize_ipstack_api_geohost <- function(url_body, use_curl=FALSE, ...){
     # check args
     dots <- list(...)
     stopifnot(is.character(url_body))
-    name_out <- ifnull(dots$name_out, url_body)
+    name_out <- aseskit::ifnull(dots$name_out, url_body)
     
     # start
     api_url= "http://api.ipstack.com/"
-    use_curl <- check_curl(api_url, "ipstack geohost", use_curl)
-    url_char <- glue('{api_url}{url_body}')
+    use_curl <- aseskit::check_curl(api_url, "ipstack geohost", use_curl)
+    url_char <- glue::glue('{api_url}{url_body}')
     url_char <- embed_ipstack_api_generic(url_char, ...)
 
     return(mapply(structure, url_char, name_out=name_out, MoreArgs=list(
@@ -800,6 +1033,28 @@ synthesize_ipstack_api_geohost <- function(url_body, use_curl=FALSE, ...){
 
 # -----------------ipinfo api------------------
 
+#' Synthesize ipinfo API
+#' 
+#' Working function for \code{\link[aseskit]{synthesize_api}()}. It will call
+#' lower functions \code{\link{synthesize_ipinfo_api_geohost}()}.
+#' @param url_body character, the leading argument in the API URL.
+#' @param api character, 'geohost'.
+#' @param use_curl logical, whether use \code{curl}(). Default TRUE.
+#' @param ... other arguments to pass to the function, e.g., \code{key}
+#'
+#' @note When \code{key} is omitted or set NULL, the function will search for it
+#' in the cache. If nothing is found, a GUI wizard will be launched for you to 
+#' input the API key. If you want to bypass API key, set \code{key} = NA.
+#' 
+#' @return A \code{url} object for \code{\link{get_api_data}()} use.
+#' @export
+#'
+#' @references ipinfo API documentation: 
+#' \url{https://ipinfo.io/developers}
+#' @examples
+#' \dontrun{
+#' synthesize_ipinfo_api("<IP Address>", key="<YOUR IPINFO KEY>")
+#' }
 synthesize_ipinfo_api <- function(
     url_body, api=c('geohost'), use_curl=FALSE, ...){
     
@@ -818,26 +1073,29 @@ embed_ipinfo_api_generic <- function(url_char, key=NULL, ...){
 
     # key is not mandatory
     if (is.null(key)) {
-        key <- getApiKey('ipinfo')
+        key <- aseskit::getApiKey('ipinfo')
     }else if (is.na(key)) {
         return(url_char)
     }
-    url_char <- glue('{url_char}?token={key}')
+    url_char <- glue::glue('{url_char}?token={key}')
     return(url_char)
 }
 
+
 #' @importFrom aseskit check_curl iif ifnull
 #' @importFrom glue glue
+#' @export
+#' @rdname synthesize_ipinfo_api
 synthesize_ipinfo_api_geohost <- function(url_body, use_curl=FALSE,...){
     # check args
     dots <- list(...)
     stopifnot(is.character(url_body))
-    name_out <- ifnull(dots$name_out, url_body)
+    name_out <- aseskit::ifnull(dots$name_out, url_body)
     
     # start
     api_url <- "https://ipinfo.io/"
-    use_curl <- check_curl(api_url, "ipinfo geohost", use_curl)
-    url_char <- glue('{api_url}{url_body}/json')
+    use_curl <- aseskit::check_curl(api_url, "ipinfo geohost", use_curl)
+    url_char <- glue::glue('{api_url}{url_body}/json')
     url_char <- embed_ipinfo_api_generic(url_char, ...)
     
     return(mapply(structure, url_char, name_out=name_out, MoreArgs=list(
